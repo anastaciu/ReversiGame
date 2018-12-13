@@ -63,7 +63,7 @@ public class GameActivity extends Activity {
     private int gameState;
 
     private static final String MULTIPLY = " × ";
-    private static final String NAME_OF_AI[] = new String[]{"1ª Vez", "Rookie", "Iniciado", "Experiente", "Jogador", "Especialista", "Mestre", "Campeão"};
+    private static final String NAME_OF_AI[] = new String[]{"Starter", "Rookie", "Good", "Pro", "Great", "Champ", "Master", "Legend"};
 
     private NewGameDialog dialog;
     private MessageDialog msgDialog;
@@ -318,11 +318,11 @@ public class GameActivity extends Activity {
 
         String msg = "";
         if(winOrLoseOrDraw > 0){
-            msg = "Ganhou" + NAME_OF_AI[difficulty - 1];
+            msg = "You've beaten" + NAME_OF_AI[difficulty - 1];
         }else if(winOrLoseOrDraw == 0){
-            msg = "Empate";
+            msg = "Draw";
         }else if(winOrLoseOrDraw < 0){
-            msg = "Derrotado por " + NAME_OF_AI[difficulty - 1];
+            msg = "Defeated by " + NAME_OF_AI[difficulty - 1];
         }
         msgDialog = new MessageDialog(GameActivity.this, msg);
         msgDialog.show();
