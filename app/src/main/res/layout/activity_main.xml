@@ -1,8 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#313131">
+    android:background="#310000">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,10 +15,11 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/title"
             android:layout_marginTop="20dp"
+            android:contentDescription="@string/titulo"
             android:padding="40dp"
-            android:contentDescription="TODO" />
+            android:src="@drawable/title"
+            tools:src="@drawable/title" />
     </LinearLayout>
 
     <LinearLayout
@@ -41,38 +43,30 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/copyright"
-                android:textColor="@color/WHITE"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="20dp"
-                android:gravity="bottom"/>
-
-            <Button
-                android:id="@+id/ruleButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:gravity="right|bottom"
-                android:paddingRight="30dp"
-                android:text="RULES"
-                android:textColor="#59c6ff" />
-        </LinearLayout>
+        android:orientation="horizontal" >
 
 
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="bottom"
+            android:text="@string/copyright"
+            android:textColor="@color/WHITE" />
 
+        <Button
+            android:id="@+id/ruleButton"
+            android:layout_width="229dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="10dp"
+            android:background="@null"
+            android:gravity="end|bottom"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/rules"
+            android:textColor="#59c6ff" />
     </LinearLayout>
-
 </LinearLayout>
+

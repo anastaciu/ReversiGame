@@ -7,8 +7,9 @@
     <string name="jogar">Jogar</string>
     <string name="starter">Starter</string>
     <string name="rookie">Rookie</string>
-    <string name="choose_dificulty">Choose Dificulty</string>
-    <string name="rules">Rules</string>
+    <string name="choose_dificulty">Choose Difficulty</string>
+    <string name="titulo">titulo</string>
+    <string name="rules">RULES</string>
 
 
 </resources>
