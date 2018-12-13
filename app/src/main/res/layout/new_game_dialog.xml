@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -11,9 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="选择先后手"
+        android:text="@string/choose_token"
         android:textColor="#000000"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:text="Choose Token" />
 
 
     <RadioGroup
@@ -31,7 +33,8 @@
             android:layout_marginRight="30dp"
             android:background="@drawable/radio_button_black"
             android:button="@null"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginEnd="30dp" />
 
         <RadioButton
             android:id="@+id/white"
@@ -46,13 +49,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="选择对手实力"
+        android:text="@string/choose_dificulty"
         android:textColor="#000000"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:text="Cooose Dificulty" />
 
     <RadioGroup
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:orientation="vertical" >
@@ -66,14 +70,15 @@
                 android:id="@+id/level1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/radio_button_ai"
                 android:button="@null"
                 android:gravity="center"
                 android:padding="15dp"
-                android:text="菜鸟"
+                android:text="@string/starter"
                 android:textColor="@color/BLACK"
                 android:textSize="15sp" />
 
@@ -81,16 +86,18 @@
                 android:id="@+id/level2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/radio_button_ai"
                 android:button="@null"
                 android:gravity="center"
                 android:padding="15dp"
-                android:text="新手"
+                android:text="@string/rookie"
                 android:textColor="@color/BLACK"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                tools:text="Rookie" />
 
             <RadioButton
                 android:id="@+id/level3"
@@ -143,7 +150,8 @@
                 android:padding="15dp"
                 android:text="棋士"
                 android:textColor="@color/BLACK"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:layout_marginStart="10dp" />
 
             <RadioButton
                 android:id="@+id/level6"
@@ -158,7 +166,8 @@
                 android:padding="15dp"
                 android:text="大师"
                 android:textColor="@color/BLACK"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:layout_marginStart="10dp" />
 
             <RadioButton
                 android:id="@+id/level7"
@@ -198,13 +207,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_bg_blue"
         android:padding="10dp"
+        android:text="@string/jogar"
+        android:textColor="@color/WHITE"
         android:textSize="20sp"
-        android:text="确定"
-        android:textColor="@color/WHITE" />
+        tools:text="Jogar" />
 
 </LinearLayout>

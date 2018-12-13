@@ -8,9 +8,10 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/rule"
-        android:padding="40dp"/>
+        android:layout_height="100dp"
+        android:contentDescription="@string/rules"
+        android:padding="0dp"
+        android:src="@drawable/rule" />
 
 
     <TextView
@@ -21,7 +22,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/WHITE"
-        android:textSize="18sp"
-        android:layout_marginTop="10dp"/>
+        android:textSize="15sp"
+        android:layout_marginTop="0dp"/>
     
  </LinearLayout>
