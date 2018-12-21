@@ -6,8 +6,4 @@
     <color name="buttonNormalBlue">#59c6ff</color>
     <color name="buttonFocusedBlue">#89d7ff</color>
 
-    <color name="buttonNormalRed">#db414a</color>
-    <color name="buttonFocusedRed">#cd0b17</color>
-
-    <color name="transparent_background">#ffffffff</color>
 </resources>

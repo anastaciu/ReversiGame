@@ -15,8 +15,6 @@ import pt.amov.reversi.R;
 
 public class MainActivity extends Activity {
 
-	private Button play;
-	private Button rule;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +22,7 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
-		play = (Button)findViewById(R.id.playButton);
+		Button play = findViewById(R.id.playButton);
 		play.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -43,7 +41,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		rule = (Button)findViewById(R.id.ruleButton);
+		Button rule = findViewById(R.id.ruleButton);
 		rule.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

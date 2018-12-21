@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#313131"
@@ -11,7 +12,8 @@
         android:layout_marginLeft="27dp"
         android:layout_marginRight="27dp"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:id="@+id/player"
@@ -29,9 +31,10 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="您"
+                android:text="@string/you"
                 android:textColor="@color/BLACK"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:text="You" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -43,13 +46,14 @@
                     android:id="@+id/player_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/black1" />
+                    android:src="@drawable/black1"
+                    android:contentDescription="@string/payerpiece" />
 
                 <TextView
                     android:id="@+id/player_chesses"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" × .."
+                    android:text="@string/x"
                     android:textColor="@color/BLACK"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -67,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="VS"
+                android:text="@string/vs"
                 android:textColor="@color/BLACK"
                 android:textSize="30sp" />
         </LinearLayout>
@@ -88,7 +92,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="大师"
                 android:textColor="@color/BLACK"
                 android:textSize="20sp" />
 
@@ -102,13 +105,14 @@
                     android:id="@+id/aiImage"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/white1" />
+                    android:src="@drawable/white1"
+                    android:contentDescription="@string/oponentpiece" />
 
                 <TextView
                     android:id="@+id/aiChesses"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" × .."
+                    android:text="@string/x"
                     android:textColor="@color/BLACK"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -130,18 +134,18 @@
         android:layout_marginRight="27dp"
         android:layout_marginBottom="20dp"
         android:gravity="bottom">
-        
-        <Button 
+
+        <Button
             android:id="@+id/new_game"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp"
             android:background="@drawable/button_bg_blue"
 			android:textColor="@color/WHITE"
             android:padding="10dp"
             android:textSize="20sp"
-            android:text="新局"/>
+            android:text="@string/new_game"/>
         
         
         <Button 
@@ -153,7 +157,7 @@
             android:textColor="@color/WHITE"
             android:padding="10dp"
             android:textSize="20sp"
-            android:text="提示"/>
+            android:text="@string/autoplay"/>
         
     </LinearLayout>
     

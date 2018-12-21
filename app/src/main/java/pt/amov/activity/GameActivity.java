@@ -1,5 +1,6 @@
 package pt.amov.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import pt.amov.bean.Move;
 import pt.amov.bean.Statistic;
@@ -48,8 +50,7 @@ public class GameActivity extends Activity {
     private ImageView playerImage;
     private ImageView aiImage;
     private TextView nameOfAI;
-    private Button newGame;
-    private Button tip;
+
 
     private byte playerColor;
     private byte aiColor;
@@ -59,33 +60,34 @@ public class GameActivity extends Activity {
     private static final int M = 8;
     private static final int depth[] = new int[] { 0, 1, 2, 3, 7, 3, 5, 2, 4 };
 
-    private byte[][] chessBoard = new byte[M][M];
+    private final byte[][] chessBoard = new byte[M][M];
     private int gameState;
 
     private static final String MULTIPLY = " × ";
     private static final String NAME_OF_AI[] = new String[]{"Starter", "Rookie", "Good", "Pro", "Great", "Champ", "Master", "Legend"};
 
     private NewGameDialog dialog;
-    private MessageDialog msgDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
-        reversiView = (ReversiView) findViewById(R.id.reversiView);
-        playerLayout = (LinearLayout) findViewById(R.id.player);
-        aiLayout = (LinearLayout) findViewById(R.id.ai);
-        playerChesses = (TextView) findViewById(R.id.player_chesses);
-        aiChesses = (TextView) findViewById(R.id.aiChesses);
-        playerImage = (ImageView) findViewById(R.id.player_image);
-        aiImage = (ImageView) findViewById(R.id.aiImage);
-        nameOfAI = (TextView) findViewById(R.id.name_of_ai);
-        newGame = (Button) findViewById(R.id.new_game);
-        tip = (Button) findViewById(R.id.tip);
+        reversiView = findViewById(R.id.reversiView);
+        playerLayout = findViewById(R.id.player);
+        aiLayout = findViewById(R.id.ai);
+        playerChesses = findViewById(R.id.player_chesses);
+        aiChesses = findViewById(R.id.aiChesses);
+        playerImage = findViewById(R.id.player_image);
+        aiImage = findViewById(R.id.aiImage);
+        nameOfAI = findViewById(R.id.name_of_ai);
+        Button newGame = findViewById(R.id.new_game);
+        Button tip = findViewById(R.id.tip);
+
 
         Bundle bundle = getIntent().getExtras();
-        playerColor = bundle.getByte("playerColor");
+        playerColor = Objects.requireNonNull(bundle).getByte("playerColor");
         aiColor = (byte) -playerColor;
         difficulty = bundle.getInt("difficulty");
 
@@ -122,7 +124,7 @@ public class GameActivity extends Activity {
                         downCol = col;
                         break;
                     case MotionEvent.ACTION_UP:
-
+                        v.performClick();
                         if (down && downRow == row && downCol == col) {
                             down = false;
                             if (!Rule.isLegalMove(chessBoard, new Move(row, col), playerColor)) {
@@ -131,7 +133,7 @@ public class GameActivity extends Activity {
 
                             Move move = new Move(row, col);
                             List<Move> moves = Rule.move(chessBoard, move, playerColor);
-                            reversiView.move(chessBoard, moves, move, playerColor);
+                            reversiView.move(chessBoard, moves, move);
                             aiTurn();
 
                         }
@@ -162,8 +164,8 @@ public class GameActivity extends Activity {
                         difficulty = dialog.getDifficulty();
 
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        preferences.edit().putInt("playerColor", playerColor).commit();
-                        preferences.edit().putInt("difficulty", difficulty).commit();
+                        preferences.edit().putInt("playerColor", playerColor).apply();
+                        preferences.edit().putInt("difficulty", difficulty).apply();
 
                         nameOfAI.setText(NAME_OF_AI[difficulty - 1]);
 
@@ -225,7 +227,7 @@ public class GameActivity extends Activity {
 
         private byte thinkingColor;
 
-        public ThinkingThread(byte thinkingColor) {
+        private ThinkingThread(byte thinkingColor) {
             this.thinkingColor = thinkingColor;
         }
 
@@ -239,14 +241,14 @@ public class GameActivity extends Activity {
             if (legalMoves > 0) {
                 Move move = Algorithm.getGoodMove(chessBoard, depth[difficulty], thinkingColor, difficulty);
                 List<Move> moves = Rule.move(chessBoard, move, thinkingColor);
-                reversiView.move(chessBoard, moves, move, thinkingColor);
+                reversiView.move(chessBoard, moves, move);
             }
-            updateUI.handle(0, legalMoves, thinkingColor);
+            updateUI.handle(legalMoves, thinkingColor);
         }
     }
 
     private UpdateUIHandler updateUI = new UpdateUIHandler();
-
+    @SuppressLint("HandlerLeak")
     class UpdateUIHandler extends Handler {
 
         @Override
@@ -269,7 +271,6 @@ public class GameActivity extends Activity {
                     gameOver(statistic.PLAYER - statistic.AI);
                 } else if (legalMovesOfAI > 0 && legalMovesOfPlayer == 0) {
                     aiTurn();
-                    return;
                 }
             }else{
                 legalMovesOfPlayer = legalMoves;
@@ -289,16 +290,18 @@ public class GameActivity extends Activity {
 
         }
 
-        public void handle(long delayMillis, int legalMoves, int thinkingColor) {
+        private void handle(int legalMoves, int thinkingColor) {
             removeMessages(0);
-            sendMessageDelayed(Message.obtain(updateUI, legalMoves, thinkingColor, 0), delayMillis);
+            sendMessageDelayed(Message.obtain(updateUI, legalMoves, thinkingColor, 0), 0);
         }
-    };
+    }
 
     private void playerTurn(){
         Statistic statistic = Rule.analyse(chessBoard, playerColor);
-        playerChesses.setText(MULTIPLY + statistic.PLAYER);
-        aiChesses.setText(MULTIPLY + statistic.AI);
+        String playerStats = MULTIPLY + statistic.PLAYER;
+        String AIStats = MULTIPLY + statistic.AI;
+        playerChesses.setText(playerStats);
+        aiChesses.setText( AIStats);
         playerLayout.setBackgroundResource(R.drawable.rect);
         aiLayout.setBackgroundResource(R.drawable.rect_normal);
         gameState = STATE_PLAYER_MOVE;
@@ -306,8 +309,10 @@ public class GameActivity extends Activity {
 
     private void aiTurn(){
         Statistic statistic = Rule.analyse(chessBoard, playerColor);
-        playerChesses.setText(MULTIPLY + statistic.PLAYER);
-        aiChesses.setText(MULTIPLY + statistic.AI);
+        String playerStats = MULTIPLY + statistic.PLAYER;
+        String AIStats = MULTIPLY + statistic.AI;
+        playerChesses.setText(playerStats);
+        aiChesses.setText(AIStats);
         playerLayout.setBackgroundResource(R.drawable.rect_normal);
         aiLayout.setBackgroundResource(R.drawable.rect);
         gameState = STATE_AI_MOVE;
@@ -315,13 +320,13 @@ public class GameActivity extends Activity {
     }
 
     private void gameOver(int winOrLoseOrDraw){
-
-        String msg = "";
+        MessageDialog msgDialog;
+        String msg;
         if(winOrLoseOrDraw > 0){
-            msg = "You've beaten" + NAME_OF_AI[difficulty - 1];
+            msg = "You've beaten " + NAME_OF_AI[difficulty - 1];
         }else if(winOrLoseOrDraw == 0){
             msg = "Draw";
-        }else if(winOrLoseOrDraw < 0){
+        }else{
             msg = "Defeated by " + NAME_OF_AI[difficulty - 1];
         }
         msgDialog = new MessageDialog(GameActivity.this, msg);
