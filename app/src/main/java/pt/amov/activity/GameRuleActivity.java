@@ -15,7 +15,7 @@ public class GameRuleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.game_rule);
-		TextView textView = (TextView)findViewById(R.id.rule);
+		TextView textView = findViewById(R.id.rule);
 		textView.setText(getResources().getString(R.string.game_rule));
 	}
 	

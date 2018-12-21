@@ -11,7 +11,7 @@ public class Move {
 		this.col = col;
 	}
 
-	@Override
+/*	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -34,6 +34,6 @@ public class Move {
 		if (row != other.row)
 			return false;
 		return true;
-	}
+	}*/
 
 }

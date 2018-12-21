@@ -6,11 +6,11 @@ import android.view.SurfaceHolder;
 
 public class RenderThread extends Thread {
 
-		private SurfaceHolder surfaceHolder;
+		private final SurfaceHolder surfaceHolder;
 		private ReversiView reversiView;
 		private boolean running;
 
-		public RenderThread(SurfaceHolder surfaceHolder, ReversiView reversiView){
+		RenderThread(SurfaceHolder surfaceHolder, ReversiView reversiView){
 			this.surfaceHolder = surfaceHolder;
 			this.reversiView = reversiView;
 		}

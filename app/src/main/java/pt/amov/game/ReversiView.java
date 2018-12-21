@@ -14,9 +14,7 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
-
 import java.util.List;
-
 import pt.amov.bean.Move;
 import pt.amov.reversi.R;
 import pt.amov.util.Util;
@@ -26,13 +24,9 @@ import pt.amov.util.Util;
 public class ReversiView extends SurfaceView implements Callback {
 
 	private RenderThread thread;
-	private float screenWidth;
 	private float bgLength;
-	private float chessBoardLength;
-	private float scale[] = new float[] { 0.75f, 0.80f, 0.85f, 0.90f, 0.95f };
-	private int scaleLevel = 2;
-	private static final int M = 8;
 	private float a;
+	private static final int M = 8;
 	private float chessBoardLeft;
 	private float chessBoardRight;
 	private float chessBoardTop;
@@ -40,19 +34,18 @@ public class ReversiView extends SurfaceView implements Callback {
 	private static final byte NULL = Constant.NULL;
 	private static final byte BLACK = Constant.BLACK;
 	private static final byte WHITE = Constant.WHITE;
-	private float margin;
 	private byte[][] chessBoard;
 	private int[][] index;
 	private Bitmap[] images;
 	private Bitmap background;
-	private float ratio = 0.9f;
 
 	public ReversiView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-
+		float chessBoardLength, screenWidth, ratio = 0.9f, scale[] = new float[] { 0.75f, 0.80f, 0.85f, 0.90f, 0.95f }, margin;
+		int scaleLevel = 2;
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ReversiView);
-		ratio = typedArray.getFloat(R.styleable.ReversiView_ratio, 0.9f);
-
+		typedArray.getFloat(R.styleable.ReversiView_ratio, ratio);
+		typedArray.recycle();
 
 		getHolder().addCallback(this);
 
@@ -70,7 +63,7 @@ public class ReversiView extends SurfaceView implements Callback {
 		chessBoardBottom = chessBoardTop + M * a;
 		images = new Bitmap[22];
 		loadChesses(context);
-		background = loadBitmap(bgLength, bgLength, context.getResources().getDrawable(R.drawable.mood));
+		background = loadBitmap(bgLength, bgLength, context.getDrawable(R.drawable.mood));
 		initialChessBoard();
 	}
 
@@ -123,7 +116,7 @@ public class ReversiView extends SurfaceView implements Callback {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
-	public void move(byte[][] chessBoard, List<Move> reversed, Move move, int chessColor) {
+	public void move(byte[][] chessBoard, List<Move> reversed, Move move) {
 
 		Util.copyBinaryArray(chessBoard, this.chessBoard);
 		for (int i = 0; i < reversed.size(); i++) {
@@ -232,28 +225,28 @@ public class ReversiView extends SurfaceView implements Callback {
 
 	private void loadChesses(Context context) {
 
-		images[0] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black1));
-		images[1] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black2));
-		images[2] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black3));
-		images[3] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black4));
-		images[4] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black5));
-		images[5] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black6));
-		images[6] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black7));
-		images[7] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black8));
-		images[8] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black9));
-		images[9] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black10));
-		images[10] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.black11));
-		images[11] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white1));
-		images[12] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white2));
-		images[13] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white3));
-		images[14] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white4));
-		images[15] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white5));
-		images[16] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white6));
-		images[17] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white7));
-		images[18] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white8));
-		images[19] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white9));
-		images[20] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white10));
-		images[21] = loadBitmap(a, a, context.getResources().getDrawable(R.drawable.white11));
+		images[0] = loadBitmap(a, a, context.getDrawable(R.drawable.black1));
+		images[1] = loadBitmap(a, a, context.getDrawable(R.drawable.black2));
+		images[2] = loadBitmap(a, a, context.getDrawable(R.drawable.black3));
+		images[3] = loadBitmap(a, a, context.getDrawable(R.drawable.black4));
+		images[4] = loadBitmap(a, a, context.getDrawable(R.drawable.black5));
+		images[5] = loadBitmap(a, a, context.getDrawable(R.drawable.black6));
+		images[6] = loadBitmap(a, a, context.getDrawable(R.drawable.black7));
+		images[7] = loadBitmap(a, a, context.getDrawable(R.drawable.black8));
+		images[8] = loadBitmap(a, a, context.getDrawable(R.drawable.black9));
+		images[9] = loadBitmap(a, a, context.getDrawable(R.drawable.black10));
+		images[10] = loadBitmap(a, a, context.getDrawable(R.drawable.black11));
+		images[11] = loadBitmap(a, a, context.getDrawable(R.drawable.white1));
+		images[12] = loadBitmap(a, a, context.getDrawable(R.drawable.white2));
+		images[13] = loadBitmap(a, a, context.getDrawable(R.drawable.white3));
+		images[14] = loadBitmap(a, a, context.getDrawable(R.drawable.white4));
+		images[15] = loadBitmap(a, a, context.getDrawable(R.drawable.white5));
+		images[16] = loadBitmap(a, a, context.getDrawable(R.drawable.white6));
+		images[17] = loadBitmap(a, a, context.getDrawable(R.drawable.white7));
+		images[18] = loadBitmap(a, a, context.getDrawable(R.drawable.white8));
+		images[19] = loadBitmap(a, a, context.getDrawable(R.drawable.white9));
+		images[20] = loadBitmap(a, a, context.getDrawable(R.drawable.white10));
+		images[21] = loadBitmap(a, a, context.getDrawable(R.drawable.white11));
 	}
 
 }
