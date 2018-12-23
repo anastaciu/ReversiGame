@@ -1,4 +1,4 @@
-package pt.amov.game;
+package pt.amov.user.interfaces.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import java.util.List;
 import pt.amov.bean.Move;
+import pt.amov.game.Constants;
 import pt.amov.reversi.R;
 import pt.amov.util.Util;
 
@@ -31,9 +32,9 @@ public class ReversiView extends SurfaceView implements Callback {
 	private float chessBoardRight;
 	private float chessBoardTop;
 	private float chessBoardBottom;
-	private static final byte NULL = Constant.NULL;
-	private static final byte BLACK = Constant.BLACK;
-	private static final byte WHITE = Constant.WHITE;
+	private static final byte NULL = Constants.NULL;
+	private static final byte BLACK = Constants.BLACK;
+	private static final byte WHITE = Constants.WHITE;
 	private byte[][] chessBoard;
 	private int[][] index;
 	private Bitmap[] images;
@@ -62,7 +63,7 @@ public class ReversiView extends SurfaceView implements Callback {
 		chessBoardTop = margin;
 		chessBoardBottom = chessBoardTop + M * a;
 		images = new Bitmap[22];
-		loadChesses(context);
+		loadTokens(context);
 		background = loadBitmap(bgLength, bgLength, context.getDrawable(R.drawable.mood));
 		initialChessBoard();
 	}
@@ -150,7 +151,7 @@ public class ReversiView extends SurfaceView implements Callback {
 	}
 
 	public boolean inChessBoard(float x, float y) {
-		return x >= chessBoardLeft && x <= chessBoardRight && y >= chessBoardTop && y <= chessBoardBottom;
+		return !(x >= chessBoardLeft) || !(x <= chessBoardRight) || !(y >= chessBoardTop) || !(y <= chessBoardBottom);
 	}
 
 	public int getRow(float y) {
@@ -223,7 +224,7 @@ public class ReversiView extends SurfaceView implements Callback {
 		return bitmap;
 	}
 
-	private void loadChesses(Context context) {
+	private void loadTokens(Context context) {
 
 		images[0] = loadBitmap(a, a, context.getDrawable(R.drawable.black1));
 		images[1] = loadBitmap(a, a, context.getDrawable(R.drawable.black2));

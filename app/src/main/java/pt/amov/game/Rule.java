@@ -12,7 +12,7 @@ public class Rule {
 	public static boolean isLegalMove(byte[][] chessBoard, Move move, byte chessColor) {
 
 		int i, j, dirx, diry, row = move.row, col = move.col;
-		if (!isLegal(row, col) || chessBoard[row][col] != Constant.NULL)
+		if (!isLegal(row, col) || chessBoard[row][col] != Constants.NULL)
 			return false;
 		for (dirx = -1; dirx < 2; dirx++) {
 			for (diry = -1; diry < 2; diry++) {

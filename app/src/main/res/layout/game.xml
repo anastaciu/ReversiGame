@@ -119,7 +119,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <pt.amov.game.ReversiView
+    <pt.amov.user.interfaces.views.ReversiView
         android:id="@+id/reversiView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -204,17 +204,18 @@
 
     <Button
         android:id="@+id/ok"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_bg_blue"
         android:padding="10dp"
-        android:text="@string/jogar"
+        android:text="@string/play"
         android:textColor="@color/WHITE"
         android:textSize="20sp"
-        tools:text="Jogar" />
+        tools:text="Play" />
 
 </LinearLayout>

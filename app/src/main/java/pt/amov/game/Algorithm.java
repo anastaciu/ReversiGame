@@ -7,14 +7,11 @@ import pt.amov.bean.Move;
 import pt.amov.util.Util;
 
 
-public class Algorithm {
-
-	private static final byte WHITE = Constant.WHITE;
-	private static final byte BLACK = Constant.BLACK;
+public class Algorithm implements Constants{
 
 	public static Move getGoodMove(byte[][] chessBoard, int depth, byte chessColor, int difficulty) {
 
-		if (chessColor == Constant.BLACK)
+		if (chessColor == BLACK)
 			return max(chessBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, chessColor, difficulty).move;
 		else
 			return min(chessBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, chessColor, difficulty).move;

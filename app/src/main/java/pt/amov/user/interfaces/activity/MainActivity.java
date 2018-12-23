@@ -1,4 +1,4 @@
-package pt.amov.activity;
+package pt.amov.user.interfaces.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-import pt.amov.game.Constant;
+import pt.amov.game.Constants;
 import pt.amov.reversi.R;
 
 
@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 
 				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				byte playColor = (byte)preferences.getInt("playerColor", Constant.BLACK);
+				byte playColor = (byte)preferences.getInt("playerColor", Constants.BLACK);
 				int difficulty = preferences.getInt("difficulty", 1);
 
 				Intent intent = new Intent(MainActivity.this, GameActivity.class);

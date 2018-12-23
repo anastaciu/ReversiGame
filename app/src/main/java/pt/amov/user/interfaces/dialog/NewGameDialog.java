@@ -1,4 +1,4 @@
-package pt.amov.widget;
+package pt.amov.user.interfaces.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
-import pt.amov.game.Constant;
+import pt.amov.game.Constants;
 import pt.amov.reversi.R;
 
 
@@ -17,7 +17,6 @@ import pt.amov.reversi.R;
 public class NewGameDialog extends Dialog {
 
     private RadioButton black;
-    private RadioButton white;
     private final RadioButton[] radioButtons = new RadioButton[8];
     private Button ok;
 
@@ -29,23 +28,23 @@ public class NewGameDialog extends Dialog {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.new_game_dialog, null);
 
-        black = (RadioButton)view.findViewById(R.id.black);
-        white = (RadioButton)view.findViewById(R.id.white);
-        if(playColor == Constant.BLACK){
+        black = view.findViewById(R.id.black);
+        RadioButton white = view.findViewById(R.id.white);
+        if(playColor == Constants.BLACK){
             black.setChecked(true);
         }else{
             white.setChecked(true);
         }
 
 
-        radioButtons[0] = (RadioButton)view.findViewById(R.id.level1);
-        radioButtons[1] = (RadioButton)view.findViewById(R.id.level2);
-        radioButtons[2] = (RadioButton)view.findViewById(R.id.level3);
-        radioButtons[3] = (RadioButton)view.findViewById(R.id.level4);
-        radioButtons[4] = (RadioButton)view.findViewById(R.id.level5);
-        radioButtons[5] = (RadioButton)view.findViewById(R.id.level6);
-        radioButtons[6] = (RadioButton)view.findViewById(R.id.level7);
-        radioButtons[7] = (RadioButton)view.findViewById(R.id.level8);
+        radioButtons[0] = view.findViewById(R.id.level1);
+        radioButtons[1] = view.findViewById(R.id.level2);
+        radioButtons[2] = view.findViewById(R.id.level3);
+        radioButtons[3] = view.findViewById(R.id.level4);
+        radioButtons[4] = view.findViewById(R.id.level5);
+        radioButtons[5] = view.findViewById(R.id.level6);
+        radioButtons[6] = view.findViewById(R.id.level7);
+        radioButtons[7] = view.findViewById(R.id.level8);
         for(int i = 0 ;i < radioButtons.length; i++){
             final int k = i;
             radioButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -67,7 +66,7 @@ public class NewGameDialog extends Dialog {
     }
 
     public byte getPlayerColor(){
-        return (black.isChecked()? Constant.BLACK:Constant.WHITE);
+        return (black.isChecked()? Constants.BLACK:Constants.WHITE);
     }
 
     public int getDifficulty(){

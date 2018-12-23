@@ -1,4 +1,4 @@
-package pt.amov.widget;
+package pt.amov.user.interfaces.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

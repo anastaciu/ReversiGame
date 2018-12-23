@@ -1,6 +1,6 @@
 package pt.amov.game;
 
-public class Constant {
+public interface Constants {
 
 	public static final byte BLACK = -1;
 	public static final byte NULL = 0;

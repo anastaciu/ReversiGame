@@ -1,4 +1,4 @@
-package pt.amov.activity;
+package pt.amov.user.interfaces.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,18 +25,18 @@ import java.util.Objects;
 import pt.amov.bean.Move;
 import pt.amov.bean.Statistic;
 import pt.amov.game.Algorithm;
-import pt.amov.game.Constant;
-import pt.amov.game.ReversiView;
+import pt.amov.game.Constants;
+import pt.amov.user.interfaces.views.ReversiView;
 import pt.amov.game.Rule;
-import pt.amov.widget.MessageDialog;
-import pt.amov.widget.NewGameDialog;
+import pt.amov.user.interfaces.dialog.MessageDialog;
+import pt.amov.user.interfaces.dialog.NewGameDialog;
 import pt.amov.reversi.R;
 
 public class GameActivity extends Activity {
 
-    private static final byte NULL = Constant.NULL;
-    private static final byte BLACK = Constant.BLACK;
-    private static final byte WHITE = Constant.WHITE;
+    private static final byte NULL = Constants.NULL;
+    private static final byte BLACK = Constants.BLACK;
+    private static final byte WHITE = Constants.WHITE;
 
     private static final int STATE_PLAYER_MOVE = 0;
     private static final int STATE_AI_MOVE = 1;
@@ -112,7 +112,7 @@ public class GameActivity extends Activity {
                 }
                 float x = event.getX();
                 float y = event.getY();
-                if (!reversiView.inChessBoard(x, y)) {
+                if (reversiView.inChessBoard(x, y)) {
                     return false;
                 }
                 int row = reversiView.getRow(y);
@@ -151,7 +151,7 @@ public class GameActivity extends Activity {
             public void onClick(View v) {
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                byte _playerColor = (byte)preferences.getInt("playerColor", Constant.BLACK);
+                byte _playerColor = (byte)preferences.getInt("playerColor", Constants.BLACK);
                 int _difficulty = preferences.getInt("difficulty", 1);
 
                 dialog = new NewGameDialog(GameActivity.this, _playerColor, _difficulty);
