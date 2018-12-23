@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
-import pt.amov.game.Constants;
+import pt.amov.logic.Constants;
 import pt.amov.reversi.R;
 
 

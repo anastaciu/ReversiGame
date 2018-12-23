@@ -22,12 +22,12 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
 
-import pt.amov.bean.Move;
-import pt.amov.bean.Statistic;
-import pt.amov.game.Algorithm;
-import pt.amov.game.Constants;
+import pt.amov.logic.Move;
+import pt.amov.logic.Statistic;
+import pt.amov.logic.Algorithm;
+import pt.amov.logic.Constants;
 import pt.amov.user.interfaces.views.ReversiView;
-import pt.amov.game.Rule;
+import pt.amov.logic.Rule;
 import pt.amov.user.interfaces.dialog.MessageDialog;
 import pt.amov.user.interfaces.dialog.NewGameDialog;
 import pt.amov.reversi.R;

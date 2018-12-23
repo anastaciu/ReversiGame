@@ -1,10 +1,7 @@
-package pt.amov.game;
+package pt.amov.logic;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import pt.amov.bean.Move;
-import pt.amov.bean.Statistic;
 
 
 public class Rule {

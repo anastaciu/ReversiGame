@@ -1,4 +1,4 @@
-package pt.amov.util;
+package pt.amov.logic;
 
 public class Util {
 

@@ -1,4 +1,4 @@
-package pt.amov.bean;
+package pt.amov.logic;
 
 
 public class Move {

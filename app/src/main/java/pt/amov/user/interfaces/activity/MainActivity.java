@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-import pt.amov.game.Constants;
+import pt.amov.logic.Constants;
 import pt.amov.reversi.R;
 
 

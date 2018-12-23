@@ -1,10 +1,6 @@
-package pt.amov.game;
+package pt.amov.logic;
 
 import java.util.List;
-
-import pt.amov.bean.MinimaxResult;
-import pt.amov.bean.Move;
-import pt.amov.util.Util;
 
 
 public class Algorithm implements Constants{

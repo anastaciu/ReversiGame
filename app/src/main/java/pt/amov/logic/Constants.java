@@ -1,4 +1,4 @@
-package pt.amov.game;
+package pt.amov.logic;
 
 public interface Constants {
 

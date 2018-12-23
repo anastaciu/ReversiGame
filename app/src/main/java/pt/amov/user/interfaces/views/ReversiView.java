@@ -15,10 +15,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import java.util.List;
-import pt.amov.bean.Move;
-import pt.amov.game.Constants;
+import pt.amov.logic.Move;
+import pt.amov.logic.Constants;
 import pt.amov.reversi.R;
-import pt.amov.util.Util;
+import pt.amov.logic.Util;
 
 
 
