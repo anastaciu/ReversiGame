@@ -18,7 +18,7 @@ import java.util.List;
 import pt.amov.logic.Move;
 import pt.amov.logic.Constants;
 import pt.amov.reversi.R;
-import pt.amov.logic.Util;
+import pt.amov.logic.ArrayCopy;
 
 
 
@@ -119,7 +119,7 @@ public class ReversiView extends SurfaceView implements Callback {
 
 	public void move(byte[][] chessBoard, List<Move> reversed, Move move) {
 
-		Util.copyBinaryArray(chessBoard, this.chessBoard);
+		ArrayCopy.copyBinaryArray(chessBoard, this.chessBoard);
 		for (int i = 0; i < reversed.size(); i++) {
 			int reverseRow = reversed.get(i).row;
 			int reverseCol = reversed.get(i).col;

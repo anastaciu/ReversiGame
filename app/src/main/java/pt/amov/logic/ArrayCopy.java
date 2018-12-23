@@ -1,6 +1,6 @@
 package pt.amov.logic;
 
-public class Util {
+public class ArrayCopy {
 
 	public static void copyBinaryArray(byte[][] src, byte[][] dest) {
 		for (int i = 0; i < 8; i++) {

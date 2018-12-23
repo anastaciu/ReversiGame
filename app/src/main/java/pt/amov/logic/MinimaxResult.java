@@ -4,7 +4,6 @@ package pt.amov.logic;
 public class MinimaxResult {
 
 	public int mark;
-	
 	public Move move;
 	
 	public MinimaxResult(int mark, Move move) {

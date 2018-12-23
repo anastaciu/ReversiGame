@@ -5,29 +5,29 @@ import java.util.List;
 
 public class Algorithm implements Constants{
 
-	public static Move getGoodMove(byte[][] chessBoard, int depth, byte chessColor, int difficulty) {
+	public static Move getGoodMove(byte[][] gameBoard, int depth, byte tokenColor, int difficulty) {
 
-		if (chessColor == BLACK)
-			return max(chessBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, chessColor, difficulty).move;
+		if (tokenColor == BLACK)
+			return max(gameBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, tokenColor, difficulty).move;
 		else
-			return min(chessBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, chessColor, difficulty).move;
+			return min(gameBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, tokenColor, difficulty).move;
 	}
 
-	private static MinimaxResult max(byte[][] chessBoard, int depth, int alpha, int beta, byte chessColor, int difficulty) {
+	private static MinimaxResult max(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
 		if (depth == 0) {
-			return new MinimaxResult(evaluate(chessBoard, difficulty), null);
+			return new MinimaxResult(evaluate(gameBoard, difficulty), null);
 		}
 
-		List<Move> legalMovesMe = Rule.getLegalMoves(chessBoard, chessColor);
+		List<Move> legalMovesMe = Rule.getLegalMoves(gameBoard, tokenColor);
 		if (legalMovesMe.size() == 0) {
-			if (Rule.getLegalMoves(chessBoard, (byte)-chessColor).size() == 0) {
-				return new MinimaxResult(evaluate(chessBoard, difficulty), null);
+			if (Rule.getLegalMoves(gameBoard, (byte)-tokenColor).size() == 0) {
+				return new MinimaxResult(evaluate(gameBoard, difficulty), null);
 			}
-			return min(chessBoard, depth, alpha, beta, (byte)-chessColor, difficulty);
+			return min(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
 
 		byte[][] tmp = new byte[8][8];
-		Util.copyBinaryArray(chessBoard, tmp);
+		ArrayCopy.copyBinaryArray(gameBoard, tmp);
 		int best = Integer.MIN_VALUE;
 		Move move = null;
 
@@ -36,13 +36,13 @@ public class Algorithm implements Constants{
             if(alpha >= beta){
                 break;
             }
-			Rule.move(chessBoard, legalMovesMe.get(i), chessColor);
-			int value = min(chessBoard, depth - 1, Math.max(best, alpha), beta, (byte)-chessColor, difficulty).mark;
+			Rule.move(gameBoard, legalMovesMe.get(i), tokenColor);
+			int value = min(gameBoard, depth - 1, Math.max(best, alpha), beta, (byte)-tokenColor, difficulty).mark;
 			if (value > best) {
 				best = value;
 				move = legalMovesMe.get(i);
 			}
-			Util.copyBinaryArray(tmp, chessBoard);
+			ArrayCopy.copyBinaryArray(tmp, gameBoard);
 		}
 		return new MinimaxResult(best, move);
 	}
@@ -61,7 +61,7 @@ public class Algorithm implements Constants{
 		}
 
 		byte[][] tmp = new byte[8][8];
-		Util.copyBinaryArray(chessBoard, tmp);
+		ArrayCopy.copyBinaryArray(chessBoard, tmp);
 		int best = Integer.MAX_VALUE;
 		Move move = null;
 
@@ -76,7 +76,7 @@ public class Algorithm implements Constants{
 				best = value;
 				move = legalMovesMe.get(i);
 			}
-			Util.copyBinaryArray(tmp, chessBoard);
+			ArrayCopy.copyBinaryArray(tmp, chessBoard);
 		}
 		return new MinimaxResult(best, move);
 	}
