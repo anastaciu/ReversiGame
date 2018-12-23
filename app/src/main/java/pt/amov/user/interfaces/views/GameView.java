@@ -15,16 +15,14 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import java.util.List;
-import pt.amov.logic.Move;
+import pt.amov.logic.Play;
 import pt.amov.logic.Constants;
 import pt.amov.reversi.R;
-import pt.amov.logic.ArrayCopy;
 
 
+public class GameView extends SurfaceView implements Callback, Constants{
 
-public class ReversiView extends SurfaceView implements Callback {
-
-	private RenderThread thread;
+	private BoardUpdate thread;
 	private float bgLength;
 	private float a;
 	private static final int M = 8;
@@ -35,17 +33,17 @@ public class ReversiView extends SurfaceView implements Callback {
 	private static final byte NULL = Constants.NULL;
 	private static final byte BLACK = Constants.BLACK;
 	private static final byte WHITE = Constants.WHITE;
-	private byte[][] chessBoard;
+	private byte[][] gameBoard;
 	private int[][] index;
 	private Bitmap[] images;
 	private Bitmap background;
 
-	public ReversiView(Context context, AttributeSet attrs, int defStyle) {
+	public GameView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		float chessBoardLength, screenWidth, ratio = 0.9f, scale[] = new float[] { 0.75f, 0.80f, 0.85f, 0.90f, 0.95f }, margin;
 		int scaleLevel = 2;
-		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ReversiView);
-		typedArray.getFloat(R.styleable.ReversiView_ratio, ratio);
+		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.GameView);
+		typedArray.getFloat(R.styleable.GameView_ratio, ratio);
 		typedArray.recycle();
 
 		getHolder().addCallback(this);
@@ -68,27 +66,27 @@ public class ReversiView extends SurfaceView implements Callback {
 		initialChessBoard();
 	}
 
-	public ReversiView(Context context, AttributeSet attrs) {
+	public GameView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
-	public ReversiView(Context context) {
+	public GameView(Context context) {
 		this(context, null, 0);
 	}
 
 	public void initialChessBoard(){
-		chessBoard = new byte[M][M];
+		gameBoard = new byte[M][M];
 		index = new int[M][M];
 
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < M; j++) {
-				chessBoard[i][j] = NULL;
+				gameBoard[i][j] = NULL;
 			}
 		}
-		chessBoard[3][3] = WHITE;
-		chessBoard[3][4] = BLACK;
-		chessBoard[4][3] = BLACK;
-		chessBoard[4][4] = WHITE;
+		gameBoard[3][3] = WHITE;
+		gameBoard[3][4] = BLACK;
+		gameBoard[4][3] = BLACK;
+		gameBoard[4][4] = WHITE;
 
 		index[3][3] = 11;
 		index[3][4] = 0;
@@ -117,22 +115,23 @@ public class ReversiView extends SurfaceView implements Callback {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
-	public void move(byte[][] chessBoard, List<Move> reversed, Move move) {
+	public void move(byte[][] gameBoard, List<Play> reversed, Play play) {
 
-		ArrayCopy.copyBinaryArray(chessBoard, this.chessBoard);
+		for (int i = 0; i <BOARDSIZE; i++)
+			System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, BOARDSIZE);
 		for (int i = 0; i < reversed.size(); i++) {
 			int reverseRow = reversed.get(i).row;
 			int reverseCol = reversed.get(i).col;
-			if (chessBoard[reverseRow][reverseCol] == WHITE) {
+			if (gameBoard[reverseRow][reverseCol] == WHITE) {
 				index[reverseRow][reverseCol] = 1;
-			} else if (chessBoard[reverseRow][reverseCol] == BLACK) {
+			} else if (gameBoard[reverseRow][reverseCol] == BLACK) {
 				index[reverseRow][reverseCol] = 12;
 			}
 		}
-		int row = move.row, col = move.col;
-		if (chessBoard[row][col] == WHITE) {
+		int row = play.row, col = play.col;
+		if (gameBoard[row][col] == WHITE) {
 			index[row][col] = 11;
-		} else if (chessBoard[row][col] == BLACK) {
+		} else if (gameBoard[row][col] == BLACK) {
 			index[row][col] = 0;
 		}
 
@@ -142,15 +141,15 @@ public class ReversiView extends SurfaceView implements Callback {
 
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < M; j++) {
-				if (chessBoard[i][j] == NULL)
+				if (gameBoard[i][j] == NULL)
 					continue;
-				index[i][j] = updateIndex(index[i][j], chessBoard[i][j]);
+				index[i][j] = updateIndex(index[i][j], gameBoard[i][j]);
 			}
 		}
 
 	}
 
-	public boolean inChessBoard(float x, float y) {
+	public boolean inGameBoard(float x, float y) {
 		return !(x >= chessBoardLeft) || !(x <= chessBoardRight) || !(y >= chessBoardTop) || !(y <= chessBoardBottom);
 	}
 
@@ -176,7 +175,7 @@ public class ReversiView extends SurfaceView implements Callback {
 		Paint paint3 = new Paint();
 		for (int col = 0; col < M; col++) {
 			for (int row = 0; row < M; row++) {
-				if (chessBoard[row][col] != NULL) {
+				if (gameBoard[row][col] != NULL) {
 					canvas.drawBitmap(images[index[row][col]], chessBoardLeft + col * a, chessBoardTop + row * a, paint3);
 				}
 			}
@@ -198,7 +197,7 @@ public class ReversiView extends SurfaceView implements Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		thread = new RenderThread(getHolder(), this);
+		thread = new BoardUpdate(getHolder(), this);
 		thread.setRunning(true);
 		thread.start();
 	}

@@ -4,15 +4,15 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 
-public class RenderThread extends Thread {
+public class BoardUpdate extends Thread {
 
     private final SurfaceHolder surfaceHolder;
-    private ReversiView reversiView;
+    private GameView gameView;
     private boolean running;
 
-    RenderThread(SurfaceHolder surfaceHolder, ReversiView reversiView){
+    BoardUpdate(SurfaceHolder surfaceHolder, GameView gameView){
         this.surfaceHolder = surfaceHolder;
-        this.reversiView = reversiView;
+        this.gameView = gameView;
     }
 
     @Override
@@ -22,13 +22,13 @@ public class RenderThread extends Thread {
         while(running){
             canvas = null;
             long startTime = System.currentTimeMillis();
-            this.reversiView.update();
+            this.gameView.update();
             long endTime = System.currentTimeMillis();
 
             try{
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
-                    this.reversiView.render(canvas);
+                    this.gameView.render(canvas);
                 }
             }catch(Exception e){
                 e.printStackTrace();

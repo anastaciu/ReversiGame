@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Rule {
+public class Rule implements Constants{
 
-	public static boolean isLegalMove(byte[][] chessBoard, Move move, byte chessColor) {
+	public static boolean isPossiblePlay(byte[][] gameBoard, Play play, byte tokenColor) {
 
-		int i, j, dirx, diry, row = move.row, col = move.col;
-		if (!isLegal(row, col) || chessBoard[row][col] != Constants.NULL)
+		int i, j, dirx, diry, row = play.row, col = play.col;
+		if (!isPossible(row, col) || gameBoard[row][col] != Constants.NULL)
 			return false;
 		for (dirx = -1; dirx < 2; dirx++) {
 			for (diry = -1; diry < 2; diry++) {
 				if (dirx == 0 && diry == 0)
 					continue;
 				int x = col + dirx, y = row + diry;
-				if (isLegal(y, x) && chessBoard[y][x] == (-chessColor)) {
-					for (i = row + diry * 2, j = col + dirx * 2; isLegal(i, j); i += diry, j += dirx) {
-						if (chessBoard[i][j] == (-chessColor)) {
+				if (isPossible(y, x) && gameBoard[y][x] == (-tokenColor)) {
+					for (i = row + diry * 2, j = col + dirx * 2; isPossible(i, j); i += diry, j += dirx) {
+						if (gameBoard[i][j] == (-tokenColor)) {
 							continue;
-						} else if (chessBoard[i][j] == chessColor) {
+						} else if (gameBoard[i][j] == tokenColor) {
 							return true;
 						} else {
 							break;
@@ -32,32 +32,32 @@ public class Rule {
 		return false;
 	}
 
-	public static boolean isLegal(int row, int col) {
-		return row >= 0 && row < 8 && col >= 0 && col < 8;
+	private static boolean isPossible(int row, int col) {
+		return row >= 0 && row < BOARDSIZE && col >= 0 && col < BOARDSIZE;
 	}
 
-	public static List<Move> move(byte[][] chessBoard, Move move, byte chessColor) {
-		int row = move.row;
-		int col = move.col;
+	public static List<Play> move(byte[][] gameBoard, Play play, byte tokenColor) {
+		int row = play.row;
+		int col = play.col;
 		int i, j, temp, m, n, dirx, diry;
-		List<Move> moves = new ArrayList<Move>();
+		List<Play> plays = new ArrayList<>();
 		for (dirx = -1; dirx < 2; dirx++) {
 			for (diry = -1; diry < 2; diry++) {
 				if (dirx == 0 && diry == 0)
 					continue;
 				temp = 0;
 				int x = col + dirx, y = row + diry;
-				if (isLegal(y, x) && chessBoard[y][x] == (-chessColor)) {
+				if (isPossible(y, x) && gameBoard[y][x] == (-tokenColor)) {
 					temp++;
-					for (i = row + diry * 2, j = col + dirx * 2; isLegal(i, j); i += diry, j += dirx) {
-						if (chessBoard[i][j] == (-chessColor)) {
+					for (i = row + diry * 2, j = col + dirx * 2; isPossible(i, j); i += diry, j += dirx) {
+						if (gameBoard[i][j] == (-tokenColor)) {
 							temp++;
 							continue;
-						} else if (chessBoard[i][j] == chessColor) {
+						} else if (gameBoard[i][j] == tokenColor) {
 							for (m = row + diry, n = col + dirx; m <= row + temp && m >= row - temp && n <= col + temp
 									&& n >= col - temp; m += diry, n += dirx) {
-								chessBoard[m][n] = chessColor;
-								moves.add(new Move(m, n));
+								gameBoard[m][n] = tokenColor;
+								plays.add(new Play(m, n));
 							}
 							break;
 						} else
@@ -66,36 +66,36 @@ public class Rule {
 				}
 			}
 		}
-		chessBoard[row][col] = chessColor;
-		return moves;
+		gameBoard[row][col] = tokenColor;
+		return plays;
 	}
 
-	public static List<Move> getLegalMoves(byte[][] chessBoard, byte chessColor) {
-		List<Move> moves = new ArrayList<Move>();
-		Move move = null;
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				move = new Move(row, col);
-				if (Rule.isLegalMove(chessBoard, move, chessColor)) {
-					moves.add(move);
+	public static List<Play> getPossiblePlays(byte[][] gameBoard, byte tokenColor) {
+		List<Play> plays = new ArrayList<>();
+		Play play;
+		for (int row = 0; row < BOARDSIZE; row++) {
+			for (int col = 0; col < BOARDSIZE; col++) {
+				play = new Play(row, col);
+				if (Rule.isPossiblePlay(gameBoard, play, tokenColor)) {
+					plays.add(play);
 				}
 			}
 		}
-		return moves;
+		return plays;
 	}
 
-	public static Statistic analyse(byte[][] chessBoard, byte playerColor) {
+	public static Scores analyse(byte[][] gameBoard, byte playerColor) {
 
 		int PLAYER = 0;
 		int AI = 0;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (chessBoard[i][j] == playerColor)
+		for (int i = 0; i < BOARDSIZE; i++) {
+			for (int j = 0; j < BOARDSIZE; j++) {
+				if (gameBoard[i][j] == playerColor)
 					PLAYER += 1;
-				else if (chessBoard[i][j] == (byte)-playerColor)
+				else if (gameBoard[i][j] == (byte)-playerColor)
 					AI += 1;
 			}
 		}
-		return new Statistic(PLAYER, AI);
+		return new Scores(PLAYER, AI);
 	}
 }

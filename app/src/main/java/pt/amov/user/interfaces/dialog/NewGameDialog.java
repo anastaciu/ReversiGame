@@ -17,7 +17,7 @@ import pt.amov.reversi.R;
 public class NewGameDialog extends Dialog {
 
     private RadioButton black;
-    private final RadioButton[] radioButtons = new RadioButton[8];
+    private final RadioButton[] radioButtons = new RadioButton[3];
     private Button ok;
 
     public NewGameDialog(Context context, byte playColor, int difficulty) {
@@ -40,11 +40,11 @@ public class NewGameDialog extends Dialog {
         radioButtons[0] = view.findViewById(R.id.level1);
         radioButtons[1] = view.findViewById(R.id.level2);
         radioButtons[2] = view.findViewById(R.id.level3);
-        radioButtons[3] = view.findViewById(R.id.level4);
+/*        radioButtons[3] = view.findViewById(R.id.level4);
         radioButtons[4] = view.findViewById(R.id.level5);
         radioButtons[5] = view.findViewById(R.id.level6);
         radioButtons[6] = view.findViewById(R.id.level7);
-        radioButtons[7] = view.findViewById(R.id.level8);
+        radioButtons[7] = view.findViewById(R.id.level8);*/
         for(int i = 0 ;i < radioButtons.length; i++){
             final int k = i;
             radioButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -61,7 +61,7 @@ public class NewGameDialog extends Dialog {
             });
         }
         radioButtons[difficulty - 1].setChecked(true);
-        ok = (Button)view.findViewById(R.id.ok);
+        ok = view.findViewById(R.id.ok);
         super.setContentView(view);
     }
 
@@ -70,7 +70,7 @@ public class NewGameDialog extends Dialog {
     }
 
     public int getDifficulty(){
-        for(int i = 0; i < 8; i++){
+        for(int i = 0; i < radioButtons.length; i++){
             if(radioButtons[i].isChecked()){
                 return i+1;
             }

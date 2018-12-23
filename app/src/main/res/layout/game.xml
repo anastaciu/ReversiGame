@@ -50,7 +50,7 @@
                     android:contentDescription="@string/payerpiece" />
 
                 <TextView
-                    android:id="@+id/player_chesses"
+                    android:id="@+id/player_tokens"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/x"
@@ -119,8 +119,8 @@
         </LinearLayout>
     </LinearLayout>
 
-    <pt.amov.user.interfaces.views.ReversiView
-        android:id="@+id/reversiView"
+    <pt.amov.user.interfaces.views.GameView
+        android:id="@+id/gameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

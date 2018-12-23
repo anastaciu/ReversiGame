@@ -5,200 +5,156 @@ import java.util.List;
 
 public class Algorithm implements Constants{
 
-	public static Move getGoodMove(byte[][] gameBoard, int depth, byte tokenColor, int difficulty) {
+	public static Play getGoodMove(byte[][] gameBoard, int depth, byte tokenColor, int difficulty) {
 
 		if (tokenColor == BLACK)
-			return max(gameBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, tokenColor, difficulty).move;
+			return max(gameBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, tokenColor, difficulty).play;
 		else
-			return min(gameBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, tokenColor, difficulty).move;
+			return min(gameBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, tokenColor, difficulty).play;
 	}
 
-	private static MinimaxResult max(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
+	private static AIPlay max(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
 		if (depth == 0) {
-			return new MinimaxResult(evaluate(gameBoard, difficulty), null);
+			return new AIPlay(evaluate(gameBoard, difficulty), null);
 		}
 
-		List<Move> legalMovesMe = Rule.getLegalMoves(gameBoard, tokenColor);
-		if (legalMovesMe.size() == 0) {
-			if (Rule.getLegalMoves(gameBoard, (byte)-tokenColor).size() == 0) {
-				return new MinimaxResult(evaluate(gameBoard, difficulty), null);
+		List<Play> possibleMoves = Rule.getPossiblePlays(gameBoard, tokenColor);
+		if (possibleMoves.size() == 0) {
+			if (Rule.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
+				return new AIPlay(evaluate(gameBoard, difficulty), null);
 			}
 			return min(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
 
-		byte[][] tmp = new byte[8][8];
-		ArrayCopy.copyBinaryArray(gameBoard, tmp);
+		byte[][] tmp = new byte[BOARDSIZE][BOARDSIZE];
+        for (int i = 0; i <  BOARDSIZE; i++)
+            System.arraycopy(gameBoard[i], 0, tmp[i], 0, BOARDSIZE);
 		int best = Integer.MIN_VALUE;
-		Move move = null;
+		Play play = null;
 
-		for (int i = 0; i < legalMovesMe.size(); i++) {
+		for (int i = 0; i < possibleMoves.size(); i++) {
             alpha = Math.max(best, alpha);
             if(alpha >= beta){
                 break;
             }
-			Rule.move(gameBoard, legalMovesMe.get(i), tokenColor);
+			Rule.move(gameBoard, possibleMoves.get(i), tokenColor);
 			int value = min(gameBoard, depth - 1, Math.max(best, alpha), beta, (byte)-tokenColor, difficulty).mark;
 			if (value > best) {
 				best = value;
-				move = legalMovesMe.get(i);
+				play = possibleMoves.get(i);
 			}
-			ArrayCopy.copyBinaryArray(tmp, gameBoard);
+            for (int j = 0; j <  BOARDSIZE; j++)
+                System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARDSIZE);
 		}
-		return new MinimaxResult(best, move);
+		return new AIPlay(best, play);
 	}
 
-	private static MinimaxResult min(byte[][] chessBoard, int depth, int alpha, int beta, byte chessColor, int difficulty) {
+	private static AIPlay min(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
 		if (depth == 0) {
-			return new MinimaxResult(evaluate(chessBoard, difficulty), null);
+			return new AIPlay(evaluate(gameBoard, difficulty), null);
 		}
 
-		List<Move> legalMovesMe = Rule.getLegalMoves(chessBoard, chessColor);
-		if (legalMovesMe.size() == 0) {
-			if (Rule.getLegalMoves(chessBoard, (byte)-chessColor).size() == 0) {
-				return new MinimaxResult(evaluate(chessBoard, difficulty), null);
+		List<Play> PossibleMoves = Rule.getPossiblePlays(gameBoard, tokenColor);
+		if (PossibleMoves.size() == 0) {
+			if (Rule.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
+				return new AIPlay(evaluate(gameBoard, difficulty), null);
 			}
-			return max(chessBoard, depth, alpha, beta, (byte)-chessColor, difficulty);
+			return max(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
 
-		byte[][] tmp = new byte[8][8];
-		ArrayCopy.copyBinaryArray(chessBoard, tmp);
+		byte[][] tmp = new byte[BOARDSIZE][BOARDSIZE];
+        for (int i = 0; i <  BOARDSIZE; i++)
+            System.arraycopy(gameBoard[i], 0, tmp[i], 0, BOARDSIZE);
 		int best = Integer.MAX_VALUE;
-		Move move = null;
+		Play play = null;
 
-		for (int i = 0; i < legalMovesMe.size(); i++) {
+		for (int i = 0; i < PossibleMoves.size(); i++) {
             beta = Math.min(best, beta);
             if(alpha >= beta){
                 break;
             }
-			Rule.move(chessBoard, legalMovesMe.get(i), chessColor);
-			int value = max(chessBoard, depth - 1, alpha, Math.min(best, beta), (byte)-chessColor, difficulty).mark;
+			Rule.move(gameBoard, PossibleMoves.get(i), tokenColor);
+			int value = max(gameBoard, depth - 1, alpha, Math.min(best, beta), (byte)-tokenColor, difficulty).mark;
 			if (value < best) {
 				best = value;
-				move = legalMovesMe.get(i);
+				play = PossibleMoves.get(i);
 			}
-			ArrayCopy.copyBinaryArray(tmp, chessBoard);
+            for (int j = 0; j <  BOARDSIZE; j++)
+                System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARDSIZE);
 		}
-		return new MinimaxResult(best, move);
+		return new AIPlay(best, play);
 	}
 
-	private static int evaluate(byte[][] chessBoard, int difficulty) {
+	private static int evaluate(byte[][] gameBoard, int difficulty) {
 		int whiteEvaluate = 0;
 		int blackEvaluate = 0;
 		switch (difficulty) {
 			case 1:
-				for (int i = 0; i < 8; i++) {
-					for (int j = 0; j < 8; j++) {
-						if (chessBoard[i][j] == WHITE) {
+				for (int i = 0; i < BOARDSIZE; i++) {
+					for (int j = 0; j < BOARDSIZE; j++) {
+						if (gameBoard[i][j] == WHITE) {
 							whiteEvaluate += 1;
-						} else if (chessBoard[i][j] == BLACK) {
+						} else if (gameBoard[i][j] == BLACK) {
 							blackEvaluate += 1;
 						}
 					}
 				}
 				break;
 			case 2:
+				for (int i = 0; i < BOARDSIZE; i++) {
+					for (int j = 0; j < BOARDSIZE; j++) {
+						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
+							if (gameBoard[i][j] == WHITE) {
+								whiteEvaluate += 5;
+							} else if (gameBoard[i][j] == BLACK) {
+								blackEvaluate += 5;
+							}
+						} else if (i == 0 || i == 7 || j == 0 || j == 7) {
+							if (gameBoard[i][j] == WHITE) {
+								whiteEvaluate += 2;
+							} else if (gameBoard[i][j] == BLACK) {
+								blackEvaluate += 2;
+							}
+						} else {
+							if (gameBoard[i][j] == WHITE) {
+								whiteEvaluate += 1;
+							} else if (gameBoard[i][j] == BLACK) {
+								blackEvaluate += 1;
+							}
+						}
+					}
+				}
+				break;
 			case 3:
-			case 4:
-				for (int i = 0; i < 8; i++) {
-					for (int j = 0; j < 8; j++) {
+				for (int i = 0; i < BOARDSIZE; i++) {
+					for (int j = 0; j < BOARDSIZE; j++) {
 						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
-							if (chessBoard[i][j] == WHITE) {
+							if (gameBoard[i][j] == WHITE) {
 								whiteEvaluate += 5;
-							} else if (chessBoard[i][j] == BLACK) {
+							} else if (gameBoard[i][j] == BLACK) {
 								blackEvaluate += 5;
 							}
 						} else if (i == 0 || i == 7 || j == 0 || j == 7) {
-							if (chessBoard[i][j] == WHITE) {
+							if (gameBoard[i][j] == WHITE) {
 								whiteEvaluate += 2;
-							} else if (chessBoard[i][j] == BLACK) {
+							} else if (gameBoard[i][j] == BLACK) {
 								blackEvaluate += 2;
 							}
 						} else {
-							if (chessBoard[i][j] == WHITE) {
+							if (gameBoard[i][j] == WHITE) {
 								whiteEvaluate += 1;
-							} else if (chessBoard[i][j] == BLACK) {
+							} else if (gameBoard[i][j] == BLACK) {
 								blackEvaluate += 1;
 							}
 						}
 					}
 				}
-				break;
-			case 5:
-			case 6:
-				for (int i = 0; i < 8; i++) {
-					for (int j = 0; j < 8; j++) {
-						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
-							if (chessBoard[i][j] == WHITE) {
-								whiteEvaluate += 5;
-							} else if (chessBoard[i][j] == BLACK) {
-								blackEvaluate += 5;
-							}
-						} else if (i == 0 || i == 7 || j == 0 || j == 7) {
-							if (chessBoard[i][j] == WHITE) {
-								whiteEvaluate += 2;
-							} else if (chessBoard[i][j] == BLACK) {
-								blackEvaluate += 2;
-							}
-						} else {
-							if (chessBoard[i][j] == WHITE) {
-								whiteEvaluate += 1;
-							} else if (chessBoard[i][j] == BLACK) {
-								blackEvaluate += 1;
-							}
-						}
-					}
-				}
-				blackEvaluate = blackEvaluate * 2 + Rule.getLegalMoves(chessBoard, BLACK).size();
-				whiteEvaluate = whiteEvaluate * 2 + Rule.getLegalMoves(chessBoard, WHITE).size();
-				break;
-			case 7:
-			case 8:
-				for (int i = 0; i < 8; i++) {
-					for (int j = 0; j < 8; j++) {
-						int weight[] = new int[] { 2, 4, 6, 10, 15 };
-						if (chessBoard[i][j] == WHITE) {
-							whiteEvaluate += weight[getStabilizationDegree(chessBoard, new Move(i, j))];
-						} else if (chessBoard[i][j] == BLACK) {
-							blackEvaluate += weight[getStabilizationDegree(chessBoard, new Move(i, j))];
-						}
-					}
-				}
-
-				blackEvaluate += Rule.getLegalMoves(chessBoard, BLACK).size();
-				whiteEvaluate += Rule.getLegalMoves(chessBoard, WHITE).size();
+				blackEvaluate = blackEvaluate * 2 + Rule.getPossiblePlays(gameBoard, BLACK).size();
+				whiteEvaluate = whiteEvaluate * 2 + Rule.getPossiblePlays(gameBoard, WHITE).size();
 				break;
 		}
 		return blackEvaluate - whiteEvaluate;
 	}
 
-	private static int getStabilizationDegree(byte[][] chessBoard, Move move) {
-		int chessColor = chessBoard[move.row][move.col];
-		int drow[][], dcol[][];
-		int row[] = new int[2], col[] = new int[2];
-		int degree = 0;
-
-		drow = new int[][] { { 0, 0 }, { -1, 1 }, { -1, 1 }, { 1, -1 } };
-		dcol = new int[][] { { -1, 1 }, { 0, 0 }, { -1, 1 }, { -1, 1 } };
-
-		for (int k = 0; k < 4; k++) {
-			row[0] = row[1] = move.row;
-			col[0] = col[1] = move.col;
-			for (int i = 0; i < 2; i++) {
-				while (Rule.isLegal(row[i] + drow[k][i], col[i] + dcol[k][i])
-						&& chessBoard[row[i] + drow[k][i]][col[i] + dcol[k][i]] == chessColor) {
-					row[i] += drow[k][i];
-					col[i] += dcol[k][i];
-				}
-			}
-			if (!Rule.isLegal(row[0] + drow[k][0], col[0] + dcol[k][0])
-					|| !Rule.isLegal(row[1] + drow[k][1], col[1] + dcol[k][1])) {
-				degree += 1;
-			} else if (chessBoard[row[0] + drow[k][0]][col[0] + dcol[k][0]] == (-chessColor)
-					&& chessBoard[row[1] + drow[k][1]][col[1] + dcol[k][1]] == (-chessColor)) {
-				degree += 1;
-			}
-		}
-		return degree;
-	}
 
 }
