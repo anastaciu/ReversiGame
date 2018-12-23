@@ -1,4 +1,4 @@
-package pt.amov.activity;
+package pt.amov.user.interfaces.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
