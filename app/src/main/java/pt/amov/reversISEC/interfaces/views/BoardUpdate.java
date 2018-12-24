@@ -1,4 +1,4 @@
-package pt.amov.user.interfaces.views;
+package pt.amov.reversISEC.interfaces.views;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;

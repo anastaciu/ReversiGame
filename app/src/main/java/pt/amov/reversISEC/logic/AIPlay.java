@@ -1,4 +1,4 @@
-package pt.amov.logic;
+package pt.amov.reversISEC.logic;
 
 
 public class AIPlay {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pt.amov.reversi">
+    package="pt.amov.reversISEC">
 
 
     <application
@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="pt.amov.user.interfaces.activity.MainActivity"
+            android:name=".interfaces.activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -22,11 +22,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pt.amov.user.interfaces.activity.GameActivity"
+            android:name=".interfaces.activity.GameVsAiActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="pt.amov.user.interfaces.activity.GameRuleActivity"
+            android:name=".interfaces.activity.RulesActivity"
             android:screenOrientation="portrait">
         </activity>
 

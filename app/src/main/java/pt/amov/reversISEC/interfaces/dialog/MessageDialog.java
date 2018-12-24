@@ -1,4 +1,4 @@
-package pt.amov.user.interfaces.dialog;
+package pt.amov.reversISEC.interfaces.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.view.ViewGroup;
 
-import pt.amov.reversi.R;
+import pt.amov.reversISEC.R;
 
 public class MessageDialog extends Dialog {
 

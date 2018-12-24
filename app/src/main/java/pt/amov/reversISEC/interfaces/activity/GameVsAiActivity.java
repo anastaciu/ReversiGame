@@ -1,4 +1,4 @@
-package pt.amov.user.interfaces.activity;
+package pt.amov.reversISEC.interfaces.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,25 +22,18 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
 
-import pt.amov.logic.Play;
-import pt.amov.logic.Scores;
-import pt.amov.logic.Algorithm;
-import pt.amov.logic.Constants;
-import pt.amov.user.interfaces.views.GameView;
-import pt.amov.logic.Rule;
-import pt.amov.user.interfaces.dialog.MessageDialog;
-import pt.amov.user.interfaces.dialog.NewGameDialog;
-import pt.amov.reversi.R;
+import pt.amov.reversISEC.logic.Play;
+import pt.amov.reversISEC.logic.Scores;
+import pt.amov.reversISEC.logic.AiAlgorithm;
+import pt.amov.reversISEC.logic.Constants;
+import pt.amov.reversISEC.interfaces.views.GameView;
+import pt.amov.reversISEC.logic.Rules;
+import pt.amov.reversISEC.interfaces.dialog.MessageDialog;
+import pt.amov.reversISEC.interfaces.dialog.NewGameDialog;
+import pt.amov.reversISEC.R;
 
-public class GameActivity extends Activity {
+public class GameVsAiActivity extends Activity implements Constants{
 
-    private static final byte NULL = Constants.NULL;
-    private static final byte BLACK = Constants.BLACK;
-    private static final byte WHITE = Constants.WHITE;
-
-    private static final int STATE_PLAYER_MOVE = 0;
-    private static final int STATE_AI_MOVE = 1;
-    private static final int STATE_GAME_OVER = 2;
 
     private GameView gameView = null;
     private LinearLayout playerLayout;
@@ -57,10 +50,9 @@ public class GameActivity extends Activity {
     private int difficulty;
 
 
-    private static final int M = 8;
-    private static final int depth[] = new int[] { 0, 1, 2, 3, 7, 3, 5, 2, 4 };
+    private static final int depth[] = new int[] { 0, 1, 6, 3, 7, 3, 5, 8, 4 };
 
-    private final byte[][] gameBoard = new byte[M][M];
+    private final byte[][] gameBoard = new byte[BOARDSIZE][BOARDSIZE];
     private int gameState;
 
     private static final String MULTIPLY = " × ";
@@ -83,7 +75,6 @@ public class GameActivity extends Activity {
         aiImage = findViewById(R.id.aiImage);
         nameOfAI = findViewById(R.id.name_of_ai);
         Button newGame = findViewById(R.id.new_game);
-        Button tip = findViewById(R.id.tip);
 
 
         Bundle bundle = getIntent().getExtras();
@@ -127,12 +118,12 @@ public class GameActivity extends Activity {
                         v.performClick();
                         if (down && downRow == row && downCol == col) {
                             down = false;
-                            if (!Rule.isPossiblePlay(gameBoard, new Play(row, col), playerColor)) {
+                            if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), playerColor)) {
                                 return true;
                             }
 
                             Play play = new Play(row, col);
-                            List<Play> plays = Rule.move(gameBoard, play, playerColor);
+                            List<Play> plays = Rules.plays(gameBoard, play, playerColor);
                             gameView.move(gameBoard, plays, play);
                             aiTurn();
 
@@ -154,7 +145,7 @@ public class GameActivity extends Activity {
                 byte _playerColor = (byte)preferences.getInt("playerColor", Constants.BLACK);
                 int _difficulty = preferences.getInt("difficulty", 1);
 
-                dialog = new NewGameDialog(GameActivity.this, _playerColor, _difficulty);
+                dialog = new NewGameDialog(GameVsAiActivity.this, _playerColor, _difficulty);
 
                 dialog.setOnStartNewGameListener(new OnClickListener() {
                     @Override
@@ -179,22 +170,11 @@ public class GameActivity extends Activity {
                             aiImage.setImageResource(R.drawable.black1);
                             aiTurn();
                         }
-                        gameView.initialChessBoard();
+                        gameView.initGameBoard();
                         dialog.dismiss();
                     }
                 });
                 dialog.show();
-            }
-        });
-
-
-        tip.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(gameState != STATE_PLAYER_MOVE){
-                    return;
-                }
-                new ThinkingThread(playerColor).start();
             }
         });
 
@@ -211,8 +191,8 @@ public class GameActivity extends Activity {
     }
 
     private void initGameBoard(){
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < M; j++) {
+        for (int i = 0; i < BOARDSIZE; i++) {
+            for (int j = 0; j < BOARDSIZE; j++) {
                 gameBoard[i][j] = NULL;
             }
         }
@@ -238,10 +218,10 @@ public class GameActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            int legalMoves = Rule.getPossiblePlays(gameBoard, thinkingColor).size();
+            int legalMoves = Rules.getPossiblePlays(gameBoard, thinkingColor).size();
             if (legalMoves > 0) {
-                Play play = Algorithm.getGoodMove(gameBoard, depth[difficulty], thinkingColor, difficulty);
-                List<Play> plays = Rule.move(gameBoard, play, thinkingColor);
+                Play play = AiAlgorithm.getPlay(gameBoard, depth[difficulty], thinkingColor, difficulty);
+                List<Play> plays = Rules.plays(gameBoard, play, thinkingColor);
                 gameView.move(gameBoard, plays, play);
             }
             updateUI.handle(legalMoves, thinkingColor);
@@ -260,30 +240,30 @@ public class GameActivity extends Activity {
             int legalMovesOfAI, legalMovesOfPlayer;
             if(thinkingColor == aiColor){
                 legalMovesOfAI = legalMoves;
-                legalMovesOfPlayer = Rule.getPossiblePlays(gameBoard, playerColor).size();
+                legalMovesOfPlayer = Rules.getPossiblePlays(gameBoard, playerColor).size();
 
-                Scores scores = Rule.analyse(gameBoard, playerColor);
+                Scores scores = Rules.getScores(gameBoard, playerColor);
                 if (legalMovesOfAI > 0 && legalMovesOfPlayer > 0) {
                     playerTurn();
                 } else if (legalMovesOfAI == 0 && legalMovesOfPlayer > 0) {
                     playerTurn();
                 } else if (legalMovesOfAI == 0 && legalMovesOfPlayer == 0) {
                     gameState = STATE_GAME_OVER;
-                    gameOver(scores.PLAYER - scores.AI);
+                    gameOver(scores.PLAYER1 - scores.PLAYER2);
                 } else if (legalMovesOfAI > 0 && legalMovesOfPlayer == 0) {
                     aiTurn();
                 }
             }else{
                 legalMovesOfPlayer = legalMoves;
-                legalMovesOfAI = Rule.getPossiblePlays(gameBoard, aiColor).size();
-                Scores scores = Rule.analyse(gameBoard, playerColor);
+                legalMovesOfAI = Rules.getPossiblePlays(gameBoard, aiColor).size();
+                Scores scores = Rules.getScores(gameBoard, playerColor);
                 if (legalMovesOfPlayer > 0 && legalMovesOfAI > 0) {
                     aiTurn();
                 }else if(legalMovesOfPlayer == 0 && legalMovesOfAI > 0){
                     aiTurn();
                 }else if(legalMovesOfPlayer == 0 && legalMovesOfAI == 0){
                     gameState = STATE_GAME_OVER;
-                    gameOver(scores.PLAYER - scores.AI);
+                    gameOver(scores.PLAYER1 - scores.PLAYER2);
                 }else if (legalMovesOfPlayer > 0 && legalMovesOfAI == 0) {
                     playerTurn();
                 }
@@ -298,9 +278,9 @@ public class GameActivity extends Activity {
     }
 
     private void playerTurn(){
-        Scores scores = Rule.analyse(gameBoard, playerColor);
-        String playerStats = MULTIPLY + scores.PLAYER;
-        String AIStats = MULTIPLY + scores.AI;
+        Scores scores = Rules.getScores(gameBoard, playerColor);
+        String playerStats = MULTIPLY + scores.PLAYER1;
+        String AIStats = MULTIPLY + scores.PLAYER2;
         playerTokens.setText(playerStats);
         aiTokens.setText( AIStats);
         playerLayout.setBackgroundResource(R.drawable.rect);
@@ -309,9 +289,9 @@ public class GameActivity extends Activity {
     }
 
     private void aiTurn(){
-        Scores scores = Rule.analyse(gameBoard, playerColor);
-        String playerStats = MULTIPLY + scores.PLAYER;
-        String AIStats = MULTIPLY + scores.AI;
+        Scores scores = Rules.getScores(gameBoard, playerColor);
+        String playerStats = MULTIPLY + scores.PLAYER1;
+        String AIStats = MULTIPLY + scores.PLAYER2;
         playerTokens.setText(playerStats);
         aiTokens.setText(AIStats);
         playerLayout.setBackgroundResource(R.drawable.rect_normal);
@@ -320,17 +300,17 @@ public class GameActivity extends Activity {
         new ThinkingThread(aiColor).start();
     }
 
-    private void gameOver(int winOrLoseOrDraw){
+    private void gameOver(int gameResult){
         MessageDialog msgDialog;
         String msg;
-        if(winOrLoseOrDraw > 0){
+        if(gameResult > 0){
             msg = "You've beaten " + NAME_OF_AI[difficulty - 1];
-        }else if(winOrLoseOrDraw == 0){
+        }else if(gameResult == 0){
             msg = "Draw";
         }else{
             msg = "Defeated by " + NAME_OF_AI[difficulty - 1];
         }
-        msgDialog = new MessageDialog(GameActivity.this, msg);
+        msgDialog = new MessageDialog(GameVsAiActivity.this, msg);
         msgDialog.show();
     }
 
@@ -338,9 +318,9 @@ public class GameActivity extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-            Intent intent = new Intent(GameActivity.this, MainActivity.class);
+            Intent intent = new Intent(GameVsAiActivity.this, MainActivity.class);
             setResult(RESULT_CANCELED, intent);
-            GameActivity.this.finish();
+            GameVsAiActivity.this.finish();
             overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             return true;
         }

@@ -6,20 +6,19 @@
     android:background="#313131"
     android:orientation="vertical" >
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:baselineAligned="false">
 
         <LinearLayout
             android:id="@+id/player"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/rect"
             android:gravity="center"
             android:orientation="vertical"
@@ -27,9 +26,8 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/you"
                 android:textColor="@color/BLACK"
@@ -38,7 +36,7 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" >
 
@@ -61,7 +59,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
@@ -78,19 +76,19 @@
 
         <LinearLayout
             android:id="@+id/ai"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"  
+            android:orientation="vertical"
+            android:layout_marginEnd="40dp"
             android:padding="10dp">
 
             <TextView
                 android:id="@+id/name_of_ai"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
+
                 android:gravity="center"
                 android:textColor="@color/BLACK"
                 android:textSize="20sp" />
@@ -119,7 +117,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <pt.amov.user.interfaces.views.GameView
+    <pt.amov.reversISEC.interfaces.views.GameView
         android:id="@+id/gameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -130,34 +128,33 @@
     <LinearLayout 
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
         android:layout_marginBottom="20dp"
         android:gravity="bottom">
 
         <Button
             android:id="@+id/new_game"
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="30dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_bg_blue"
 			android:textColor="@color/WHITE"
             android:padding="10dp"
             android:textSize="20sp"
             android:text="@string/new_game"/>
-        
-        
-        <Button 
-            android:id="@+id/tip"
+<!--        <Button
+            android:id="@+id/new_game2"
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_bg_blue"
             android:textColor="@color/WHITE"
             android:padding="10dp"
             android:textSize="20sp"
-            android:text="@string/autoplay"/>
+            android:text="@string/new_game"/>-->
+
+
         
     </LinearLayout>
     

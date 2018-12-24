@@ -1,4 +1,4 @@
-package pt.amov.user.interfaces.views;
+package pt.amov.reversISEC.interfaces.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,17 +15,16 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import java.util.List;
-import pt.amov.logic.Play;
-import pt.amov.logic.Constants;
-import pt.amov.reversi.R;
+import pt.amov.reversISEC.logic.Play;
+import pt.amov.reversISEC.logic.Constants;
+import pt.amov.reversISEC.R;
 
 
 public class GameView extends SurfaceView implements Callback, Constants{
 
 	private BoardUpdate thread;
 	private float bgLength;
-	private float a;
-	private static final int M = 8;
+	private float squareSize;
 	private float chessBoardLeft;
 	private float chessBoardRight;
 	private float chessBoardTop;
@@ -54,16 +53,16 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		screenWidth = dm.widthPixels;
 		bgLength = screenWidth * scale[scaleLevel];
 		chessBoardLength = 8f / 9f * bgLength;
-		a = chessBoardLength / 8;
+		squareSize = chessBoardLength / 8;
 		margin = 1f / 18f * bgLength;
 		chessBoardLeft = margin;
-		chessBoardRight = chessBoardLeft + M * a;
+		chessBoardRight = chessBoardLeft + BOARDSIZE * squareSize;
 		chessBoardTop = margin;
-		chessBoardBottom = chessBoardTop + M * a;
+		chessBoardBottom = chessBoardTop + BOARDSIZE * squareSize;
 		images = new Bitmap[22];
 		loadTokens(context);
-		background = loadBitmap(bgLength, bgLength, context.getDrawable(R.drawable.mood));
-		initialChessBoard();
+		background = loadBitmap(bgLength, bgLength, context.getDrawable(R.drawable.board));
+		initGameBoard();
 	}
 
 	public GameView(Context context, AttributeSet attrs) {
@@ -74,12 +73,12 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		this(context, null, 0);
 	}
 
-	public void initialChessBoard(){
-		gameBoard = new byte[M][M];
-		index = new int[M][M];
+	public void initGameBoard(){
+		gameBoard = new byte[BOARDSIZE][BOARDSIZE];
+		index = new int[BOARDSIZE][BOARDSIZE];
 
-		for (int i = 0; i < M; i++) {
-			for (int j = 0; j < M; j++) {
+		for (int i = 0; i < BOARDSIZE; i++) {
+			for (int j = 0; j < BOARDSIZE; j++) {
 				gameBoard[i][j] = NULL;
 			}
 		}
@@ -139,8 +138,8 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
 	public void update() {
 
-		for (int i = 0; i < M; i++) {
-			for (int j = 0; j < M; j++) {
+		for (int i = 0; i < BOARDSIZE; i++) {
+			for (int j = 0; j < BOARDSIZE; j++) {
 				if (gameBoard[i][j] == NULL)
 					continue;
 				index[i][j] = updateIndex(index[i][j], gameBoard[i][j]);
@@ -154,29 +153,31 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	}
 
 	public int getRow(float y) {
-		return (int) Math.floor((y - chessBoardTop) / a);
+		return (int) Math.floor((y - chessBoardTop) / squareSize);
 	}
 
 	public int getCol(float x) {
-		return (int) Math.floor((x - chessBoardLeft) / a);
+		return (int) Math.floor((x - chessBoardLeft) / squareSize);
 	}
 
 	public void render(Canvas canvas) {
 		Paint paint1 = new Paint();
-		canvas.drawBitmap(background, 0, 0, paint1);
-		Paint paint2 = new Paint();
-		paint2.setColor(Color.BLACK);
-		paint2.setStrokeWidth(3);
+		canvas.drawBitmap(background, 0, 10, paint1);
+		Paint boardLines = new Paint();
+		boardLines.setColor(Color.TRANSPARENT);
+		boardLines.setStrokeWidth(3);
+
 		for (int i = 0; i < 9; i++) {
-			canvas.drawLine(chessBoardLeft, chessBoardTop + i * a, chessBoardRight, chessBoardTop + i * a, paint2);
-			canvas.drawLine(chessBoardLeft + i * a, chessBoardTop, chessBoardLeft + i * a, chessBoardBottom, paint2);
+			canvas.drawLine(chessBoardLeft, chessBoardTop + i * squareSize, chessBoardRight, chessBoardTop + i * squareSize, boardLines);
+			canvas.drawLine(chessBoardLeft + i * squareSize, chessBoardTop, chessBoardLeft + i * squareSize, chessBoardBottom, boardLines);
 		}
 
+
 		Paint paint3 = new Paint();
-		for (int col = 0; col < M; col++) {
-			for (int row = 0; row < M; row++) {
+		for (int col = 0; col < BOARDSIZE; col++) {
+			for (int row = 0; row < BOARDSIZE; row++) {
 				if (gameBoard[row][col] != NULL) {
-					canvas.drawBitmap(images[index[row][col]], chessBoardLeft + col * a, chessBoardTop + row * a, paint3);
+					canvas.drawBitmap(images[index[row][col]], chessBoardLeft + col * squareSize, chessBoardTop + row * squareSize, paint3);
 				}
 			}
 		}
@@ -225,28 +226,28 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
 	private void loadTokens(Context context) {
 
-		images[0] = loadBitmap(a, a, context.getDrawable(R.drawable.black1));
-		images[1] = loadBitmap(a, a, context.getDrawable(R.drawable.black2));
-		images[2] = loadBitmap(a, a, context.getDrawable(R.drawable.black3));
-		images[3] = loadBitmap(a, a, context.getDrawable(R.drawable.black4));
-		images[4] = loadBitmap(a, a, context.getDrawable(R.drawable.black5));
-		images[5] = loadBitmap(a, a, context.getDrawable(R.drawable.black6));
-		images[6] = loadBitmap(a, a, context.getDrawable(R.drawable.black7));
-		images[7] = loadBitmap(a, a, context.getDrawable(R.drawable.black8));
-		images[8] = loadBitmap(a, a, context.getDrawable(R.drawable.black9));
-		images[9] = loadBitmap(a, a, context.getDrawable(R.drawable.black10));
-		images[10] = loadBitmap(a, a, context.getDrawable(R.drawable.black11));
-		images[11] = loadBitmap(a, a, context.getDrawable(R.drawable.white1));
-		images[12] = loadBitmap(a, a, context.getDrawable(R.drawable.white2));
-		images[13] = loadBitmap(a, a, context.getDrawable(R.drawable.white3));
-		images[14] = loadBitmap(a, a, context.getDrawable(R.drawable.white4));
-		images[15] = loadBitmap(a, a, context.getDrawable(R.drawable.white5));
-		images[16] = loadBitmap(a, a, context.getDrawable(R.drawable.white6));
-		images[17] = loadBitmap(a, a, context.getDrawable(R.drawable.white7));
-		images[18] = loadBitmap(a, a, context.getDrawable(R.drawable.white8));
-		images[19] = loadBitmap(a, a, context.getDrawable(R.drawable.white9));
-		images[20] = loadBitmap(a, a, context.getDrawable(R.drawable.white10));
-		images[21] = loadBitmap(a, a, context.getDrawable(R.drawable.white11));
+		images[0] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black1));
+		images[1] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black2));
+		images[2] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black3));
+		images[3] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black4));
+		images[4] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black5));
+		images[5] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black6));
+		images[6] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black7));
+		images[7] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black8));
+		images[8] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black9));
+		images[9] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black10));
+		images[10] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black11));
+		images[11] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white1));
+		images[12] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white2));
+		images[13] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white3));
+		images[14] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white4));
+		images[15] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white5));
+		images[16] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white6));
+		images[17] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white7));
+		images[18] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white8));
+		images[19] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white9));
+		images[20] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white10));
+		images[21] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white11));
 	}
 
 }

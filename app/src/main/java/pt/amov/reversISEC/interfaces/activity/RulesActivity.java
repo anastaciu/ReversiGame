@@ -1,4 +1,4 @@
-package pt.amov.user.interfaces.activity;
+package pt.amov.reversISEC.interfaces.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.TextView;
 
-import pt.amov.reversi.R;
+import pt.amov.reversISEC.R;
 
-public class GameRuleActivity extends Activity {
+public class RulesActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class GameRuleActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			GameRuleActivity.this.finish();
+			RulesActivity.this.finish();
 			overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 			return true;
 		}
