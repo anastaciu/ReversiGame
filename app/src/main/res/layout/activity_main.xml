@@ -6,42 +6,73 @@
     android:background="#310000">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:layout_width="wrap_content"
+        android:layout_height="300dp">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/titulo"
-            android:padding="40dp"
             android:src="@drawable/title"
-            tools:src="@drawable/title" />
+            tools:src="@drawable/title"
+            android:scaleY="0.8"
+            android:scaleX="0.8"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="3"
         android:orientation="horizontal"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/playVsAiButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/playbutton" />
-        <Button
-            android:id="@+id/playVsHumanButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/playbutton" />
+        android:layout_gravity="bottom|center"
+        >
 
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/playVsAiButton"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/WHITE"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:text="@string/play_ai"
+        android:layout_gravity="center"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+
+    <Button
+        android:id="@+id/playVsHumanButton"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:textColor="@color/WHITE"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:text="@string/play_human"
+        android:layout_gravity="center"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+
+    <Button
+        android:id="@+id/new_game"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/WHITE"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:layout_row="2"
+        android:layout_column="0"
+        android:text="@string/online"
+        android:layout_gravity="center"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
+
+    </GridLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +86,6 @@
             android:layout_width="100dp"
             android:layout_height="75dp"
             android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
             android:layout_marginBottom="20dp"
             android:gravity="bottom"
             android:text="@string/copyright"

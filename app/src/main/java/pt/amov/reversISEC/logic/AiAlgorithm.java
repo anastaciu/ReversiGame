@@ -13,15 +13,15 @@ public class AiAlgorithm implements Constants{
 			return min(gameBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, tokenColor, difficulty).play;
 	}
 
-	private static AIPlay max(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
+	private static AiPlay max(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
 		if (depth == 0) {
-			return new AIPlay(evaluate(gameBoard, difficulty), null);
+			return new AiPlay(evaluate(gameBoard, difficulty), null);
 		}
 
 		List<Play> possiblePlays = Rules.getPossiblePlays(gameBoard, tokenColor);
 		if (possiblePlays.size() == 0) {
 			if (Rules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
-				return new AIPlay(evaluate(gameBoard, difficulty), null);
+				return new AiPlay(evaluate(gameBoard, difficulty), null);
 			}
 			return min(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
@@ -46,18 +46,18 @@ public class AiAlgorithm implements Constants{
             for (int j = 0; j <  BOARDSIZE; j++)
                 System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARDSIZE);
 		}
-		return new AIPlay(best, play);
+		return new AiPlay(best, play);
 	}
 
-	private static AIPlay min(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
+	private static AiPlay min(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
 		if (depth == 0) {
-			return new AIPlay(evaluate(gameBoard, difficulty), null);
+			return new AiPlay(evaluate(gameBoard, difficulty), null);
 		}
 
 		List<Play> PossibleMoves = Rules.getPossiblePlays(gameBoard, tokenColor);
 		if (PossibleMoves.size() == 0) {
 			if (Rules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
-				return new AIPlay(evaluate(gameBoard, difficulty), null);
+				return new AiPlay(evaluate(gameBoard, difficulty), null);
 			}
 			return max(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
@@ -82,7 +82,7 @@ public class AiAlgorithm implements Constants{
             for (int j = 0; j <  BOARDSIZE; j++)
                 System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARDSIZE);
 		}
-		return new AIPlay(best, play);
+		return new AiPlay(best, play);
 	}
 
 	private static int evaluate(byte[][] gameBoard, int difficulty) {

@@ -11,13 +11,16 @@
     <string name="rules">RULES</string>
     <string name="vs">VS</string>
     <string name="x">× ..</string>
-    <string name="new_game">New Game</string>
     <string name="autoplay">Autoplay</string>
     <string name="playerpiece">playerPiece</string>
     <string name="opponentpiece">oponentPiece</string>
     <string name="player_1">Player 1</string>
     <string name="ok">OK</string>
+    <string name="online">Play Online</string>
+    <string name="play_ai">Play AI</string>
+    <string name="play_human">Play Human</string>
     <string name="pro">Pro</string>
     <string name="master">Master</string>
+    <string name="new_game">New Game</string>
 
 </resources>
