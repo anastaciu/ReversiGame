@@ -13,9 +13,9 @@
     <string name="x">× ..</string>
     <string name="new_game">New Game</string>
     <string name="autoplay">Autoplay</string>
-    <string name="payerpiece">payerPiece</string>
-    <string name="oponentpiece">oponentPiece</string>
-    <string name="you">You</string>
+    <string name="playerpiece">playerPiece</string>
+    <string name="opponentpiece">oponentPiece</string>
+    <string name="player_1">Player 1</string>
     <string name="ok">OK</string>
     <string name="pro">Pro</string>
     <string name="master">Master</string>

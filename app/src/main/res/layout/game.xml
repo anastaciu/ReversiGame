@@ -29,14 +29,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="@string/you"
+                android:text="@string/player_1"
                 android:textColor="@color/BLACK"
                 android:textSize="20sp"
                 tools:text="You" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center" >
 
@@ -45,7 +45,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/black1"
-                    android:contentDescription="@string/payerpiece" />
+                    android:contentDescription="@string/playerpiece" />
 
                 <TextView
                     android:id="@+id/player_tokens"
@@ -104,7 +104,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/white1"
-                    android:contentDescription="@string/oponentpiece" />
+                    android:contentDescription="@string/opponentpiece" />
 
                 <TextView
                     android:id="@+id/aiChesses"
@@ -124,39 +124,81 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp" />
-    
-    <LinearLayout 
+
+
+    <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_marginBottom="20dp"
-        android:gravity="bottom">
+        android:gravity="center">
 
-        <Button
-            android:id="@+id/new_game"
-            android:layout_height="wrap_content"
+        <GridLayout
             android:layout_width="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/button_bg_blue"
-			android:textColor="@color/WHITE"
-            android:padding="10dp"
-            android:textSize="20sp"
-            android:text="@string/new_game"/>
-<!--        <Button
-            android:id="@+id/new_game2"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:rowCount="2"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/button_bg_blue"
-            android:textColor="@color/WHITE"
-            android:padding="10dp"
-            android:textSize="20sp"
-            android:text="@string/new_game"/>-->
+            tools:ignore="UselessParent">
 
+            <Button
+                android:id="@+id/new_game5"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:text="@string/new_game"
+                />
 
-        
+            <Button
+                android:id="@+id/new_game3"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:text="@string/new_game"
+                />
+
+            <Button
+                android:id="@+id/new_game"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:text="@string/new_game"
+                />
+
+            <Button
+                android:id="@+id/new_game2"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:text="@string/new_game"/>
+
+        </GridLayout>
+
     </LinearLayout>
-    
-
 </LinearLayout>

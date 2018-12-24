@@ -142,7 +142,7 @@ public class GameVsAiActivity extends Activity implements Constants{
             public void onClick(View v) {
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                byte _playerColor = (byte)preferences.getInt("playerColor", Constants.BLACK);
+                byte _playerColor = (byte)preferences.getInt("playerColor", BLACK);
                 int _difficulty = preferences.getInt("difficulty", 1);
 
                 dialog = new NewGameDialog(GameVsAiActivity.this, _playerColor, _difficulty);
