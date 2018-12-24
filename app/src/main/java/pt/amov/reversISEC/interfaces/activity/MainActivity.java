@@ -53,7 +53,7 @@ public class MainActivity extends Activity implements Constants{
                                          byte playColor = (byte) preferences.getInt("playerColor", BLACK);
                                          int difficulty = preferences.getInt("difficulty", 1);
 
-                                         Intent intent = new Intent(MainActivity.this, GameVsAiActivity.class);
+                                         Intent intent = new Intent(MainActivity.this, GameVsHumanActivity.class);
                                          Bundle bundle = new Bundle();
                                          bundle.putByte("playerColor", playColor);
                                          bundle.putInt("difficulty", difficulty);
@@ -66,8 +66,8 @@ public class MainActivity extends Activity implements Constants{
 
         );
 
-        Button rule = findViewById(R.id.ruleButton);
-        rule.setOnClickListener(new View.OnClickListener() {
+        Button rules = findViewById(R.id.ruleButton);
+        rules.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RulesActivity.class);
