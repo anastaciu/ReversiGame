@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -25,10 +24,10 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	private BoardUpdate thread;
 	private float bgLength;
 	private float squareSize;
-	private float chessBoardLeft;
-	private float chessBoardRight;
-	private float chessBoardTop;
-	private float chessBoardBottom;
+	private float boardLeft;
+	private float boardRight;
+	private float boardTop;
+	private float boardBottom;
 	private static final byte NULL = Constants.NULL;
 	private static final byte BLACK = Constants.BLACK;
 	private static final byte WHITE = Constants.WHITE;
@@ -39,7 +38,7 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
 	public GameView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		float chessBoardLength, screenWidth, ratio = 0.9f, scale[] = new float[] { 0.75f, 0.80f, 0.85f, 0.90f, 0.95f }, margin;
+		float boardLength, screenWidth, ratio = 0.9f, scale[] = new float[] { 0.75f, 0.80f, 0.85f, 0.90f, 0.95f }, margin;
 		int scaleLevel = 2;
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.GameView);
 		typedArray.getFloat(R.styleable.GameView_ratio, ratio);
@@ -52,16 +51,16 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		wm.getDefaultDisplay().getMetrics(dm);
 		screenWidth = dm.widthPixels;
 		bgLength = screenWidth * scale[scaleLevel];
-		chessBoardLength = 8f / 9f * bgLength;
-		squareSize = chessBoardLength / 8;
+		boardLength = 8f / 9f * bgLength;
+		squareSize = boardLength / 8;
 		margin = 1f / 18f * bgLength;
-		chessBoardLeft = margin;
-		chessBoardRight = chessBoardLeft + BOARDSIZE * squareSize;
-		chessBoardTop = margin;
-		chessBoardBottom = chessBoardTop + BOARDSIZE * squareSize;
+		boardLeft = margin;
+		boardRight = boardLeft + BOARD_SIZE * squareSize;
+		boardTop = margin;
+		boardBottom = boardTop + BOARD_SIZE * squareSize;
 		images = new Bitmap[22];
 		loadTokens(context);
-		background = loadBitmap(bgLength, bgLength, context.getDrawable(R.drawable.board));
+		background = loadImages(bgLength, bgLength, context.getDrawable(R.drawable.board));
 		initGameBoard();
 	}
 
@@ -74,11 +73,11 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	}
 
 	public void initGameBoard(){
-		gameBoard = new byte[BOARDSIZE][BOARDSIZE];
-		index = new int[BOARDSIZE][BOARDSIZE];
+		gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
+		index = new int[BOARD_SIZE][BOARD_SIZE];
 
-		for (int i = 0; i < BOARDSIZE; i++) {
-			for (int j = 0; j < BOARDSIZE; j++) {
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			for (int j = 0; j < BOARD_SIZE; j++) {
 				gameBoard[i][j] = NULL;
 			}
 		}
@@ -114,10 +113,10 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
-	public void move(byte[][] gameBoard, List<Play> reversed, Play play) {
+	public void play(byte[][] gameBoard, List<Play> reversed, Play play) {
 
-		for (int i = 0; i <BOARDSIZE; i++)
-			System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, BOARDSIZE);
+		for (int i = 0; i < BOARD_SIZE; i++)
+			System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, BOARD_SIZE);
 		for (int i = 0; i < reversed.size(); i++) {
 			int reverseRow = reversed.get(i).row;
 			int reverseCol = reversed.get(i).col;
@@ -138,8 +137,8 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
 	public void update() {
 
-		for (int i = 0; i < BOARDSIZE; i++) {
-			for (int j = 0; j < BOARDSIZE; j++) {
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			for (int j = 0; j < BOARD_SIZE; j++) {
 				if (gameBoard[i][j] == NULL)
 					continue;
 				index[i][j] = updateIndex(index[i][j], gameBoard[i][j]);
@@ -149,35 +148,26 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	}
 
 	public boolean inGameBoard(float x, float y) {
-		return !(x >= chessBoardLeft) || !(x <= chessBoardRight) || !(y >= chessBoardTop) || !(y <= chessBoardBottom);
+		return !(x >= boardLeft) || !(x <= boardRight) || !(y >= boardTop) || !(y <= boardBottom);
 	}
 
 	public int getRow(float y) {
-		return (int) Math.floor((y - chessBoardTop) / squareSize);
+		return (int) Math.floor((y - boardTop) / squareSize);
 	}
 
 	public int getCol(float x) {
-		return (int) Math.floor((x - chessBoardLeft) / squareSize);
+		return (int) Math.floor((x - boardLeft) / squareSize);
 	}
 
 	public void render(Canvas canvas) {
-		Paint paint1 = new Paint();
-		canvas.drawBitmap(background, 0, 10, paint1);
-		Paint boardLines = new Paint();
-		boardLines.setColor(Color.TRANSPARENT);
-		boardLines.setStrokeWidth(3);
+		Paint board = new Paint();
+		Paint tokens = new Paint();
+		canvas.drawBitmap(background, 0, 6, board);
 
-		for (int i = 0; i < 9; i++) {
-			canvas.drawLine(chessBoardLeft, chessBoardTop + i * squareSize, chessBoardRight, chessBoardTop + i * squareSize, boardLines);
-			canvas.drawLine(chessBoardLeft + i * squareSize, chessBoardTop, chessBoardLeft + i * squareSize, chessBoardBottom, boardLines);
-		}
-
-
-		Paint paint3 = new Paint();
-		for (int col = 0; col < BOARDSIZE; col++) {
-			for (int row = 0; row < BOARDSIZE; row++) {
+		for (int col = 0; col < BOARD_SIZE; col++) {
+			for (int row = 0; row < BOARD_SIZE; row++) {
 				if (gameBoard[row][col] != NULL) {
-					canvas.drawBitmap(images[index[row][col]], chessBoardLeft + col * squareSize, chessBoardTop + row * squareSize, paint3);
+					canvas.drawBitmap(images[index[row][col]], boardLeft + col * squareSize, boardTop + row * squareSize, tokens);
 				}
 			}
 		}
@@ -211,11 +201,9 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
 
-
-	public Bitmap loadBitmap(float width, float height, Drawable drawable) {
+	public Bitmap loadImages(float width, float height, Drawable drawable) {
 
 		Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
@@ -226,28 +214,28 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
 	private void loadTokens(Context context) {
 
-		images[0] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black1));
-		images[1] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black2));
-		images[2] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black3));
-		images[3] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black4));
-		images[4] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black5));
-		images[5] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black6));
-		images[6] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black7));
-		images[7] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black8));
-		images[8] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black9));
-		images[9] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black10));
-		images[10] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.black11));
-		images[11] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white1));
-		images[12] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white2));
-		images[13] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white3));
-		images[14] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white4));
-		images[15] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white5));
-		images[16] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white6));
-		images[17] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white7));
-		images[18] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white8));
-		images[19] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white9));
-		images[20] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white10));
-		images[21] = loadBitmap(squareSize, squareSize, context.getDrawable(R.drawable.white11));
+		images[0] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black1));
+		images[1] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black2));
+		images[2] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black3));
+		images[3] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black4));
+		images[4] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black5));
+		images[5] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black6));
+		images[6] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black7));
+		images[7] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black8));
+		images[8] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black9));
+		images[9] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black10));
+		images[10] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black11));
+		images[11] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white1));
+		images[12] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white2));
+		images[13] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white3));
+		images[14] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white4));
+		images[15] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white5));
+		images[16] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white6));
+		images[17] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white7));
+		images[18] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white8));
+		images[19] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white9));
+		images[20] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white10));
+		images[21] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white11));
 	}
 
 }

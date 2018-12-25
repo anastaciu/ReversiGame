@@ -1,7 +1,9 @@
 package pt.amov.reversISEC.interfaces.activity;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ public class RulesActivity extends Activity {
 		setContentView(R.layout.game_rule);
 		TextView textView = findViewById(R.id.rule);
 		textView.setText(getResources().getString(R.string.game_rule));
+		if (Build.VERSION.SDK_INT > 26)
+			textView.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
 	}
 	
 	@Override

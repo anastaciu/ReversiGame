@@ -29,9 +29,7 @@
             android:name=".interfaces.activity.RulesActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity
-            android:name=".interfaces.activity.GameVsHumanActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".interfaces.activity.GameVsHumanActivity" />
     </application>
 
 </manifest>

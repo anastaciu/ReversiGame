@@ -52,7 +52,7 @@ public class GameVsAiActivity extends Activity implements Constants{
 
     private static final int depth[] = new int[] { 0, 1, 6, 3, 7, 3, 5, 8, 4 };
 
-    private final byte[][] gameBoard = new byte[BOARDSIZE][BOARDSIZE];
+    private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
     private int gameState;
 
     private static final String MULTIPLY = " × ";
@@ -67,14 +67,17 @@ public class GameVsAiActivity extends Activity implements Constants{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
         gameView = findViewById(R.id.gameView);
-        playerLayout = findViewById(R.id.player);
-        aiLayout = findViewById(R.id.ai);
-        playerTokens = findViewById(R.id.player_tokens);
-        aiTokens = findViewById(R.id.aiChesses);
-        playerImage = findViewById(R.id.player_image);
-        aiImage = findViewById(R.id.aiImage);
-        nameOfAI = findViewById(R.id.name_of_ai);
+        playerLayout = findViewById(R.id.player1);
+        aiLayout = findViewById(R.id.player2);
+        playerTokens = findViewById(R.id.player1_tokens);
+        aiTokens = findViewById(R.id.player2_tokens);
+        playerImage = findViewById(R.id.player1_image);
+        aiImage = findViewById(R.id.player2_image);
+        nameOfAI = findViewById(R.id.player2_name);
         Button newGame = findViewById(R.id.new_game);
+        Button pass = findViewById(R.id.pass);
+        Button playAgain = findViewById(R.id.play_again);
+        Button quitGame = findViewById(R.id.exit_game);
 
 
         Bundle bundle = getIntent().getExtras();
@@ -92,8 +95,6 @@ public class GameVsAiActivity extends Activity implements Constants{
             boolean down = false;
             int downRow;
             int downCol;
-
-
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -124,7 +125,7 @@ public class GameVsAiActivity extends Activity implements Constants{
 
                             Play play = new Play(row, col);
                             List<Play> plays = Rules.plays(gameBoard, play, playerColor);
-                            gameView.move(gameBoard, plays, play);
+                            gameView.play(gameBoard, plays, play);
                             aiTurn();
 
                         }
@@ -191,8 +192,8 @@ public class GameVsAiActivity extends Activity implements Constants{
     }
 
     private void initGameBoard(){
-        for (int i = 0; i < BOARDSIZE; i++) {
-            for (int j = 0; j < BOARDSIZE; j++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 gameBoard[i][j] = NULL;
             }
         }
@@ -222,7 +223,7 @@ public class GameVsAiActivity extends Activity implements Constants{
             if (legalMoves > 0) {
                 Play play = AiAlgorithm.getPlay(gameBoard, depth[difficulty], thinkingColor, difficulty);
                 List<Play> plays = Rules.plays(gameBoard, play, thinkingColor);
-                gameView.move(gameBoard, plays, play);
+                gameView.play(gameBoard, plays, play);
             }
             updateUI.handle(legalMoves, thinkingColor);
         }

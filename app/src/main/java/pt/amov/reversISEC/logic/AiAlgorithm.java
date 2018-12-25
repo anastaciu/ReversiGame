@@ -26,9 +26,9 @@ public class AiAlgorithm implements Constants{
 			return min(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
 
-		byte[][] tmp = new byte[BOARDSIZE][BOARDSIZE];
-        for (int i = 0; i <  BOARDSIZE; i++)
-            System.arraycopy(gameBoard[i], 0, tmp[i], 0, BOARDSIZE);
+		byte[][] tmp = new byte[BOARD_SIZE][BOARD_SIZE];
+        for (int i = 0; i < BOARD_SIZE; i++)
+            System.arraycopy(gameBoard[i], 0, tmp[i], 0, BOARD_SIZE);
 		int best = Integer.MIN_VALUE;
 		Play play = null;
 
@@ -43,8 +43,8 @@ public class AiAlgorithm implements Constants{
 				best = value;
 				play = possiblePlays.get(i);
 			}
-            for (int j = 0; j <  BOARDSIZE; j++)
-                System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARDSIZE);
+            for (int j = 0; j < BOARD_SIZE; j++)
+                System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARD_SIZE);
 		}
 		return new AiPlay(best, play);
 	}
@@ -62,9 +62,9 @@ public class AiAlgorithm implements Constants{
 			return max(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
 
-		byte[][] tmp = new byte[BOARDSIZE][BOARDSIZE];
-        for (int i = 0; i <  BOARDSIZE; i++)
-            System.arraycopy(gameBoard[i], 0, tmp[i], 0, BOARDSIZE);
+		byte[][] tmp = new byte[BOARD_SIZE][BOARD_SIZE];
+        for (int i = 0; i < BOARD_SIZE; i++)
+            System.arraycopy(gameBoard[i], 0, tmp[i], 0, BOARD_SIZE);
 		int best = Integer.MAX_VALUE;
 		Play play = null;
 
@@ -79,8 +79,8 @@ public class AiAlgorithm implements Constants{
 				best = value;
 				play = PossibleMoves.get(i);
 			}
-            for (int j = 0; j <  BOARDSIZE; j++)
-                System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARDSIZE);
+            for (int j = 0; j < BOARD_SIZE; j++)
+                System.arraycopy(tmp[j], 0, gameBoard[j], 0, BOARD_SIZE);
 		}
 		return new AiPlay(best, play);
 	}
@@ -90,8 +90,8 @@ public class AiAlgorithm implements Constants{
 		int blackEvaluate = 0;
 		switch (difficulty) {
 			case 1:
-				for (int i = 0; i < BOARDSIZE; i++) {
-					for (int j = 0; j < BOARDSIZE; j++) {
+				for (int i = 0; i < BOARD_SIZE; i++) {
+					for (int j = 0; j < BOARD_SIZE; j++) {
 						if (gameBoard[i][j] == WHITE) {
 							whiteEvaluate += 1;
 						} else if (gameBoard[i][j] == BLACK) {
@@ -101,8 +101,8 @@ public class AiAlgorithm implements Constants{
 				}
 				break;
 			case 2:
-				for (int i = 0; i < BOARDSIZE; i++) {
-					for (int j = 0; j < BOARDSIZE; j++) {
+				for (int i = 0; i < BOARD_SIZE; i++) {
+					for (int j = 0; j < BOARD_SIZE; j++) {
 						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
 							if (gameBoard[i][j] == WHITE) {
 								whiteEvaluate += 5;
@@ -126,8 +126,8 @@ public class AiAlgorithm implements Constants{
 				}
 				break;
 			case 3:
-				for (int i = 0; i < BOARDSIZE; i++) {
-					for (int j = 0; j < BOARDSIZE; j++) {
+				for (int i = 0; i < BOARD_SIZE; i++) {
+					for (int j = 0; j < BOARD_SIZE; j++) {
 						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
 							if (gameBoard[i][j] == WHITE) {
 								whiteEvaluate += 5;
