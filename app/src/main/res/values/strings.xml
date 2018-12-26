@@ -21,5 +21,8 @@
     <string name="pro">Pro</string>
     <string name="master">Master</string>
     <string name="new_game">New Game</string>
+    <string name="pass">Pass Move</string>
+    <string name="play_again">Play Again</string>
+    <string name="quit_game">Quit Game</string>
 
 </resources>

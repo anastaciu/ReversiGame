@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Objects;
 
 import pt.amov.reversISEC.R;
@@ -45,6 +46,8 @@ public class GameVsHumanActivity extends Activity implements Constants{
     private byte player1Color;
     private byte player2Color;
 
+
+
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
     private int gameState;
 
@@ -69,22 +72,56 @@ public class GameVsHumanActivity extends Activity implements Constants{
         Button playAgain = findViewById(R.id.play_again);
         Button quitGame = findViewById(R.id.exit_game);
 
+        Bundle bundle = getIntent().getExtras();
+        player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
+        player2Color = (byte) -player1Color;
+
         initGameBoard();
 
         gameView.setOnTouchListener(new OnTouchListener() {
 
+            boolean down = false;
+            int downRow;
+            int downCol;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
+                if (gameState != STATE_PLAYER_MOVE) {
+                    return false;
+                }
+                float x = event.getX();
+                float y = event.getY();
+                if (gameView.inGameBoard(x, y)) {
+                    return false;
+                }
+                int row = gameView.getRow(y);
+                int col = gameView.getCol(x);
 
                 switch (event.getAction()) {
+
                     case MotionEvent.ACTION_DOWN:
+
+                        down = true;
+                        downRow = row;
+                        downCol = col;
+                        break;
 
                     case MotionEvent.ACTION_UP:
                         v.performClick();
+                        if (down && downRow == row && downCol == col) {
+                            down = false;
+                            if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
+                                return true;
+                            }
 
+                            Play play = new Play(row, col);
+                            List<Play> plays = Rules.plays(gameBoard, play, player1Color);
+                            gameView.play(gameBoard, plays, play);
+                        }
                     case MotionEvent.ACTION_CANCEL:
-
+                        down = false;
+                        break;
                 }
                 return true;
             }
@@ -95,17 +132,11 @@ public class GameVsHumanActivity extends Activity implements Constants{
             public void onClick(View v) {
 
 
-                dialog.setOnStartNewGameListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
                         initGameBoard();
 
                         gameView.initGameBoard();
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+
+
             }
         });
 

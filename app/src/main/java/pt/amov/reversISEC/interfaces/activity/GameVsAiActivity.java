@@ -36,17 +36,17 @@ public class GameVsAiActivity extends Activity implements Constants{
 
 
     private GameView gameView = null;
-    private LinearLayout playerLayout;
-    private LinearLayout aiLayout;
-    private TextView playerTokens;
-    private TextView aiTokens;
-    private ImageView playerImage;
-    private ImageView aiImage;
+    private LinearLayout player1Layout;
+    private LinearLayout player2Layout;
+    private TextView player1Tokens;
+    private TextView player2Tokens;
+    private ImageView player1Image;
+    private ImageView player2Image;
     private TextView nameOfAI;
 
 
     private byte playerColor;
-    private byte aiColor;
+    private byte player2Color;
     private int difficulty;
 
 
@@ -54,9 +54,6 @@ public class GameVsAiActivity extends Activity implements Constants{
 
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
     private int gameState;
-
-    private static final String MULTIPLY = " × ";
-    private static final String NAME_OF_AI[] = new String[]{"Rookie", "Pro", "Master"};
 
     private NewGameDialog dialog;
 
@@ -67,12 +64,12 @@ public class GameVsAiActivity extends Activity implements Constants{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
         gameView = findViewById(R.id.gameView);
-        playerLayout = findViewById(R.id.player1);
-        aiLayout = findViewById(R.id.player2);
-        playerTokens = findViewById(R.id.player1_tokens);
-        aiTokens = findViewById(R.id.player2_tokens);
-        playerImage = findViewById(R.id.player1_image);
-        aiImage = findViewById(R.id.player2_image);
+        player1Layout = findViewById(R.id.player1);
+        player2Layout = findViewById(R.id.player2);
+        player1Tokens = findViewById(R.id.player1_tokens);
+        player2Tokens = findViewById(R.id.player2_tokens);
+        player1Image = findViewById(R.id.player1_image);
+        player2Image = findViewById(R.id.player2_image);
         nameOfAI = findViewById(R.id.player2_name);
         Button newGame = findViewById(R.id.new_game);
         Button pass = findViewById(R.id.pass);
@@ -82,10 +79,10 @@ public class GameVsAiActivity extends Activity implements Constants{
 
         Bundle bundle = getIntent().getExtras();
         playerColor = Objects.requireNonNull(bundle).getByte("playerColor");
-        aiColor = (byte) -playerColor;
+        player2Color = (byte) -playerColor;
         difficulty = bundle.getInt("difficulty");
 
-        nameOfAI.setText(NAME_OF_AI[difficulty - 1]);
+        nameOfAI.setText(AI_NAME[difficulty - 1]);
 
         initGameBoard();
 
@@ -152,23 +149,23 @@ public class GameVsAiActivity extends Activity implements Constants{
                     @Override
                     public void onClick(View v) {
                         playerColor = dialog.getPlayerColor();
-                        aiColor = (byte) -playerColor;
+                        player2Color = (byte) -playerColor;
                         difficulty = dialog.getDifficulty();
 
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         preferences.edit().putInt("playerColor", playerColor).apply();
                         preferences.edit().putInt("difficulty", difficulty).apply();
 
-                        nameOfAI.setText(NAME_OF_AI[difficulty - 1]);
+                        nameOfAI.setText(AI_NAME[difficulty - 1]);
 
                         initGameBoard();
                         if(playerColor == BLACK){
-                            playerImage.setImageResource(R.drawable.black1);
-                            aiImage.setImageResource(R.drawable.white1);
+                            player1Image.setImageResource(R.drawable.black_1);
+                            player2Image.setImageResource(R.drawable.white1);
                             playerTurn();
                         }else{
-                            playerImage.setImageResource(R.drawable.white1);
-                            aiImage.setImageResource(R.drawable.black1);
+                            player1Image.setImageResource(R.drawable.white1);
+                            player2Image.setImageResource(R.drawable.black_1);
                             aiTurn();
                         }
                         gameView.initGameBoard();
@@ -180,12 +177,12 @@ public class GameVsAiActivity extends Activity implements Constants{
         });
 
         if(playerColor == BLACK){
-            playerImage.setImageResource(R.drawable.black1);
-            aiImage.setImageResource(R.drawable.white1);
+            player1Image.setImageResource(R.drawable.black_1);
+            player2Image.setImageResource(R.drawable.white1);
             playerTurn();
         }else{
-            playerImage.setImageResource(R.drawable.white1);
-            aiImage.setImageResource(R.drawable.black1);
+            player1Image.setImageResource(R.drawable.white1);
+            player2Image.setImageResource(R.drawable.black_1);
             aiTurn();
         }
 
@@ -239,7 +236,7 @@ public class GameVsAiActivity extends Activity implements Constants{
             int legalMoves = msg.what;
             int thinkingColor = msg.arg1;
             int legalMovesOfAI, legalMovesOfPlayer;
-            if(thinkingColor == aiColor){
+            if(thinkingColor == player2Color){
                 legalMovesOfAI = legalMoves;
                 legalMovesOfPlayer = Rules.getPossiblePlays(gameBoard, playerColor).size();
 
@@ -256,7 +253,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                 }
             }else{
                 legalMovesOfPlayer = legalMoves;
-                legalMovesOfAI = Rules.getPossiblePlays(gameBoard, aiColor).size();
+                legalMovesOfAI = Rules.getPossiblePlays(gameBoard, player2Color).size();
                 Scores scores = Rules.getScores(gameBoard, playerColor);
                 if (legalMovesOfPlayer > 0 && legalMovesOfAI > 0) {
                     aiTurn();
@@ -280,36 +277,36 @@ public class GameVsAiActivity extends Activity implements Constants{
 
     private void playerTurn(){
         Scores scores = Rules.getScores(gameBoard, playerColor);
-        String playerStats = MULTIPLY + scores.PLAYER1;
-        String AIStats = MULTIPLY + scores.PLAYER2;
-        playerTokens.setText(playerStats);
-        aiTokens.setText( AIStats);
-        playerLayout.setBackgroundResource(R.drawable.rect);
-        aiLayout.setBackgroundResource(R.drawable.rect_normal);
+        String playerStats = X_TOKENS + scores.PLAYER1;
+        String AIStats = X_TOKENS + scores.PLAYER2;
+        player1Tokens.setText(playerStats);
+        player2Tokens.setText( AIStats);
+        player1Layout.setBackgroundResource(R.drawable.player_selected);
+        player2Layout.setBackgroundResource(R.drawable.player_unselected);
         gameState = STATE_PLAYER_MOVE;
     }
 
     private void aiTurn(){
         Scores scores = Rules.getScores(gameBoard, playerColor);
-        String playerStats = MULTIPLY + scores.PLAYER1;
-        String AIStats = MULTIPLY + scores.PLAYER2;
-        playerTokens.setText(playerStats);
-        aiTokens.setText(AIStats);
-        playerLayout.setBackgroundResource(R.drawable.rect_normal);
-        aiLayout.setBackgroundResource(R.drawable.rect);
+        String playerStats = X_TOKENS + scores.PLAYER1;
+        String AIStats = X_TOKENS + scores.PLAYER2;
+        player1Tokens.setText(playerStats);
+        player2Tokens.setText(AIStats);
+        player1Layout.setBackgroundResource(R.drawable.player_unselected);
+        player2Layout.setBackgroundResource(R.drawable.player_selected);
         gameState = STATE_AI_MOVE;
-        new ThinkingThread(aiColor).start();
+        new ThinkingThread(player2Color).start();
     }
 
     private void gameOver(int gameResult){
         MessageDialog msgDialog;
         String msg;
         if(gameResult > 0){
-            msg = "You've beaten " + NAME_OF_AI[difficulty - 1];
+            msg = "You've beaten " + AI_NAME[difficulty - 1];
         }else if(gameResult == 0){
             msg = "Draw";
         }else{
-            msg = "Defeated by " + NAME_OF_AI[difficulty - 1];
+            msg = "Defeated by " + AI_NAME[difficulty - 1];
         }
         msgDialog = new MessageDialog(GameVsAiActivity.this, msg);
         msgDialog.show();

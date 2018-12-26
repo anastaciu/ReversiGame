@@ -2,18 +2,20 @@ package pt.amov.reversISEC.interfaces.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.view.SurfaceHolder;
+import android.view.SurfaceHolder.Callback;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.WindowManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.WindowManager;
+
 import java.util.List;
+
 import pt.amov.reversISEC.logic.Play;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.R;
@@ -28,9 +30,6 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	private float boardRight;
 	private float boardTop;
 	private float boardBottom;
-	private static final byte NULL = Constants.NULL;
-	private static final byte BLACK = Constants.BLACK;
-	private static final byte WHITE = Constants.WHITE;
 	private byte[][] gameBoard;
 	private int[][] index;
 	private Bitmap[] images;
@@ -152,12 +151,13 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	}
 
 	public int getRow(float y) {
-		return (int) Math.floor((y - boardTop) / squareSize);
+        return (int) Math.floor((y - boardTop) / squareSize);
 	}
 
 	public int getCol(float x) {
 		return (int) Math.floor((x - boardLeft) / squareSize);
-	}
+
+    }
 
 	public void render(Canvas canvas) {
 		Paint board = new Paint();
@@ -214,12 +214,12 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
 	private void loadTokens(Context context) {
 
-		images[0] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black1));
-		images[1] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black2));
-		images[2] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black3));
-		images[3] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black4));
-		images[4] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black5));
-		images[5] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black6));
+		images[0] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_1));
+		images[1] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_2));
+		images[2] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_3));
+		images[3] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_4));
+		images[4] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_5));
+		images[5] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_6));
 		images[6] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black7));
 		images[7] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black8));
 		images[8] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black9));

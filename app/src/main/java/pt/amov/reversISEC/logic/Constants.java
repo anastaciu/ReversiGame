@@ -9,6 +9,8 @@ public interface Constants {
 	int STATE_PLAYER_MOVE = 0;
 	int STATE_AI_MOVE = 1;
 	int STATE_GAME_OVER = 2;
-	String VS = " × ";
+	String X_TOKENS = " × ";
+	String AI_NAME[] = new String[]{"Rookie", "Pro", "Master"};
+	int PASS_MOVES = 5;
 
 }
