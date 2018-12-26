@@ -6,21 +6,21 @@ import java.util.List;
 
 public class Rules implements Constants {
 
-    public static boolean isPossiblePlay(byte[][] chessBoard, Play play, byte chessColor) {
+    public static boolean isPossiblePlay(byte[][] gameBoard, Play play, byte tokenColor) {
 
         int i, j, dirx, diry, row = play.row, col = play.col;
-        if (!isLegal(row, col) || chessBoard[row][col] != NULL)
+        if (!isLegal(row, col) || gameBoard[row][col] != NULL)
             return false;
         for (dirx = -1; dirx < 2; dirx++) {
             for (diry = -1; diry < 2; diry++) {
                 if (dirx == 0 && diry == 0)
                     continue;
                 int x = col + dirx, y = row + diry;
-                if (isLegal(y, x) && chessBoard[y][x] == (-chessColor)) {
+                if (isLegal(y, x) && gameBoard[y][x] == (-tokenColor)) {
                     for (i = row + diry * 2, j = col + dirx * 2; isLegal(i, j); i += diry, j += dirx) {
-                        if (chessBoard[i][j] == (-chessColor)) {
+                        if (gameBoard[i][j] == (-tokenColor)) {
                             continue;
-                        } else if (chessBoard[i][j] == chessColor) {
+                        } else if (gameBoard[i][j] == tokenColor) {
                             return true;
                         } else {
                             break;

@@ -33,7 +33,6 @@ import pt.amov.reversISEC.logic.Scores;
 
 public class GameVsHumanActivity extends Activity implements Constants{
 
-
     private GameView gameView = null;
     private LinearLayout player1Layout;
     private LinearLayout player2Layout;
@@ -45,6 +44,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
 
     private byte player1Color;
     private byte player2Color;
+    private boolean player_vs = true;
 
 
 
@@ -77,6 +77,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
         player2Color = (byte) -player1Color;
 
         initGameBoard();
+        playerTurn(player1Color, player1Layout, player2Layout);
 
         gameView.setOnTouchListener(new OnTouchListener() {
 
@@ -84,8 +85,10 @@ public class GameVsHumanActivity extends Activity implements Constants{
             int downRow;
             int downCol;
 
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
 
                 if (gameState != STATE_PLAYER_MOVE) {
                     return false;
@@ -111,13 +114,29 @@ public class GameVsHumanActivity extends Activity implements Constants{
                         v.performClick();
                         if (down && downRow == row && downCol == col) {
                             down = false;
-                            if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
-                                return true;
-                            }
 
-                            Play play = new Play(row, col);
-                            List<Play> plays = Rules.plays(gameBoard, play, player1Color);
-                            gameView.play(gameBoard, plays, play);
+                            if(player_vs) {
+                                if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
+                                    return true;
+                                }
+
+                                Play play = new Play(row, col);
+                                List<Play> plays = Rules.plays(gameBoard, play, player1Color);
+                                gameView.play(gameBoard, plays, play);
+                                playerTurn(player1Color, player2Layout, player1Layout);
+                                player_vs = false;
+                            }
+                            else {
+                                if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
+                                    return true;
+                                }
+
+                                Play play2 = new Play(row, col);
+                                List<Play> plays2 = Rules.plays(gameBoard, play2, player2Color);
+                                gameView.play(gameBoard, plays2, play2);
+                                playerTurn(player2Color, player1Layout, player2Layout);
+                                player_vs = true;
+                            }
                         }
                     case MotionEvent.ACTION_CANCEL:
                         down = false;
@@ -181,5 +200,32 @@ public class GameVsHumanActivity extends Activity implements Constants{
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
+    private void gameOver(int gameResult){
+        MessageDialog msgDialog;
+        String msg;
+        if(gameResult > 0){
+            msg = "Player 1 wins";
+        }else if(gameResult == 0){
+            msg = "Draw";
+        }else{
+            msg = "Player 2 wins";
+        }
+        msgDialog = new MessageDialog(GameVsHumanActivity.this, msg);
+        msgDialog.show();
+    }
+
+    private void playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
+        Scores scores = Rules.getScores(gameBoard, playerColor);
+        String player1Stats = X_TOKENS + scores.PLAYER1;
+        String player2Stats = X_TOKENS + scores.PLAYER2;
+        player1Tokens.setText(player1Stats);
+        player2Tokens.setText(player2Stats);
+        player1Layout.setBackgroundResource(R.drawable.player_selected);
+        player2Layout.setBackgroundResource(R.drawable.player_unselected);
+    }
+
+
 
 }
