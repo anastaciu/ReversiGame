@@ -3,11 +3,9 @@ package pt.amov.reversISEC.interfaces.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,8 +21,8 @@ import java.util.List;
 import java.util.Objects;
 
 import pt.amov.reversISEC.R;
-import pt.amov.reversISEC.interfaces.dialog.MessageDialog;
-import pt.amov.reversISEC.interfaces.dialog.NewGameDialog;
+import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
+import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.interfaces.views.GameView;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.logic.Play;
@@ -40,11 +38,13 @@ public class GameVsHumanActivity extends Activity implements Constants{
     private TextView player2Tokens;
     private ImageView player1Image;
     private ImageView player2Image;
+    private TextView player1Name;
+    private TextView player2Name;
 
 
     private byte player1Color;
     private byte player2Color;
-    private boolean player_vs = true;
+    private boolean player_vs = false;
 
 
 
@@ -53,7 +53,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
 
     private static final String MULTIPLY = " × ";
 
-    private NewGameDialog dialog;
+    private NewGameChooser dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,13 @@ public class GameVsHumanActivity extends Activity implements Constants{
         Button pass = findViewById(R.id.pass);
         Button playAgain = findViewById(R.id.play_again);
         Button quitGame = findViewById(R.id.exit_game);
+
+
+        player1Name = findViewById(R.id.player1_name);
+        player1Name.setText("The Man");
+        player2Name = findViewById(R.id.player2_name);
+        player2Name.setText("The Rat");
+
 
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
@@ -90,7 +97,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
             public boolean onTouch(View v, MotionEvent event) {
 
 
-                if (gameState != STATE_PLAYER_MOVE) {
+                if (gameState != STATE_PLAYER1_MOVE) {
                     return false;
                 }
                 float x = event.getX();
@@ -124,7 +131,6 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 List<Play> plays = Rules.plays(gameBoard, play, player1Color);
                                 gameView.play(gameBoard, plays, play);
                                 playerTurn(player1Color, player2Layout, player1Layout);
-                                player_vs = false;
                             }
                             else {
                                 if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
@@ -134,8 +140,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 Play play2 = new Play(row, col);
                                 List<Play> plays2 = Rules.plays(gameBoard, play2, player2Color);
                                 gameView.play(gameBoard, plays2, play2);
-                                playerTurn(player2Color, player1Layout, player2Layout);
-                                player_vs = true;
+                                playerTurn(player1Color, player1Layout, player2Layout);
                             }
                         }
                     case MotionEvent.ACTION_CANCEL:
@@ -203,16 +208,16 @@ public class GameVsHumanActivity extends Activity implements Constants{
 
 
     private void gameOver(int gameResult){
-        MessageDialog msgDialog;
+        ResultMessage msgDialog;
         String msg;
         if(gameResult > 0){
-            msg = "Player 1 wins";
+            msg = player1Name + " wins";
         }else if(gameResult == 0){
             msg = "Draw";
         }else{
-            msg = "Player 2 wins";
+            msg = player2Name + " wins";
         }
-        msgDialog = new MessageDialog(GameVsHumanActivity.this, msg);
+        msgDialog = new ResultMessage(GameVsHumanActivity.this, msg);
         msgDialog.show();
     }
 
@@ -224,6 +229,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
         player2Tokens.setText(player2Stats);
         player1Layout.setBackgroundResource(R.drawable.player_selected);
         player2Layout.setBackgroundResource(R.drawable.player_unselected);
+        player_vs = !player_vs;
     }
 
 

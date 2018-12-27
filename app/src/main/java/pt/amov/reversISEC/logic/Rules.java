@@ -73,8 +73,8 @@ public class Rules implements Constants {
     public static List<Play> getPossiblePlays(byte[][] chessBoard, byte chessColor) {
         List<Play> moves = new ArrayList<Play>();
         Play move = null;
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 move = new Play(row, col);
                 if (Rules.isPossiblePlay(chessBoard, move, chessColor)) {
                     moves.add(move);

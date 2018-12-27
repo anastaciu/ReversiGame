@@ -14,13 +14,13 @@ import pt.amov.reversISEC.R;
 
 
 
-public class NewGameDialog extends Dialog {
+public class NewGameChooser extends Dialog {
 
     private RadioButton black;
     private final RadioButton[] radioButtons = new RadioButton[3];
     private Button ok;
 
-    public NewGameDialog(Context context, byte playColor, int difficulty) {
+    public NewGameChooser(Context context, byte playColor, int difficulty) {
 
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 
 import pt.amov.reversISEC.R;
 
-public class MessageDialog extends Dialog {
+public class ResultMessage extends Dialog {
 
-    public MessageDialog(Context context, String msg) {
+    public ResultMessage(Context context, String msg) {
 
         super(context);
         final ViewGroup nullParent = null;

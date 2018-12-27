@@ -35,8 +35,10 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	private Bitmap[] images;
 	private Bitmap background;
 
-	public GameView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
+
+
+	public GameView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		float boardLength, screenWidth, ratio = 0.9f, scale[] = new float[] { 0.75f, 0.80f, 0.85f, 0.90f, 0.95f }, margin;
 		int scaleLevel = 2;
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.GameView);
@@ -63,13 +65,13 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		initGameBoard();
 	}
 
-	public GameView(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
-	}
-
+	/*public GameView(Context context, AttributeSet attrs) {
+		this(context, attrs);
+	}*/
+/*
 	public GameView(Context context) {
-		this(context, null, 0);
-	}
+		this(context, null);
+	}*/
 
 	public void initGameBoard(){
 		gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
@@ -220,22 +222,22 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		images[3] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_4));
 		images[4] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_5));
 		images[5] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_6));
-		images[6] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black7));
-		images[7] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black8));
-		images[8] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black9));
-		images[9] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black10));
-		images[10] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black11));
-		images[11] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white1));
-		images[12] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white2));
-		images[13] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white3));
-		images[14] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white4));
-		images[15] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white5));
-		images[16] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white6));
-		images[17] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white7));
-		images[18] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white8));
-		images[19] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white9));
-		images[20] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white10));
-		images[21] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white11));
+		images[6] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_7));
+		images[7] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_8));
+		images[8] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_9));
+		images[9] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_10));
+		images[10] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.black_11));
+		images[11] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_1));
+		images[12] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_2));
+		images[13] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_3));
+		images[14] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_4));
+		images[15] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_5));
+		images[16] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_6));
+		images[17] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_7));
+		images[18] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_8));
+		images[19] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_9));
+		images[20] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_10));
+		images[21] = loadImages(squareSize, squareSize, context.getDrawable(R.drawable.white_11));
 	}
 
 }
