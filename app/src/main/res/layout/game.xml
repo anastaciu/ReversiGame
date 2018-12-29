@@ -3,35 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#313131"
+    android:background="@drawable/back"
     android:orientation="vertical" >
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:baselineAligned="false">
 
         <LinearLayout
-            android:id="@+id/player"
-            android:layout_width="0dp"
+            android:id="@+id/player1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/rect"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp" >
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/you"
+                android:text="@string/player_1"
                 android:textColor="@color/BLACK"
                 android:textSize="20sp"
                 tools:text="You" />
@@ -40,17 +37,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:gravity="center"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:id="@+id/player_image"
+                    android:id="@+id/player1_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/black1"
-                    android:contentDescription="@string/payerpiece" />
+                    android:src="@drawable/black_1"
+                    android:contentDescription="@string/player_piece" />
 
                 <TextView
-                    android:id="@+id/player_tokens"
+                    android:id="@+id/player1_tokens"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/x"
@@ -61,11 +59,10 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center"
-            android:background="#f3fbff">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -77,20 +74,20 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ai"
-            android:layout_width="0dp"
+            android:id="@+id/player2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"  
+            android:orientation="vertical"
+            android:layout_marginEnd="40dp"
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/name_of_ai"
+                android:id="@+id/player2_name"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
+
                 android:gravity="center"
                 android:textColor="@color/BLACK"
                 android:textSize="20sp" />
@@ -99,17 +96,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:gravity="center"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:id="@+id/aiImage"
+                    android:id="@+id/player2_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/white1"
-                    android:contentDescription="@string/oponentpiece" />
+                    android:contentDescription="@string/opponent_piece" />
 
                 <TextView
-                    android:id="@+id/aiChesses"
+                    android:id="@+id/player2_tokens"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/x"
@@ -119,47 +117,90 @@
         </LinearLayout>
     </LinearLayout>
 
-    <pt.amov.user.interfaces.views.GameView
+    <pt.amov.reversISEC.interfaces.views.GameView
         android:id="@+id/gameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp" />
-    
-    <LinearLayout 
+
+
+    <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
         android:layout_marginBottom="20dp"
-        android:gravity="bottom">
+        android:gravity="center">
 
-        <Button
-            android:id="@+id/new_game"
+        <GridLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="30dp"
-            android:background="@drawable/button_bg_blue"
-			android:textColor="@color/WHITE"
-            android:padding="10dp"
-            android:textSize="20sp"
-            android:text="@string/new_game"/>
-        
-        
-        <Button 
-            android:id="@+id/tip"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_bg_blue"
-            android:textColor="@color/WHITE"
-            android:padding="10dp"
-            android:textSize="20sp"
-            android:text="@string/autoplay"/>
-        
+            android:rowCount="2"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_gravity="bottom"
+            tools:ignore="UselessParent">
+
+
+
+            <Button
+                android:id="@+id/pass"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:text="@string/pass"
+                />
+
+
+            <Button
+                android:id="@+id/play_again"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:text="@string/play_again"
+                />
+
+            <Button
+                android:id="@+id/new_game"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:text="@string/new_game"
+                />
+
+            <Button
+                android:id="@+id/exit_game"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_bg_blue"
+                android:textColor="@color/WHITE"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:text="@string/quit_game"/>
+
+        </GridLayout>
+
     </LinearLayout>
-    
-
 </LinearLayout>

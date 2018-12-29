@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="#ffffff"
+    android:background="@drawable/back"
     android:orientation="vertical">
 
     <TextView
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/choose_dificulty"
+        android:text="@string/choose_difficulty"
         android:textColor="#000000"
         android:textSize="18sp"
         tools:text="Cooose Dificulty" />
@@ -84,7 +84,8 @@
                 android:padding="15dp"
                 android:text="@string/rookie"
                 android:textColor="@color/BLACK"
-                android:textSize="15sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <RadioButton
                 android:id="@+id/level2"
@@ -99,8 +100,9 @@
                 android:padding="15dp"
                 android:text="@string/pro"
                 android:textColor="@color/BLACK"
-                android:textSize="15sp"
-                tools:text="Rookie" />
+                android:textSize="16sp"
+                tools:text="Rookie"
+                android:textStyle="bold"/>
 
             <RadioButton
                 android:id="@+id/level3"
@@ -115,8 +117,9 @@
                 android:gravity="center"
                 android:padding="15dp"
                 android:text="@string/master"
+                android:textStyle="bold"
                 android:textColor="@color/BLACK"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </RadioGroup>
 
@@ -135,6 +138,7 @@
         android:paddingBottom="10dp"
         android:text="@string/play"
         android:textColor="@color/WHITE"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
 </LinearLayout>
