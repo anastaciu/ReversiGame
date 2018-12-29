@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="footer">AMov 18/19</string>
+    <string name="app_name">ReversISEC</string>
+    <string name="game_rule">1.OBJECTIVOS DO JOGO\nO objectivo deste jogo é ter mais peças no tabuleiro que o adversário. O jogo termina quando todas as casas do tabuleiro estiverem ocupadas com peças ou quando um jogador não puder fazer uma jogada válida.\n2.COMO JOGAR\nO Reversi é jogado com peças brancas de um lado e pretas do outro. Na sua vez, o jogador coloca uma peça no tabuleiro com a sua cor virada para cima. O jogador tem de capturar uma ou mais peças do adversário em cada jogada. As peças capturadas são viradas e tornam-se peças do jogador que fez a jogada.\n3.CAPTURAR PEÇAS\n O jogador deve jogar a sua peça de forma a encurralar horizontal, vertical ou diagonalmente uma linha de peças consecutivas do adversário entre duas das suas peças.\n4. JOGAR OU PASSAR Se o jogador não pode fazer uma jogada válida passa automáticamente a vez ao seu adversário fazendo uma jogada "em branco". A regra anterior não é aplicada se o adversário também não pode fazer nenhuma jogada válida. Nesse caso o jogo é automáticamente terminado.</string>
+    <string name="choose_token">Escolha Cor</string>
+    <string name="play">Jogar</string>
+    <string name="rookie">Novato</string>
+    <string name="choose_difficulty">Escolha Dificuldade</string>
+    <string name="title">Titulo</string>
+    <string name="rules">regras</string>
+    <string name="vs">VS</string>
+    <string name="x">× ..</string>
+    <string name="player_piece">playerPiece</string>
+    <string name="opponent_piece">oponentPiece</string>
+    <string name="player_1"> </string>
+    <string name="ok">OK</string>
+    <string name="online">jogar online</string>
+    <string name="play_ai">jogar</string>
+    <string name="play_human">jogar com amigo</string>
+    <string name="pro">Pro</string>
+    <string name="master">Mestre</string>
+    <string name="new_game">Novo Jogo</string>
+    <string name="pass">Passar Vez</string>
+    <string name="play_again">Jogar Duplo</string>
+    <string name="quit_game">Abandonar</string>
+    <string name="camera_name">Câmera</string>
+    <string name="take_picture">Tirar Foto</string>
+
+</resources>
