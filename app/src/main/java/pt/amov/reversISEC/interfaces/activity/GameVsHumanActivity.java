@@ -1,12 +1,7 @@
 package pt.amov.reversISEC.interfaces.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,11 +17,10 @@ import java.util.Objects;
 
 import pt.amov.reversISEC.R;
 import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
-import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.interfaces.views.GameView;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.logic.Play;
-import pt.amov.reversISEC.logic.Rules;
+import pt.amov.reversISEC.logic.GameRules;
 import pt.amov.reversISEC.logic.Scores;
 
 public class GameVsHumanActivity extends Activity implements Constants{
@@ -47,13 +41,8 @@ public class GameVsHumanActivity extends Activity implements Constants{
     private boolean player_vs = false;
 
 
-
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
-    private int gameState;
 
-    private static final String MULTIPLY = " × ";
-
-    private NewGameChooser dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +85,6 @@ public class GameVsHumanActivity extends Activity implements Constants{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-
-                if (gameState != STATE_PLAYER1_MOVE) {
-                    return false;
-                }
                 float x = event.getX();
                 float y = event.getY();
                 if (gameView.inGameBoard(x, y)) {
@@ -123,22 +108,22 @@ public class GameVsHumanActivity extends Activity implements Constants{
                             down = false;
 
                             if(player_vs) {
-                                if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
+                                if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
                                     return true;
                                 }
 
                                 Play play = new Play(row, col);
-                                List<Play> plays = Rules.plays(gameBoard, play, player1Color);
+                                List<Play> plays = GameRules.plays(gameBoard, play, player1Color);
                                 gameView.play(gameBoard, plays, play);
                                 playerTurn(player1Color, player2Layout, player1Layout);
                             }
                             else {
-                                if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
+                                if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
                                     return true;
                                 }
 
                                 Play play2 = new Play(row, col);
-                                List<Play> plays2 = Rules.plays(gameBoard, play2, player2Color);
+                                List<Play> plays2 = GameRules.plays(gameBoard, play2, player2Color);
                                 gameView.play(gameBoard, plays2, play2);
                                 playerTurn(player1Color, player1Layout, player2Layout);
                             }
@@ -180,20 +165,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
     }
 
 
-
-    private UpdateUIHandler updateUI = new UpdateUIHandler();
-    @SuppressLint("HandlerLeak")
-    class UpdateUIHandler extends Handler {
-
-        @Override
-        public void handleMessage(Message msg) {
-
-        }
-
-    }
-
-
-    @Override
+  /*  @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
@@ -204,7 +176,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
 
 
     private void gameOver(int gameResult){
@@ -222,7 +194,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
     }
 
     private void playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
-        Scores scores = Rules.getScores(gameBoard, playerColor);
+        Scores scores = GameRules.getScores(gameBoard, playerColor);
         String player1Stats = X_TOKENS + scores.PLAYER1;
         String player2Stats = X_TOKENS + scores.PLAYER2;
         player1Tokens.setText(player1Stats);

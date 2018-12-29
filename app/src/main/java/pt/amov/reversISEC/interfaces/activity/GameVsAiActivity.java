@@ -28,7 +28,7 @@ import pt.amov.reversISEC.logic.Scores;
 import pt.amov.reversISEC.logic.AiAlgorithm;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.interfaces.views.GameView;
-import pt.amov.reversISEC.logic.Rules;
+import pt.amov.reversISEC.logic.GameRules;
 import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
 import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.R;
@@ -123,12 +123,12 @@ public class GameVsAiActivity extends Activity implements Constants{
                         v.performClick();
                         if (down && downRow == row && downCol == col) {
                             down = false;
-                            if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), playerColor)) {
+                            if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), playerColor)) {
                                 return true;
                             }
 
                             Play play = new Play(row, col);
-                            List<Play> plays = Rules.plays(gameBoard, play, playerColor);
+                            List<Play> plays = GameRules.plays(gameBoard, play, playerColor);
                             gameView.play(gameBoard, plays, play);
                             aiTurn();
 
@@ -223,10 +223,10 @@ public class GameVsAiActivity extends Activity implements Constants{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            int legalMoves = Rules.getPossiblePlays(gameBoard, thinkingColor).size();
+            int legalMoves = GameRules.getPossiblePlays(gameBoard, thinkingColor).size();
             if (legalMoves > 0) {
                 Play play = AiAlgorithm.getPlay(gameBoard, depth[difficulty], thinkingColor, difficulty);
-                List<Play> plays = Rules.plays(gameBoard, play, thinkingColor);
+                List<Play> plays = GameRules.plays(gameBoard, play, thinkingColor);
                 gameView.play(gameBoard, plays, play);
             }
             updateUI.handle(legalMoves, thinkingColor);
@@ -245,9 +245,9 @@ public class GameVsAiActivity extends Activity implements Constants{
             int legalMovesOfAI, legalMovesOfPlayer;
             if(thinkingColor == player2Color){
                 legalMovesOfAI = legalMoves;
-                legalMovesOfPlayer = Rules.getPossiblePlays(gameBoard, playerColor).size();
+                legalMovesOfPlayer = GameRules.getPossiblePlays(gameBoard, playerColor).size();
 
-                Scores scores = Rules.getScores(gameBoard, playerColor);
+                Scores scores = GameRules.getScores(gameBoard, playerColor);
                 if (legalMovesOfAI > 0 && legalMovesOfPlayer > 0) {
                     playerTurn();
                 } else if (legalMovesOfAI == 0 && legalMovesOfPlayer > 0) {
@@ -260,8 +260,8 @@ public class GameVsAiActivity extends Activity implements Constants{
                 }
             }else{
                 legalMovesOfPlayer = legalMoves;
-                legalMovesOfAI = Rules.getPossiblePlays(gameBoard, player2Color).size();
-                Scores scores = Rules.getScores(gameBoard, playerColor);
+                legalMovesOfAI = GameRules.getPossiblePlays(gameBoard, player2Color).size();
+                Scores scores = GameRules.getScores(gameBoard, playerColor);
                 if (legalMovesOfPlayer > 0 && legalMovesOfAI > 0) {
                     aiTurn();
                 }else if(legalMovesOfPlayer == 0 && legalMovesOfAI > 0){
@@ -283,7 +283,7 @@ public class GameVsAiActivity extends Activity implements Constants{
     }
 
     private void playerTurn(){
-        Scores scores = Rules.getScores(gameBoard, playerColor);
+        Scores scores = GameRules.getScores(gameBoard, playerColor);
         String playerStats = X_TOKENS + scores.PLAYER1;
         String AIStats = X_TOKENS + scores.PLAYER2;
         player1Tokens.setText(playerStats);
@@ -294,7 +294,7 @@ public class GameVsAiActivity extends Activity implements Constants{
     }
 
     private void aiTurn(){
-        Scores scores = Rules.getScores(gameBoard, playerColor);
+        Scores scores = GameRules.getScores(gameBoard, playerColor);
         String playerStats = X_TOKENS + scores.PLAYER1;
         String AIStats = X_TOKENS + scores.PLAYER2;
         player1Tokens.setText(playerStats);

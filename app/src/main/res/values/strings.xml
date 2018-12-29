@@ -24,5 +24,7 @@
     <string name="pass">Pass Move</string>
     <string name="play_again">Play Twice</string>
     <string name="quit_game">Quit Game</string>
+    <string name="camera_name">Android Camera API 2</string>
+    <string name="take_picture">Take picture</string>
 
 </resources>

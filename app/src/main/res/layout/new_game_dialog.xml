@@ -19,6 +19,8 @@
 
 
     <RadioGroup
+
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -28,6 +30,8 @@
         android:gravity="center"
         android:orientation="horizontal">
 
+
+
         <RadioButton
             android:id="@+id/black"
             android:layout_width="wrap_content"
@@ -36,6 +40,7 @@
             android:background="@drawable/radio_button_black"
             android:button="@null"
             android:gravity="center" />
+
 
         <RadioButton
             android:id="@+id/white"
@@ -78,7 +83,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/radio_button_ai"
+                android:background="@drawable/level_selector_rb"
                 android:button="@null"
                 android:gravity="center"
                 android:padding="15dp"
@@ -94,7 +99,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/radio_button_ai"
+                android:background="@drawable/level_selector_rb"
                 android:button="@null"
                 android:gravity="center"
                 android:padding="15dp"
@@ -112,7 +117,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/radio_button_ai"
+                android:background="@drawable/level_selector_rb"
                 android:button="@null"
                 android:gravity="center"
                 android:padding="15dp"

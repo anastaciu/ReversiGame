@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pt.amov.reversISEC">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera2.full" />
 
     <application
         android:fullBackupContent="true"
@@ -29,7 +32,13 @@
             android:name=".interfaces.activity.RulesActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".interfaces.activity.GameVsHumanActivity" />
+        <activity
+            android:name=".interfaces.activity.GameVsHumanActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".interfaces.activity.CameraActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

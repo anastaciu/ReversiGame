@@ -119,7 +119,7 @@ public class GameView extends SurfaceView implements Callback, Constants{
 		for (int i = 0; i < BOARD_SIZE; i++)
 			System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, BOARD_SIZE);
 		for (int i = 0; i < reversed.size(); i++) {
-			int reverseRow = reversed.get(i).row;
+			int reverseRow = reversed.get(i).line;
 			int reverseCol = reversed.get(i).col;
 			if (gameBoard[reverseRow][reverseCol] == WHITE) {
 				index[reverseRow][reverseCol] = 1;
@@ -127,7 +127,7 @@ public class GameView extends SurfaceView implements Callback, Constants{
 				index[reverseRow][reverseCol] = 12;
 			}
 		}
-		int row = play.row, col = play.col;
+		int row = play.line, col = play.col;
 		if (gameBoard[row][col] == WHITE) {
 			index[row][col] = 11;
 		} else if (gameBoard[row][col] == BLACK) {
@@ -164,6 +164,7 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	public void render(Canvas canvas) {
 		Paint board = new Paint();
 		Paint tokens = new Paint();
+		Paint grid =new Paint();
 		canvas.drawBitmap(background, 0, 6, board);
 
 		for (int col = 0; col < BOARD_SIZE; col++) {

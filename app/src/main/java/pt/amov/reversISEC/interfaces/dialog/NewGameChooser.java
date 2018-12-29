@@ -14,10 +14,11 @@ import pt.amov.reversISEC.R;
 
 
 
-public class NewGameChooser extends Dialog {
+public class NewGameChooser extends Dialog implements Constants{
 
     private RadioButton black;
-    private final RadioButton[] radioButtons = new RadioButton[3];
+    private RadioButton white;
+    private final RadioButton[] levelButtons = new RadioButton[3];
     private Button ok;
 
     public NewGameChooser(Context context, byte playColor, int difficulty) {
@@ -29,44 +30,44 @@ public class NewGameChooser extends Dialog {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.new_game_dialog, null);
 
         black = view.findViewById(R.id.black);
-        RadioButton white = view.findViewById(R.id.white);
-        if(playColor == Constants.BLACK){
+        white = view.findViewById(R.id.white);
+
+        if(playColor == BLACK){
             black.setChecked(true);
         }else{
             white.setChecked(true);
         }
 
-
-        radioButtons[0] = view.findViewById(R.id.level1);
-        radioButtons[1] = view.findViewById(R.id.level2);
-        radioButtons[2] = view.findViewById(R.id.level3);
-        for(int i = 0 ;i < radioButtons.length; i++){
+        levelButtons[0] = view.findViewById(R.id.level1);
+        levelButtons[1] = view.findViewById(R.id.level2);
+        levelButtons[2] = view.findViewById(R.id.level3);
+        for(int i = 0; i < levelButtons.length; i++){
             final int k = i;
-            radioButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            levelButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
-                        for(int index = 0; index < radioButtons.length; index++){
+                        for(int index = 0; index < levelButtons.length; index++){
                             if(index != k){
-                                radioButtons[index].setChecked(false);
+                                levelButtons[index].setChecked(false);
                             }
                         }
                     }
                 }
             });
         }
-        radioButtons[difficulty - 1].setChecked(true);
+        levelButtons[difficulty - 1].setChecked(true);
         ok = view.findViewById(R.id.ok);
         super.setContentView(view);
     }
 
     public byte getPlayerColor(){
-        return (black.isChecked()? Constants.BLACK:Constants.WHITE);
+        return (black.isChecked()? BLACK : WHITE);
     }
 
     public int getDifficulty(){
-        for(int i = 0; i < radioButtons.length; i++){
-            if(radioButtons[i].isChecked()){
+        for(int i = 0; i < levelButtons.length; i++){
+            if(levelButtons[i].isChecked()){
                 return i+1;
             }
         }
