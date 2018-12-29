@@ -1,14 +1,7 @@
 package pt.amov.reversISEC.interfaces.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,12 +16,11 @@ import java.util.List;
 import java.util.Objects;
 
 import pt.amov.reversISEC.R;
-import pt.amov.reversISEC.interfaces.dialog.MessageDialog;
-import pt.amov.reversISEC.interfaces.dialog.NewGameDialog;
+import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
 import pt.amov.reversISEC.interfaces.views.GameView;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.logic.Play;
-import pt.amov.reversISEC.logic.Rules;
+import pt.amov.reversISEC.logic.GameRules;
 import pt.amov.reversISEC.logic.Scores;
 
 public class GameVsHumanActivity extends Activity implements Constants{
@@ -40,20 +32,17 @@ public class GameVsHumanActivity extends Activity implements Constants{
     private TextView player2Tokens;
     private ImageView player1Image;
     private ImageView player2Image;
+    private TextView player1Name;
+    private TextView player2Name;
 
 
     private byte player1Color;
     private byte player2Color;
-    private boolean player_vs = true;
-
+    private boolean player_vs = false;
 
 
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
-    private int gameState;
 
-    private static final String MULTIPLY = " × ";
-
-    private NewGameDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +61,12 @@ public class GameVsHumanActivity extends Activity implements Constants{
         Button playAgain = findViewById(R.id.play_again);
         Button quitGame = findViewById(R.id.exit_game);
 
+
+        player1Name = findViewById(R.id.player1_name);
+        player1Name.setText("The Man");
+        player2Name = findViewById(R.id.player2_name);
+        player2Name.setText("The Rat");
+
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -player1Color;
@@ -89,16 +84,13 @@ public class GameVsHumanActivity extends Activity implements Constants{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-
-                if (gameState != STATE_PLAYER_MOVE) {
-                    return false;
-                }
+                Scores scores;
                 float x = event.getX();
                 float y = event.getY();
                 if (gameView.inGameBoard(x, y)) {
                     return false;
                 }
-                int row = gameView.getRow(y);
+                int row = gameView.getLine(y);
                 int col = gameView.getCol(x);
 
                 switch (event.getAction()) {
@@ -116,27 +108,29 @@ public class GameVsHumanActivity extends Activity implements Constants{
                             down = false;
 
                             if(player_vs) {
-                                if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
+                                if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
                                     return true;
                                 }
 
                                 Play play = new Play(row, col);
-                                List<Play> plays = Rules.plays(gameBoard, play, player1Color);
+                                List<Play> plays = GameRules.plays(gameBoard, play, player1Color);
                                 gameView.play(gameBoard, plays, play);
-                                playerTurn(player1Color, player2Layout, player1Layout);
-                                player_vs = false;
+                                scores = playerTurn(player1Color, player2Layout, player1Layout);
+                                if(GameRules.getPossiblePlays(gameBoard,player1Color).size() == 0)
+                                    player_vs = !player_vs;
                             }
                             else {
-                                if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
+                                if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
                                     return true;
                                 }
 
                                 Play play2 = new Play(row, col);
-                                List<Play> plays2 = Rules.plays(gameBoard, play2, player2Color);
+                                List<Play> plays2 = GameRules.plays(gameBoard, play2, player2Color);
                                 gameView.play(gameBoard, plays2, play2);
-                                playerTurn(player2Color, player1Layout, player2Layout);
-                                player_vs = true;
+                                scores = playerTurn(player1Color, player1Layout, player2Layout);
                             }
+                            if(GameRules.getPossiblePlays(gameBoard,player2Color).size() == 0 && GameRules.getPossiblePlays(gameBoard,player1Color).size() == 0)
+                                gameOver(scores.player1 - scores.player2);
                         }
                     case MotionEvent.ACTION_CANCEL:
                         down = false;
@@ -175,20 +169,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
     }
 
 
-
-    private UpdateUIHandler updateUI = new UpdateUIHandler();
-    @SuppressLint("HandlerLeak")
-    class UpdateUIHandler extends Handler {
-
-        @Override
-        public void handleMessage(Message msg) {
-
-        }
-
-    }
-
-
-    @Override
+  /*  @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
@@ -199,31 +180,33 @@ public class GameVsHumanActivity extends Activity implements Constants{
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
 
 
     private void gameOver(int gameResult){
-        MessageDialog msgDialog;
+        ResultMessage msgDialog;
         String msg;
         if(gameResult > 0){
-            msg = "Player 1 wins";
+            msg = player1Name.getText() + " wins";
         }else if(gameResult == 0){
             msg = "Draw";
         }else{
-            msg = "Player 2 wins";
+            msg = player2Name.getText() + " wins";
         }
-        msgDialog = new MessageDialog(GameVsHumanActivity.this, msg);
+        msgDialog = new ResultMessage(GameVsHumanActivity.this, msg);
         msgDialog.show();
     }
 
-    private void playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
-        Scores scores = Rules.getScores(gameBoard, playerColor);
-        String player1Stats = X_TOKENS + scores.PLAYER1;
-        String player2Stats = X_TOKENS + scores.PLAYER2;
+    private Scores playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
+        Scores scores = GameRules.getScores(gameBoard, playerColor);
+        String player1Stats = X_TOKENS + scores.player1;
+        String player2Stats = X_TOKENS + scores.player2;
         player1Tokens.setText(player1Stats);
         player2Tokens.setText(player2Stats);
         player1Layout.setBackgroundResource(R.drawable.player_selected);
         player2Layout.setBackgroundResource(R.drawable.player_unselected);
+        player_vs = !player_vs;
+        return scores;
     }
 
 

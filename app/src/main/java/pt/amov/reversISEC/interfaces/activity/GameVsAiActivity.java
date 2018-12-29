@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,9 +28,9 @@ import pt.amov.reversISEC.logic.Scores;
 import pt.amov.reversISEC.logic.AiAlgorithm;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.interfaces.views.GameView;
-import pt.amov.reversISEC.logic.Rules;
-import pt.amov.reversISEC.interfaces.dialog.MessageDialog;
-import pt.amov.reversISEC.interfaces.dialog.NewGameDialog;
+import pt.amov.reversISEC.logic.GameRules;
+import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
+import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.R;
 
 public class GameVsAiActivity extends Activity implements Constants{
@@ -50,12 +51,13 @@ public class GameVsAiActivity extends Activity implements Constants{
     private int difficulty;
 
 
+
     private static final int depth[] = new int[] { 0, 1, 6, 3, 7, 3, 5, 8, 4 };
 
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
     private int gameState;
 
-    private NewGameDialog dialog;
+    private NewGameChooser dialog;
 
 
     @Override
@@ -77,6 +79,11 @@ public class GameVsAiActivity extends Activity implements Constants{
         Button quitGame = findViewById(R.id.exit_game);
 
 
+
+        quitGame.setEnabled(false);
+        quitGame.setBackgroundColor(Color.TRANSPARENT);
+        quitGame.setText("");
+
         Bundle bundle = getIntent().getExtras();
         playerColor = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -playerColor;
@@ -96,7 +103,7 @@ public class GameVsAiActivity extends Activity implements Constants{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (gameState != STATE_PLAYER_MOVE) {
+                if (gameState != STATE_PLAYER1_MOVE) {
                     return false;
                 }
                 float x = event.getX();
@@ -104,7 +111,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                 if (gameView.inGameBoard(x, y)) {
                     return false;
                 }
-                int row = gameView.getRow(y);
+                int row = gameView.getLine(y);
                 int col = gameView.getCol(x);
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -116,12 +123,12 @@ public class GameVsAiActivity extends Activity implements Constants{
                         v.performClick();
                         if (down && downRow == row && downCol == col) {
                             down = false;
-                            if (!Rules.isPossiblePlay(gameBoard, new Play(row, col), playerColor)) {
+                            if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), playerColor)) {
                                 return true;
                             }
 
                             Play play = new Play(row, col);
-                            List<Play> plays = Rules.plays(gameBoard, play, playerColor);
+                            List<Play> plays = GameRules.plays(gameBoard, play, playerColor);
                             gameView.play(gameBoard, plays, play);
                             aiTurn();
 
@@ -143,7 +150,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                 byte _playerColor = (byte)preferences.getInt("playerColor", BLACK);
                 int _difficulty = preferences.getInt("difficulty", 1);
 
-                dialog = new NewGameDialog(GameVsAiActivity.this, _playerColor, _difficulty);
+                dialog = new NewGameChooser(GameVsAiActivity.this, _playerColor, _difficulty);
 
                 dialog.setOnStartNewGameListener(new OnClickListener() {
                     @Override
@@ -161,10 +168,10 @@ public class GameVsAiActivity extends Activity implements Constants{
                         initGameBoard();
                         if(playerColor == BLACK){
                             player1Image.setImageResource(R.drawable.black_1);
-                            player2Image.setImageResource(R.drawable.white1);
+                            player2Image.setImageResource(R.drawable.white_1);
                             playerTurn();
                         }else{
-                            player1Image.setImageResource(R.drawable.white1);
+                            player1Image.setImageResource(R.drawable.white_1);
                             player2Image.setImageResource(R.drawable.black_1);
                             aiTurn();
                         }
@@ -178,10 +185,10 @@ public class GameVsAiActivity extends Activity implements Constants{
 
         if(playerColor == BLACK){
             player1Image.setImageResource(R.drawable.black_1);
-            player2Image.setImageResource(R.drawable.white1);
+            player2Image.setImageResource(R.drawable.white_1);
             playerTurn();
         }else{
-            player1Image.setImageResource(R.drawable.white1);
+            player1Image.setImageResource(R.drawable.white_1);
             player2Image.setImageResource(R.drawable.black_1);
             aiTurn();
         }
@@ -210,16 +217,16 @@ public class GameVsAiActivity extends Activity implements Constants{
         }
 
         public void run() {
-            int process_move = 500;
+            int process_play = 500;
             try {
-                sleep(process_move);
+                sleep(process_play);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            int legalMoves = Rules.getPossiblePlays(gameBoard, thinkingColor).size();
+            int legalMoves = GameRules.getPossiblePlays(gameBoard, thinkingColor).size();
             if (legalMoves > 0) {
                 Play play = AiAlgorithm.getPlay(gameBoard, depth[difficulty], thinkingColor, difficulty);
-                List<Play> plays = Rules.plays(gameBoard, play, thinkingColor);
+                List<Play> plays = GameRules.plays(gameBoard, play, thinkingColor);
                 gameView.play(gameBoard, plays, play);
             }
             updateUI.handle(legalMoves, thinkingColor);
@@ -238,30 +245,30 @@ public class GameVsAiActivity extends Activity implements Constants{
             int legalMovesOfAI, legalMovesOfPlayer;
             if(thinkingColor == player2Color){
                 legalMovesOfAI = legalMoves;
-                legalMovesOfPlayer = Rules.getPossiblePlays(gameBoard, playerColor).size();
+                legalMovesOfPlayer = GameRules.getPossiblePlays(gameBoard, playerColor).size();
 
-                Scores scores = Rules.getScores(gameBoard, playerColor);
+                Scores scores = GameRules.getScores(gameBoard, playerColor);
                 if (legalMovesOfAI > 0 && legalMovesOfPlayer > 0) {
                     playerTurn();
                 } else if (legalMovesOfAI == 0 && legalMovesOfPlayer > 0) {
                     playerTurn();
                 } else if (legalMovesOfAI == 0 && legalMovesOfPlayer == 0) {
                     gameState = STATE_GAME_OVER;
-                    gameOver(scores.PLAYER1 - scores.PLAYER2);
+                    gameOver(scores.player1 - scores.player2);
                 } else if (legalMovesOfAI > 0 && legalMovesOfPlayer == 0) {
                     aiTurn();
                 }
             }else{
                 legalMovesOfPlayer = legalMoves;
-                legalMovesOfAI = Rules.getPossiblePlays(gameBoard, player2Color).size();
-                Scores scores = Rules.getScores(gameBoard, playerColor);
+                legalMovesOfAI = GameRules.getPossiblePlays(gameBoard, player2Color).size();
+                Scores scores = GameRules.getScores(gameBoard, playerColor);
                 if (legalMovesOfPlayer > 0 && legalMovesOfAI > 0) {
                     aiTurn();
                 }else if(legalMovesOfPlayer == 0 && legalMovesOfAI > 0){
                     aiTurn();
                 }else if(legalMovesOfPlayer == 0 && legalMovesOfAI == 0){
                     gameState = STATE_GAME_OVER;
-                    gameOver(scores.PLAYER1 - scores.PLAYER2);
+                    gameOver(scores.player1 - scores.player2);
                 }else if (legalMovesOfPlayer > 0 && legalMovesOfAI == 0) {
                     playerTurn();
                 }
@@ -276,30 +283,30 @@ public class GameVsAiActivity extends Activity implements Constants{
     }
 
     private void playerTurn(){
-        Scores scores = Rules.getScores(gameBoard, playerColor);
-        String playerStats = X_TOKENS + scores.PLAYER1;
-        String AIStats = X_TOKENS + scores.PLAYER2;
+        Scores scores = GameRules.getScores(gameBoard, playerColor);
+        String playerStats = X_TOKENS + scores.player1;
+        String AIStats = X_TOKENS + scores.player2;
         player1Tokens.setText(playerStats);
         player2Tokens.setText( AIStats);
         player1Layout.setBackgroundResource(R.drawable.player_selected);
         player2Layout.setBackgroundResource(R.drawable.player_unselected);
-        gameState = STATE_PLAYER_MOVE;
+        gameState = STATE_PLAYER1_MOVE;
     }
 
     private void aiTurn(){
-        Scores scores = Rules.getScores(gameBoard, playerColor);
-        String playerStats = X_TOKENS + scores.PLAYER1;
-        String AIStats = X_TOKENS + scores.PLAYER2;
+        Scores scores = GameRules.getScores(gameBoard, playerColor);
+        String playerStats = X_TOKENS + scores.player1;
+        String AIStats = X_TOKENS + scores.player2;
         player1Tokens.setText(playerStats);
         player2Tokens.setText(AIStats);
         player1Layout.setBackgroundResource(R.drawable.player_unselected);
         player2Layout.setBackgroundResource(R.drawable.player_selected);
-        gameState = STATE_AI_MOVE;
+        gameState = STATE_PLAYER2_MOVE;
         new ThinkingThread(player2Color).start();
     }
 
     private void gameOver(int gameResult){
-        MessageDialog msgDialog;
+        ResultMessage msgDialog;
         String msg;
         if(gameResult > 0){
             msg = "You've beaten " + AI_NAME[difficulty - 1];
@@ -308,7 +315,7 @@ public class GameVsAiActivity extends Activity implements Constants{
         }else{
             msg = "Defeated by " + AI_NAME[difficulty - 1];
         }
-        msgDialog = new MessageDialog(GameVsAiActivity.this, msg);
+        msgDialog = new ResultMessage(GameVsAiActivity.this, msg);
         msgDialog.show();
     }
 

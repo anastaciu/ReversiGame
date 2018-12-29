@@ -18,9 +18,9 @@ public class AiAlgorithm implements Constants{
 			return new AiPlay(evaluate(gameBoard, difficulty), null);
 		}
 
-		List<Play> possiblePlays = Rules.getPossiblePlays(gameBoard, tokenColor);
+		List<Play> possiblePlays = GameRules.getPossiblePlays(gameBoard, tokenColor);
 		if (possiblePlays.size() == 0) {
-			if (Rules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
+			if (GameRules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
 				return new AiPlay(evaluate(gameBoard, difficulty), null);
 			}
 			return min(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
@@ -37,7 +37,7 @@ public class AiAlgorithm implements Constants{
             if(alpha >= beta){
                 break;
             }
-			Rules.plays(gameBoard, possiblePlays.get(i), tokenColor);
+			GameRules.plays(gameBoard, possiblePlays.get(i), tokenColor);
 			int value = min(gameBoard, depth - 1, Math.max(best, alpha), beta, (byte)-tokenColor, difficulty).mark;
 			if (value > best) {
 				best = value;
@@ -54,9 +54,9 @@ public class AiAlgorithm implements Constants{
 			return new AiPlay(evaluate(gameBoard, difficulty), null);
 		}
 
-		List<Play> PossibleMoves = Rules.getPossiblePlays(gameBoard, tokenColor);
+		List<Play> PossibleMoves = GameRules.getPossiblePlays(gameBoard, tokenColor);
 		if (PossibleMoves.size() == 0) {
-			if (Rules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
+			if (GameRules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
 				return new AiPlay(evaluate(gameBoard, difficulty), null);
 			}
 			return max(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
@@ -73,7 +73,7 @@ public class AiAlgorithm implements Constants{
             if(alpha >= beta){
                 break;
             }
-			Rules.plays(gameBoard, PossibleMoves.get(i), tokenColor);
+			GameRules.plays(gameBoard, PossibleMoves.get(i), tokenColor);
 			int value = max(gameBoard, depth - 1, alpha, Math.min(best, beta), (byte)-tokenColor, difficulty).mark;
 			if (value < best) {
 				best = value;
@@ -149,8 +149,8 @@ public class AiAlgorithm implements Constants{
 						}
 					}
 				}
-				blackEvaluate = blackEvaluate * 2 + Rules.getPossiblePlays(gameBoard, BLACK).size();
-				whiteEvaluate = whiteEvaluate * 2 + Rules.getPossiblePlays(gameBoard, WHITE).size();
+				blackEvaluate = blackEvaluate * 2 + GameRules.getPossiblePlays(gameBoard, BLACK).size();
+				whiteEvaluate = whiteEvaluate * 2 + GameRules.getPossiblePlays(gameBoard, WHITE).size();
 				break;
 		}
 		return blackEvaluate - whiteEvaluate;
