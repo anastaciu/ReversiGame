@@ -32,13 +32,12 @@ public class GameRules implements Constants{
         return false;
     }
 
-    private static boolean isPossible(int row, int col) {
-        return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
+    private static boolean isPossible(int line, int col) {
+        return line >= 0 && line < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
     }
 
     public static List<Play> plays(byte[][] gameBoard, Play play, byte tokenColor) {
-        int row = play.line;
-        int col = play.col;
+
         int temp;
         List<Play> plays = new ArrayList<>();
         for (int x_pos = -1; x_pos < 2; x_pos++) {
@@ -46,16 +45,16 @@ public class GameRules implements Constants{
                 if (x_pos == 0 && y_pos == 0)
                     continue;
                 temp = 0;
-                int x = col + x_pos, y = row + y_pos;
+                int x = play.col + x_pos, y = play.line + y_pos;
                 if (isPossible(y, x) && gameBoard[y][x] == (-tokenColor)) {
                     temp++;
-                    for (int i = row + y_pos * 2, j = col + x_pos * 2; isPossible(i, j); i += y_pos, j += x_pos) {
+                    for (int i = play.line + y_pos * 2, j = play.col + x_pos * 2; isPossible(i, j); i += y_pos, j += x_pos) {
                         if (gameBoard[i][j] == (-tokenColor)) {
                             temp++;
                             continue;
                         } else if (gameBoard[i][j] == tokenColor) {
-                            for (int m = row + y_pos, n = col + x_pos; m <= row + temp && m >= row - temp && n <= col + temp
-                                    && n >= col - temp; m += y_pos, n += x_pos) {
+                            for (int m = play.line + y_pos, n = play.col + x_pos; m <= play.line + temp && m >= play.line - temp && n <= play.col + temp
+                                    && n >= play.col - temp; m += y_pos, n += x_pos) {
                                 gameBoard[m][n] = tokenColor;
                                 plays.add(new Play(m, n));
                             }
@@ -66,16 +65,16 @@ public class GameRules implements Constants{
                 }
             }
         }
-        gameBoard[row][col] = tokenColor;
+        gameBoard[play.line][play.col] = tokenColor;
         return plays;
     }
 
     public static List<Play> getPossiblePlays(byte[][] gameBoard, byte tokenColor) {
         List<Play> plays = new ArrayList<>();
         Play play;
-        for (int row = 0; row < BOARD_SIZE; row++) {
+        for (int line = 0; line < BOARD_SIZE; line++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                play = new Play(row, col);
+                play = new Play(line, col);
                 if (GameRules.isPossiblePlay(gameBoard, play, tokenColor)) {
                     plays.add(play);
                 }
@@ -86,16 +85,17 @@ public class GameRules implements Constants{
 
     public static Scores getScores(byte[][] gameBoard, byte playerColor) {
 
-        int PLAYER = 0;
-        int AI = 0;
+        int player1 = 0;
+        int player2 = 0;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (gameBoard[i][j] == playerColor)
-                    PLAYER += 1;
-                else if (gameBoard[i][j] == (byte)-playerColor)
-                    AI += 1;
+                    player1 += 1;
+                else if (gameBoard[i][j] == -playerColor)
+                    player2 += 1;
             }
+
         }
-        return new Scores(PLAYER, AI);
+        return new Scores(player1, player2);
     }
 }

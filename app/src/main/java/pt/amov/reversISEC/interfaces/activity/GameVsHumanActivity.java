@@ -195,8 +195,8 @@ public class GameVsHumanActivity extends Activity implements Constants{
 
     private void playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
         Scores scores = GameRules.getScores(gameBoard, playerColor);
-        String player1Stats = X_TOKENS + scores.PLAYER1;
-        String player2Stats = X_TOKENS + scores.PLAYER2;
+        String player1Stats = X_TOKENS + scores.player1;
+        String player2Stats = X_TOKENS + scores.player2;
         player1Tokens.setText(player1Stats);
         player2Tokens.setText(player2Stats);
         player1Layout.setBackgroundResource(R.drawable.player_selected);

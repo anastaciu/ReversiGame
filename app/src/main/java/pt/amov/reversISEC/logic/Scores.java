@@ -2,12 +2,12 @@ package pt.amov.reversISEC.logic;
 
 public class Scores {
 
-	public int PLAYER1;
-	public int PLAYER2;
+	public int player1;
+	public int player2;
 
-	Scores(int PLAYER1, int PLAYER2) {
-		this.PLAYER1 = PLAYER1;
-		this.PLAYER2 = PLAYER2;
+	Scores(int player1, int player2) {
+		this.player1 = player1;
+		this.player2 = player2;
 	}
 	
 }

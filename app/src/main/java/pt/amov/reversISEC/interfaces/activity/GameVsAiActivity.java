@@ -254,7 +254,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                     playerTurn();
                 } else if (legalMovesOfAI == 0 && legalMovesOfPlayer == 0) {
                     gameState = STATE_GAME_OVER;
-                    gameOver(scores.PLAYER1 - scores.PLAYER2);
+                    gameOver(scores.player1 - scores.player2);
                 } else if (legalMovesOfAI > 0 && legalMovesOfPlayer == 0) {
                     aiTurn();
                 }
@@ -268,7 +268,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                     aiTurn();
                 }else if(legalMovesOfPlayer == 0 && legalMovesOfAI == 0){
                     gameState = STATE_GAME_OVER;
-                    gameOver(scores.PLAYER1 - scores.PLAYER2);
+                    gameOver(scores.player1 - scores.player2);
                 }else if (legalMovesOfPlayer > 0 && legalMovesOfAI == 0) {
                     playerTurn();
                 }
@@ -284,8 +284,8 @@ public class GameVsAiActivity extends Activity implements Constants{
 
     private void playerTurn(){
         Scores scores = GameRules.getScores(gameBoard, playerColor);
-        String playerStats = X_TOKENS + scores.PLAYER1;
-        String AIStats = X_TOKENS + scores.PLAYER2;
+        String playerStats = X_TOKENS + scores.player1;
+        String AIStats = X_TOKENS + scores.player2;
         player1Tokens.setText(playerStats);
         player2Tokens.setText( AIStats);
         player1Layout.setBackgroundResource(R.drawable.player_selected);
@@ -295,8 +295,8 @@ public class GameVsAiActivity extends Activity implements Constants{
 
     private void aiTurn(){
         Scores scores = GameRules.getScores(gameBoard, playerColor);
-        String playerStats = X_TOKENS + scores.PLAYER1;
-        String AIStats = X_TOKENS + scores.PLAYER2;
+        String playerStats = X_TOKENS + scores.player1;
+        String AIStats = X_TOKENS + scores.player2;
         player1Tokens.setText(playerStats);
         player2Tokens.setText(AIStats);
         player1Layout.setBackgroundResource(R.drawable.player_unselected);
