@@ -111,7 +111,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                 if (gameView.inGameBoard(x, y)) {
                     return false;
                 }
-                int row = gameView.getRow(y);
+                int row = gameView.getLine(y);
                 int col = gameView.getCol(x);
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -217,9 +217,9 @@ public class GameVsAiActivity extends Activity implements Constants{
         }
 
         public void run() {
-            int process_move = 500;
+            int process_play = 500;
             try {
-                sleep(process_move);
+                sleep(process_play);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

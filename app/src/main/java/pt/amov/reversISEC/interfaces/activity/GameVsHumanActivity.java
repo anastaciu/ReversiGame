@@ -67,7 +67,6 @@ public class GameVsHumanActivity extends Activity implements Constants{
         player2Name = findViewById(R.id.player2_name);
         player2Name.setText("The Rat");
 
-
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -player1Color;
@@ -85,12 +84,13 @@ public class GameVsHumanActivity extends Activity implements Constants{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
+                Scores scores;
                 float x = event.getX();
                 float y = event.getY();
                 if (gameView.inGameBoard(x, y)) {
                     return false;
                 }
-                int row = gameView.getRow(y);
+                int row = gameView.getLine(y);
                 int col = gameView.getCol(x);
 
                 switch (event.getAction()) {
@@ -115,7 +115,9 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 Play play = new Play(row, col);
                                 List<Play> plays = GameRules.plays(gameBoard, play, player1Color);
                                 gameView.play(gameBoard, plays, play);
-                                playerTurn(player1Color, player2Layout, player1Layout);
+                                scores = playerTurn(player1Color, player2Layout, player1Layout);
+                                if(GameRules.getPossiblePlays(gameBoard,player1Color).size() == 0)
+                                    player_vs = !player_vs;
                             }
                             else {
                                 if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
@@ -125,8 +127,10 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 Play play2 = new Play(row, col);
                                 List<Play> plays2 = GameRules.plays(gameBoard, play2, player2Color);
                                 gameView.play(gameBoard, plays2, play2);
-                                playerTurn(player1Color, player1Layout, player2Layout);
+                                scores = playerTurn(player1Color, player1Layout, player2Layout);
                             }
+                            if(GameRules.getPossiblePlays(gameBoard,player2Color).size() == 0 && GameRules.getPossiblePlays(gameBoard,player1Color).size() == 0)
+                                gameOver(scores.player1 - scores.player2);
                         }
                     case MotionEvent.ACTION_CANCEL:
                         down = false;
@@ -183,17 +187,17 @@ public class GameVsHumanActivity extends Activity implements Constants{
         ResultMessage msgDialog;
         String msg;
         if(gameResult > 0){
-            msg = player1Name + " wins";
+            msg = player1Name.getText() + " wins";
         }else if(gameResult == 0){
             msg = "Draw";
         }else{
-            msg = player2Name + " wins";
+            msg = player2Name.getText() + " wins";
         }
         msgDialog = new ResultMessage(GameVsHumanActivity.this, msg);
         msgDialog.show();
     }
 
-    private void playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
+    private Scores playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
         Scores scores = GameRules.getScores(gameBoard, playerColor);
         String player1Stats = X_TOKENS + scores.player1;
         String player2Stats = X_TOKENS + scores.player2;
@@ -202,6 +206,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
         player1Layout.setBackgroundResource(R.drawable.player_selected);
         player2Layout.setBackgroundResource(R.drawable.player_unselected);
         player_vs = !player_vs;
+        return scores;
     }
 
 

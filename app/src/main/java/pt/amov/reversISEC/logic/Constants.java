@@ -10,6 +10,7 @@ public interface Constants {
 	int STATE_PLAYER2_MOVE = 1;
 	int STATE_GAME_OVER = 2;
 	String X_TOKENS = " × ";
+	int TOKENS = 22;
 	String AI_NAME[] = new String[]{"Rookie", "Pro", "Master"};
 	int SPECIAL = 5;
 
