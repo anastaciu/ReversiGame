@@ -38,7 +38,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
 
     private byte player1Color;
     private byte player2Color;
-    private boolean player_vs = false;
+    private boolean player1_turn = true;
 
 
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
@@ -107,7 +107,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
                         if (down && downRow == row && downCol == col) {
                             down = false;
 
-                            if(player_vs) {
+                            if(player1_turn) {
                                 if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), player1Color)) {
                                     return true;
                                 }
@@ -116,8 +116,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 List<Play> plays = GameRules.plays(gameBoard, play, player1Color);
                                 gameView.play(gameBoard, plays, play);
                                 scores = playerTurn(player1Color, player2Layout, player1Layout);
-                                if(GameRules.getPossiblePlays(gameBoard,player1Color).size() == 0)
-                                    player_vs = !player_vs;
+                                player1_turn = false;
                             }
                             else {
                                 if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), player2Color)) {
@@ -128,9 +127,16 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 List<Play> plays2 = GameRules.plays(gameBoard, play2, player2Color);
                                 gameView.play(gameBoard, plays2, play2);
                                 scores = playerTurn(player1Color, player1Layout, player2Layout);
+                                player1_turn = true;
                             }
-                            if(GameRules.getPossiblePlays(gameBoard,player2Color).size() == 0 && GameRules.getPossiblePlays(gameBoard,player1Color).size() == 0)
+                            int legalMovesPlayer1 = GameRules.getPossiblePlays(gameBoard,player1Color).size();
+                            int legalMovesPlayer2 = GameRules.getPossiblePlays(gameBoard,player2Color).size();
+                            if(legalMovesPlayer2== 0 && legalMovesPlayer1 == 0)
                                 gameOver(scores.player1 - scores.player2);
+                            else if(legalMovesPlayer1 > 0 && legalMovesPlayer2 == 0)
+                                player1_turn = true;
+                            else if(legalMovesPlayer2 > 0 && legalMovesPlayer1 == 0)
+                                player1_turn = false;
                         }
                     case MotionEvent.ACTION_CANCEL:
                         down = false;
@@ -143,12 +149,8 @@ public class GameVsHumanActivity extends Activity implements Constants{
         newGame.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                         initGameBoard();
-
                         gameView.initGameBoard();
-
 
             }
         });
@@ -205,7 +207,6 @@ public class GameVsHumanActivity extends Activity implements Constants{
         player2Tokens.setText(player2Stats);
         player1Layout.setBackgroundResource(R.drawable.player_selected);
         player2Layout.setBackgroundResource(R.drawable.player_unselected);
-        player_vs = !player_vs;
         return scores;
     }
 
