@@ -63,9 +63,9 @@ public class GameVsHumanActivity extends Activity implements Constants{
 
 
         player1Name = findViewById(R.id.player1_name);
-        player1Name.setText("The Man");
+        player1Name.setText("Ricardo");
         player2Name = findViewById(R.id.player2_name);
-        player2Name.setText("The Rat");
+        player2Name.setText("Tonixa");
 
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
