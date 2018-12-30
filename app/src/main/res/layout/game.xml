@@ -150,9 +150,10 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/WHITE"
+                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 android:layout_row="0"
                 android:layout_column="0"
                 android:text="@string/pass"
@@ -165,9 +166,9 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/WHITE"
+                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
-
+                android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_row="0"
                 android:layout_column="1"
@@ -181,11 +182,12 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/WHITE"
+                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
                 android:textSize="20sp"
                 android:layout_row="1"
                 android:layout_column="0"
+                android:textStyle="bold"
                 android:text="@string/new_game"
                 />
 
@@ -197,11 +199,12 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/WHITE"
+                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
                 android:textSize="20sp"
                 android:layout_row="1"
                 android:layout_column="1"
+                android:textStyle="bold"
                 android:text="@string/quit_game"/>
 
         </GridLayout>

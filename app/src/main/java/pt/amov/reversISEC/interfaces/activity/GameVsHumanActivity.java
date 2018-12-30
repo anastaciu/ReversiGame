@@ -322,12 +322,14 @@ public class GameVsHumanActivity extends Activity implements Constants{
 
     void setButtonOn(Button button){
         button.setEnabled(true);
+        button.setTextColor(getResources().getColor(R.color.design_default_color_primary_dark));
         button.setBackgroundResource(R.drawable.button_bg);
     }
 
     void setButtonOff(Button button){
         button.setEnabled(false);
-        button.setBackgroundResource(R.color.button_disabled);
+        button.setTextColor(getResources().getColor(R.color.WHITE));
+        button.setBackgroundResource(R.drawable.button_disabled);
     }
 
 }
