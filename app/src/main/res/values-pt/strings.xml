@@ -8,13 +8,13 @@
     <string name="play">Jogar</string>
     <string name="rookie">Novato</string>
     <string name="choose_difficulty">Escolha Dificuldade</string>
-    <string name="title">Titulo</string>
+    <string name="title">titulo</string>
     <string name="rules">regras</string>
     <string name="vs">VS</string>
     <string name="x">× ..</string>
     <string name="player_piece">playerPiece</string>
     <string name="opponent_piece">oponentPiece</string>
-    <string name="player_1"> </string>
+    <string name="player_1">" Player1"</string>
     <string name="ok">OK</string>
     <string name="online">jogar online</string>
     <string name="play_ai">jogar</string>
@@ -23,7 +23,7 @@
     <string name="master">Mestre</string>
     <string name="new_game">Novo Jogo</string>
     <string name="pass">Passar Vez</string>
-    <string name="play_again">Jogar Duplo</string>
+    <string name="play_again">Jogar 2X</string>
     <string name="quit_game">Abandonar</string>
     <string name="camera_name">Câmera</string>
     <string name="take_picture">Tirar Foto</string>
