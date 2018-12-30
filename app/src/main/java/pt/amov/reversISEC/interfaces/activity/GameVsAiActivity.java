@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
 
+import pt.amov.reversISEC.interfaces.dialog.PlayerInfoDialogBox;
 import pt.amov.reversISEC.logic.Play;
 import pt.amov.reversISEC.logic.Scores;
 import pt.amov.reversISEC.logic.AiAlgorithm;
@@ -41,6 +42,7 @@ public class GameVsAiActivity extends Activity implements Constants{
     private LinearLayout player2Layout;
     private TextView player1Tokens;
     private TextView player2Tokens;
+    private TextView tvPlayerName;
     private ImageView player1Image;
     private ImageView player2Image;
     private TextView nameOfAI;
@@ -49,6 +51,7 @@ public class GameVsAiActivity extends Activity implements Constants{
     private byte playerColor;
     private byte player2Color;
     private int difficulty;
+    private String playerName;
 
 
 
@@ -58,15 +61,17 @@ public class GameVsAiActivity extends Activity implements Constants{
     private int gameState;
 
     private NewGameChooser dialog;
-
+    private PlayerInfoDialogBox playerInfoDialogBox;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
         gameView = findViewById(R.id.gameView);
+        tvPlayerName = findViewById(R.id.player1_name);
         player1Layout = findViewById(R.id.player1);
         player2Layout = findViewById(R.id.player2);
         player1Tokens = findViewById(R.id.player1_tokens);
@@ -86,6 +91,9 @@ public class GameVsAiActivity extends Activity implements Constants{
         difficulty = bundle.getInt("difficulty");
 
         nameOfAI.setText(AI_NAME[difficulty - 1]);
+
+        playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
+        playerInfoDialogBox.show();
 
         initGameBoard();
 

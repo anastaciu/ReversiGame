@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/back"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/player1"
@@ -21,19 +21,17 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="10dp" >
+            android:padding="10dp">
 
             <TextView
-
                 android:id="@+id/player1_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="@string/player_1"
+                android:text="Player 1"
                 android:textColor="@color/BLACK"
-                android:textSize="20sp"
-                tools:text="You" />
+                android:textSize="20sp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -46,8 +44,8 @@
                     android:id="@+id/player1_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/black_1"
-                    android:contentDescription="@string/player_piece" />
+                    android:contentDescription="@string/player_piece"
+                    android:src="@drawable/black_1" />
 
                 <TextView
                     android:id="@+id/player1_tokens"
@@ -79,9 +77,9 @@
             android:id="@+id/player2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginEnd="40dp"
             android:padding="10dp">
 
             <TextView
@@ -90,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
+                android:text="AI"
                 android:textColor="@color/BLACK"
                 android:textSize="20sp" />
 
@@ -104,8 +103,8 @@
                     android:id="@+id/player2_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/white_1"
-                    android:contentDescription="@string/opponent_piece" />
+                    android:contentDescription="@string/opponent_piece"
+                    android:src="@drawable/white_1" />
 
                 <TextView
                     android:id="@+id/player2_tokens"
@@ -123,13 +122,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp" />
 
 
     <LinearLayout
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="20dp"
         android:gravity="center">
 
@@ -137,75 +136,72 @@
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:rowCount="2"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
             android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:rowCount="2"
             tools:ignore="UselessParent">
 
             <Button
                 android:id="@+id/pass"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_row="0"
+                android:layout_column="0"
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_row="0"
-                android:layout_column="0"
                 android:text="@string/pass"
-                />
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/play_again"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_row="0"
+                android:layout_column="1"
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_row="0"
-                android:layout_column="1"
                 android:text="@string/play_again"
-                />
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/new_game"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_row="1"
+                android:layout_column="0"
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
-                android:textSize="20sp"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:textStyle="bold"
                 android:text="@string/new_game"
-                />
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/exit_game"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_row="1"
+                android:layout_column="1"
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/button_bg"
-                android:textColor="@color/design_default_color_primary_dark"
                 android:padding="10dp"
+                android:text="@string/quit_game"
+                android:textColor="@color/design_default_color_primary_dark"
                 android:textSize="20sp"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:textStyle="bold"
-                android:text="@string/quit_game"/>
+                android:textStyle="bold" />
 
         </GridLayout>
 

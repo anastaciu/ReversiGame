@@ -27,11 +27,7 @@ import pt.amov.reversISEC.logic.Play;
 import pt.amov.reversISEC.logic.GameRules;
 import pt.amov.reversISEC.logic.Scores;
 
-public class GameVsHumanActivity extends Activity implements Constants{
-
-    public GameVsHumanActivity(){
-
-    }
+public class GameVsHumanActivity extends Activity implements Constants {
 
     private GameView gameView = null;
     private LinearLayout player1Layout;
@@ -60,7 +56,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
 
 
-////dados do jogador
+    ////dados do jogador
     PlayerInfoDialogBox player;
 
 
@@ -82,7 +78,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
         final Button playAgain = findViewById(R.id.play_again);
         final Button quitGame = findViewById(R.id.exit_game);
 
-        player = new PlayerInfoDialogBox(GameVsHumanActivity.this, "xxx");
+        //player = new PlayerInfoDialogBox(GameVsHumanActivity.this, "xxx");
         //player.show();
 
         setButtonOff(playAgain);
@@ -105,7 +101,6 @@ public class GameVsHumanActivity extends Activity implements Constants{
             boolean down = false;
             int downLine;
             int downCol;
-
 
 
             @Override
@@ -135,7 +130,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
                         if (down && downLine == line && downCol == col) {
                             down = false;
 
-                            if(player1_turn) {
+                            if (player1_turn) {
                                 if (!GameRules.isPossiblePlay(gameBoard, new Play(line, col), player1Color)) {
                                     return true;
                                 }
@@ -146,8 +141,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 scores = playerTurn(player1Color, player2Layout, player1Layout);
                                 player1TurnSpecialMoves++;
                                 player1_turn = false;
-                            }
-                            else {
+                            } else {
                                 if (!GameRules.isPossiblePlay(gameBoard, new Play(line, col), player2Color)) {
                                     return true;
                                 }
@@ -159,47 +153,42 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 player2TurnSpecialMoves++;
                                 player1_turn = true;
                             }
-                            int legalMovesPlayer1 = GameRules.getPossiblePlays(gameBoard,player1Color).size();
-                            int legalMovesPlayer2 = GameRules.getPossiblePlays(gameBoard,player2Color).size();
-                            if(legalMovesPlayer2== 0 && legalMovesPlayer1 == 0)
+                            int legalMovesPlayer1 = GameRules.getPossiblePlays(gameBoard, player1Color).size();
+                            int legalMovesPlayer2 = GameRules.getPossiblePlays(gameBoard, player2Color).size();
+                            if (legalMovesPlayer2 == 0 && legalMovesPlayer1 == 0)
                                 gameOver(scores.player1 - scores.player2, pass, playAgain);
-                            else if(legalMovesPlayer1 > 0 && legalMovesPlayer2 == 0){
+                            else if (legalMovesPlayer1 > 0 && legalMovesPlayer2 == 0) {
                                 setPlayerColor(player1Layout, player2Layout);
                                 player1_turn = true;
-                            }
-                            else if(legalMovesPlayer2 > 0 && legalMovesPlayer1 == 0){
+                            } else if (legalMovesPlayer2 > 0 && legalMovesPlayer1 == 0) {
                                 setPlayerColor(player2Layout, player1Layout);
                                 player1_turn = false;
                             }
 
-                            if(player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed){
+                            if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed) {
                                 setButtonOn(pass);
-                            }
-                            else if(!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
+                            } else if (!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
                                 setButtonOn(pass);
-                            }
-                            else{
+                            } else {
                                 setButtonOff(pass);
                             }
 
-                            if(player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1TwiceNotUsed){
+                            if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1TwiceNotUsed) {
                                 setButtonOn(playAgain);
-                            }
-                            else if(!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2TwiceNotUsed) {
+                            } else if (!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2TwiceNotUsed) {
                                 setButtonOn(playAgain);
-                            }
-                            else{
+                            } else {
                                 setButtonOff(playAgain);
                             }
 
-                            if(!player1_turn && !player1TwiceNotUsed && player1TwiceSpecialPlayActive){
+                            if (!player1_turn && !player1TwiceNotUsed && player1TwiceSpecialPlayActive) {
                                 setPlayerColor(player1Layout, player2Layout);
                                 player1TwiceSpecialPlayActive = false;
                                 setButtonOff(playAgain);
                                 player1_turn = !player1_turn;
                             }
 
-                            if(player1_turn && !player2TwiceNotUsed && player2TwiceSpecialPlayActive){
+                            if (player1_turn && !player2TwiceNotUsed && player2TwiceSpecialPlayActive) {
                                 setPlayerColor(player2Layout, player1Layout);
                                 player2TwiceSpecialPlayActive = false;
                                 setButtonOff(playAgain);
@@ -223,7 +212,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
             @Override
             public void onClick(View v) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                byte playColor = (byte)preferences.getInt("playerColor", BLACK);
+                byte playColor = (byte) preferences.getInt("playerColor", BLACK);
                 Intent intent = new Intent(GameVsHumanActivity.this, GameVsHumanActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putByte("playerColor", playColor);
@@ -242,20 +231,17 @@ public class GameVsHumanActivity extends Activity implements Constants{
                     setPlayerColor(player2Layout, player1Layout);
                     player1PassNotUsed = false;
 
-                }
-                else {
+                } else {
                     player1_turn = true;
                     setPlayerColor(player1Layout, player2Layout);
                     player2PassNotUsed = false;
                 }
 
-                if(player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed){
+                if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed) {
                     setButtonOn(pass);
-                }
-                else if(!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
+                } else if (!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
                     setButtonOn(pass);
-                }
-                else{
+                } else {
                     setButtonOff(pass);
                 }
             }
@@ -270,13 +256,12 @@ public class GameVsHumanActivity extends Activity implements Constants{
                     player1TwiceNotUsed = false;
                     player1TwiceSpecialPlayActive = true;
                     setButtonOff(playAgain);
-                    }
-                else {
+                } else {
                     player2TwiceNotUsed = false;
                     player2TwiceSpecialPlayActive = true;
                     setButtonOff(playAgain);
-                    }
                 }
+            }
         });
 
         quitGame.setOnClickListener(new OnClickListener() {
@@ -288,7 +273,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
     }
 
 
-    private void initGameBoard(){
+    private void initGameBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 gameBoard[i][j] = NULL;
@@ -301,14 +286,14 @@ public class GameVsHumanActivity extends Activity implements Constants{
     }
 
 
-    private void gameOver(int gameResult, Button pass, Button playAgain){
+    private void gameOver(int gameResult, Button pass, Button playAgain) {
         ResultMessage msgDialog;
         String msg;
-        if(gameResult > 0){
+        if (gameResult > 0) {
             msg = player1Name.getText() + " wins";
-        }else if(gameResult == 0){
+        } else if (gameResult == 0) {
             msg = "Draw";
-        }else{
+        } else {
             msg = player2Name.getText() + " wins";
         }
         setButtonOff(pass);
@@ -317,7 +302,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
         msgDialog.show();
     }
 
-    private Scores playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout){
+    private Scores playerTurn(byte playerColor, LinearLayout player1Layout, LinearLayout player2Layout) {
         Scores scores = GameRules.getScores(gameBoard, playerColor);
         String player1Stats = X_TOKENS + scores.player1;
         String player2Stats = X_TOKENS + scores.player2;
@@ -327,18 +312,18 @@ public class GameVsHumanActivity extends Activity implements Constants{
         return scores;
     }
 
-    void setPlayerColor(LinearLayout player1Layout, LinearLayout player2Layout){
+    void setPlayerColor(LinearLayout player1Layout, LinearLayout player2Layout) {
         player1Layout.setBackgroundResource(R.drawable.player_selected);
         player2Layout.setBackgroundResource(R.drawable.player_unselected);
     }
 
-    void setButtonOn(Button button){
+    void setButtonOn(Button button) {
         button.setEnabled(true);
         button.setTextColor(getResources().getColor(R.color.design_default_color_primary_dark));
         button.setBackgroundResource(R.drawable.button_bg);
     }
 
-    void setButtonOff(Button button){
+    void setButtonOff(Button button) {
         button.setEnabled(false);
         button.setTextColor(getResources().getColor(R.color.WHITE));
         button.setBackgroundResource(R.drawable.button_disabled);
