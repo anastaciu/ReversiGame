@@ -17,26 +17,17 @@
         <activity
             android:name=".interfaces.activity.MainActivity"
             android:label="@string/app_name">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".interfaces.activity.GameVsAiActivity">
-        </activity>
-        <activity
-            android:name=".interfaces.activity.RulesActivity">
-        </activity>
-        <activity
-            android:name=".interfaces.activity.GameVsHumanActivity"
-            />
-        <activity
-            android:name=".interfaces.activity.CameraActivity"
-            />
-
+        <activity android:name=".interfaces.activity.GameVsAiActivity"/>
+        <activity android:name=".interfaces.activity.RulesActivity"/>
+        <activity android:name=".interfaces.activity.GameVsHumanActivity" />
+        <activity android:name=".interfaces.activity.CameraActivity"/>
+        <activity android:name=".interfaces.activity.GameOnline"/>
     </application>
 
 </manifest>

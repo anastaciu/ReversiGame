@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="@drawable/back_widget">
+
     <TextView
         android:id="@+id/msg"
         android:layout_width="wrap_content"
@@ -27,8 +28,9 @@
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
         android:layout_margin="10dp"
-        android:layout_gravity="center"
+        android:layout_gravity="center|bottom"
         android:textSize="18sp"
         android:text="@string/ok"
         android:textColor="@color/WHITE" />
+
 </LinearLayout>

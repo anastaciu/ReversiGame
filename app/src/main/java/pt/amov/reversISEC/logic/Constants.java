@@ -12,6 +12,6 @@ public interface Constants {
 	String X_TOKENS = " × ";
 	int TOKENS = 22;
 	String AI_NAME[] = new String[]{"Rookie", "Pro", "Master"};
-	int SPECIAL = 4;
+	int SPECIAL_THRESHOLD = 4;
 
 }
