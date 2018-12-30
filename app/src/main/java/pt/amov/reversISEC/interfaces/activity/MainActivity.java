@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.R;
 
@@ -51,8 +52,6 @@ public class MainActivity extends Activity implements Constants{
 
                                          SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                          byte playColor = (byte) preferences.getInt("playerColor", BLACK);
-
-
                                          Intent intent = new Intent(MainActivity.this, GameVsHumanActivity.class);
                                          Bundle bundle = new Bundle();
                                          bundle.putByte("playerColor", playColor);

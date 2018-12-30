@@ -47,10 +47,10 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
 		getHolder().addCallback(this);
 
-		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		DisplayMetrics dm = new DisplayMetrics();
-		wm.getDefaultDisplay().getMetrics(dm);
-		screenWidth = dm.widthPixels;
+		WindowManager window = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics metrics = new DisplayMetrics();
+		window.getDefaultDisplay().getMetrics(metrics);
+		screenWidth = metrics.widthPixels;
 		boardSize = screenWidth * scale[scaleLevel];
 		squareSize = (8f / 9f * boardSize) / 8;
 		margin = 1f / 18f * boardSize;
@@ -98,12 +98,12 @@ public class GameView extends SurfaceView implements Callback, Constants{
 	}
 
 	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	protected void onMeasure(int widthSpec, int heightSpec) {
 
-		widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) boardSize, View.MeasureSpec.EXACTLY);
-		heightMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) boardSize, View.MeasureSpec.EXACTLY);
-		setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		widthSpec = View.MeasureSpec.makeMeasureSpec((int) boardSize, View.MeasureSpec.EXACTLY);
+		heightSpec = View.MeasureSpec.makeMeasureSpec((int) boardSize, View.MeasureSpec.EXACTLY);
+		setMeasuredDimension(widthSpec, heightSpec);
+		super.onMeasure(widthSpec, heightSpec);
 	}
 
 	public void play(byte[][] gameBoard, List<Play> reversed, Play play) {
@@ -153,7 +153,7 @@ public class GameView extends SurfaceView implements Callback, Constants{
 
     }
 
-	public void render(Canvas canvas) {
+	public void drawGameResources(Canvas canvas) {
 		Paint board = new Paint();
 		Paint tokens = new Paint();
 		canvas.drawBitmap(background, 0, 6, board);

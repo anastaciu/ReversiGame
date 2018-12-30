@@ -60,6 +60,7 @@ public class GameVsAiActivity extends Activity implements Constants{
     private NewGameChooser dialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -208,12 +209,12 @@ public class GameVsAiActivity extends Activity implements Constants{
     }
 
 
-    class ThinkingThread extends Thread {
+    class AIThread extends Thread {
 
-        private byte thinkingColor;
+        private byte AiColor;
 
-        private ThinkingThread(byte thinkingColor) {
-            this.thinkingColor = thinkingColor;
+        private AIThread(byte AiColor) {
+            this.AiColor = AiColor;
         }
 
         public void run() {
@@ -223,13 +224,13 @@ public class GameVsAiActivity extends Activity implements Constants{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            int legalMoves = GameRules.getPossiblePlays(gameBoard, thinkingColor).size();
+            int legalMoves = GameRules.getPossiblePlays(gameBoard, AiColor).size();
             if (legalMoves > 0) {
-                Play play = AiAlgorithm.getPlay(gameBoard, depth[difficulty], thinkingColor, difficulty);
-                List<Play> plays = GameRules.plays(gameBoard, play, thinkingColor);
+                Play play = AiAlgorithm.getPlay(gameBoard, depth[difficulty], AiColor, difficulty);
+                List<Play> plays = GameRules.plays(gameBoard, play, AiColor);
                 gameView.play(gameBoard, plays, play);
             }
-            updateUI.handle(legalMoves, thinkingColor);
+            updateUI.handle(legalMoves, AiColor);
         }
     }
 
@@ -302,7 +303,7 @@ public class GameVsAiActivity extends Activity implements Constants{
         player1Layout.setBackgroundResource(R.drawable.player_unselected);
         player2Layout.setBackgroundResource(R.drawable.player_selected);
         gameState = STATE_PLAYER2_MOVE;
-        new ThinkingThread(player2Color).start();
+        new AIThread(player2Color).start();
     }
 
     private void gameOver(int gameResult){
