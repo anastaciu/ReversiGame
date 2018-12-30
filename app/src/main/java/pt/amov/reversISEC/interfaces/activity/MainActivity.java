@@ -31,7 +31,6 @@ public class MainActivity extends Activity implements Constants{
                                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                         byte playColor = (byte) preferences.getInt("playerColor", BLACK);
                                         int difficulty = preferences.getInt("difficulty", 1);
-
                                         Intent intent = new Intent(MainActivity.this, GameVsAiActivity.class);
                                         Bundle bundle = new Bundle();
                                         bundle.putByte("playerColor", playColor);
@@ -51,11 +50,10 @@ public class MainActivity extends Activity implements Constants{
                                      public void onClick(View v) {
 
                                          SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                         byte playColor = (byte) preferences.getInt("playerColor", BLACK);
+                                         byte playColor = (byte)preferences.getInt("playerColor", BLACK);
                                          Intent intent = new Intent(MainActivity.this, GameVsHumanActivity.class);
                                          Bundle bundle = new Bundle();
                                          bundle.putByte("playerColor", playColor);
-
                                          intent.putExtras(bundle);
                                          startActivity(intent);
                                          overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -69,15 +67,11 @@ public class MainActivity extends Activity implements Constants{
         playVsHuman.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View v) {
-
                                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                               byte playColor = (byte) preferences.getInt("playerColor", BLACK);
-
-
+                                               byte playColor = (byte)preferences.getInt("playerColor", BLACK);
                                                Intent intent = new Intent(MainActivity.this, GameVsHumanActivity.class);
                                                Bundle bundle = new Bundle();
                                                bundle.putByte("playerColor", playColor);
-
                                                intent.putExtras(bundle);
                                                startActivity(intent);
                                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -80,11 +80,6 @@ public class GameVsAiActivity extends Activity implements Constants{
         Button quitGame = findViewById(R.id.exit_game);
 
 
-
-        quitGame.setEnabled(false);
-        quitGame.setBackgroundColor(Color.TRANSPARENT);
-        quitGame.setText("");
-
         Bundle bundle = getIntent().getExtras();
         playerColor = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -playerColor;
@@ -181,6 +176,20 @@ public class GameVsAiActivity extends Activity implements Constants{
                     }
                 });
                 dialog.show();
+            }
+        });
+
+        quitGame.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                byte playColor = (byte)preferences.getInt("playerColor", BLACK);
+                Intent intent = new Intent(GameVsAiActivity.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putByte("playerColor", playColor);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 

@@ -1,7 +1,10 @@
 package pt.amov.reversISEC.interfaces.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +29,10 @@ import pt.amov.reversISEC.logic.Scores;
 
 public class GameVsHumanActivity extends Activity implements Constants{
 
+    public GameVsHumanActivity(){
+
+    }
+
     private GameView gameView = null;
     private LinearLayout player1Layout;
     private LinearLayout player2Layout;
@@ -40,22 +47,21 @@ public class GameVsHumanActivity extends Activity implements Constants{
     private byte player1Color;
     private byte player2Color;
     private boolean player1_turn = true;
-    private int player1TurnSpecial = 0;
-    private int player2TurnSpecial = 0;
-    private  boolean player1PassNotUsed = true;
-    private  boolean player2PassNotUsed = true;
+    private int player1TurnSpecialMoves = 0;
+    private int player2TurnSpecialMoves = 0;
+    private boolean player1PassNotUsed = true;
+    private boolean player2PassNotUsed = true;
     private boolean player1TwiceSpecialPlayActive = false;
     private boolean player2TwiceSpecialPlayActive = false;
     private boolean player1TwiceNotUsed = true;
     private boolean player2TwiceNotUsed = true;
-    private int playsPlayer1 = 2;
-    private int playsPlayer2 = 2;
 
 
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
 
-    PlayerInfoDialogBox player;
 
+////dados do jogador
+    PlayerInfoDialogBox player;
 
 
     @Override
@@ -138,7 +144,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 List<Play> plays = GameRules.plays(gameBoard, play, player1Color);
                                 gameView.play(gameBoard, plays, play);
                                 scores = playerTurn(player1Color, player2Layout, player1Layout);
-                                player1TurnSpecial++;
+                                player1TurnSpecialMoves++;
                                 player1_turn = false;
                             }
                             else {
@@ -150,7 +156,7 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 List<Play> plays2 = GameRules.plays(gameBoard, play2, player2Color);
                                 gameView.play(gameBoard, plays2, play2);
                                 scores = playerTurn(player1Color, player1Layout, player2Layout);
-                                player2TurnSpecial++;
+                                player2TurnSpecialMoves++;
                                 player1_turn = true;
                             }
                             int legalMovesPlayer1 = GameRules.getPossiblePlays(gameBoard,player1Color).size();
@@ -166,20 +172,20 @@ public class GameVsHumanActivity extends Activity implements Constants{
                                 player1_turn = false;
                             }
 
-                            if(player1_turn && player1TurnSpecial > SPECIAL && player1PassNotUsed){
+                            if(player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed){
                                 setButtonOn(pass);
                             }
-                            else if(!player1_turn && player2TurnSpecial > SPECIAL && player2PassNotUsed) {
+                            else if(!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
                                 setButtonOn(pass);
                             }
                             else{
                                 setButtonOff(pass);
                             }
 
-                            if(player1_turn && player1TurnSpecial > SPECIAL && player1TwiceNotUsed){
+                            if(player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1TwiceNotUsed){
                                 setButtonOn(playAgain);
                             }
-                            else if(!player1_turn && player2TurnSpecial > SPECIAL && player2TwiceNotUsed) {
+                            else if(!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2TwiceNotUsed) {
                                 setButtonOn(playAgain);
                             }
                             else{
@@ -216,8 +222,15 @@ public class GameVsHumanActivity extends Activity implements Constants{
         newGame.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                        initGameBoard();
-                        gameView.initGameBoard();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                byte playColor = (byte)preferences.getInt("playerColor", BLACK);
+                Intent intent = new Intent(GameVsHumanActivity.this, GameVsHumanActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putByte("playerColor", playColor);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
             }
         });
         pass.setOnClickListener(new OnClickListener() {
@@ -236,10 +249,10 @@ public class GameVsHumanActivity extends Activity implements Constants{
                     player2PassNotUsed = false;
                 }
 
-                if(player1_turn && player1TurnSpecial > SPECIAL && player1PassNotUsed){
+                if(player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed){
                     setButtonOn(pass);
                 }
-                else if(!player1_turn && player2TurnSpecial > SPECIAL && player2PassNotUsed) {
+                else if(!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
                     setButtonOn(pass);
                 }
                 else{
@@ -265,7 +278,6 @@ public class GameVsHumanActivity extends Activity implements Constants{
                     }
                 }
         });
-
 
         quitGame.setOnClickListener(new OnClickListener() {
             @Override

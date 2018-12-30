@@ -1,5 +1,7 @@
 package pt.amov.reversISEC.interfaces.activity;
 
-public class GameOnline {
+import android.app.Activity;
+
+public class GameOnline extends Activity {
 
 }
