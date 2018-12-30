@@ -28,7 +28,7 @@ public class BoardUpdate extends Thread {
             try{
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
-                    this.gameView.render(canvas);
+                    this.gameView.drawGameResources(canvas);
                 }
             }catch(Exception e){
                 e.printStackTrace();

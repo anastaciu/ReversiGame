@@ -60,6 +60,7 @@ public class GameVsAiActivity extends Activity implements Constants{
     private NewGameChooser dialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
