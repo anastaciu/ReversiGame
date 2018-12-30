@@ -119,11 +119,11 @@ public class GameView extends SurfaceView implements Callback, Constants{
 				index[reverseRow][reverseCol] = 12;
 			}
 		}
-		int row = play.line, col = play.col;
-		if (gameBoard[row][col] == WHITE) {
-			index[row][col] = 11;
-		} else if (gameBoard[row][col] == BLACK) {
-			index[row][col] = 0;
+		int line = play.line, col = play.col;
+		if (gameBoard[line][col] == WHITE) {
+			index[line][col] = 11;
+		} else if (gameBoard[line][col] == BLACK) {
+			index[line][col] = 0;
 		}
 
 	}
