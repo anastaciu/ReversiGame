@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import pt.amov.reversISEC.R;
-import pt.amov.reversISEC.interfaces.dialog.PlayerInfoDialogBox;
+import pt.amov.reversISEC.interfaces.dialog.TwoPlayerInfoDialogBox;
 import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
 import pt.amov.reversISEC.interfaces.views.GameView;
 import pt.amov.reversISEC.logic.Constants;
@@ -34,11 +33,11 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private LinearLayout player2Layout;
     private TextView player1Tokens;
     private TextView player2Tokens;
-    private ImageView player1Image;
-    private ImageView player2Image;
     private TextView player1Name;
     private TextView player2Name;
 
+    private boolean isNameP1Defined;
+    private boolean isNameP2Defined;
 
     private byte player1Color;
     private byte player2Color;
@@ -51,13 +50,13 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private boolean player2TwiceSpecialPlayActive = false;
     private boolean player1TwiceNotUsed = true;
     private boolean player2TwiceNotUsed = true;
+    private boolean player1PlayTwiceInUse = false;
+    private boolean player2PlayTwiceInUse = false;
+
+
 
 
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
-
-
-    ////dados do jogador
-    PlayerInfoDialogBox player;
 
 
     @Override
@@ -70,30 +69,36 @@ public class GameVsHumanActivity extends Activity implements Constants {
         player2Layout = findViewById(R.id.player2);
         player1Tokens = findViewById(R.id.player1_tokens);
         player2Tokens = findViewById(R.id.player2_tokens);
-        player1Image = findViewById(R.id.player1_image);
-        player2Image = findViewById(R.id.player2_image);
+        player1Name = findViewById(R.id.player1_name);
+        player2Name = findViewById(R.id.player2_name);
 
         final Button newGame = findViewById(R.id.new_game);
         final Button pass = findViewById(R.id.pass);
         final Button playAgain = findViewById(R.id.play_again);
         final Button quitGame = findViewById(R.id.exit_game);
 
-        //player = new PlayerInfoDialogBox(GameVsHumanActivity.this, "xxx");
-        //player.show();
 
         setButtonOff(playAgain);
         setButtonOff(pass);
 
-        player1Name = findViewById(R.id.player1_name);
-        player1Name.setText("Ricardo");
-        player2Name = findViewById(R.id.player2_name);
-        player2Name.setText("Tonixa");
-
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -player1Color;
+        player1Name.setText(Objects.requireNonNull(bundle).getString("player1Name"));
+        player2Name.setText(Objects.requireNonNull(bundle).getString("player2Name"));
+        isNameP1Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer1Defined");
+        isNameP2Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer2Defined");
 
+
+
+        final TwoPlayerInfoDialogBox twoPlayerInfoDialogBox = new TwoPlayerInfoDialogBox(GameVsHumanActivity.this, player1Name, player2Name);
+        if(!isNameP1Defined) {
+            twoPlayerInfoDialogBox.show();
+            isNameP1Defined = !isNameP1Defined;
+            isNameP2Defined = !isNameP2Defined;
+        }
         initGameBoard();
+
         playerTurn(player1Color, player1Layout, player2Layout);
 
         gameView.setOnTouchListener(new OnTouchListener() {
@@ -165,6 +170,25 @@ public class GameVsHumanActivity extends Activity implements Constants {
                                 player1_turn = false;
                             }
 
+                            if (!player1_turn && !player1TwiceNotUsed && player1TwiceSpecialPlayActive) {
+                                setPlayerColor(player1Layout, player2Layout);
+                                player1TwiceSpecialPlayActive = false;
+                                setButtonOff(playAgain);
+                                setButtonOff(pass);
+                                player2PlayTwiceInUse = true;
+                                player1_turn = !player1_turn;
+                            }
+
+                            if (player1_turn && !player2TwiceNotUsed && player2TwiceSpecialPlayActive) {
+                                setPlayerColor(player2Layout, player1Layout);
+                                player2TwiceSpecialPlayActive = false;
+                                setButtonOff(playAgain);
+                                setButtonOff(pass);
+                                player1PlayTwiceInUse = true;
+                                player1_turn = !player1_turn;
+
+                            }
+
                             if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed) {
                                 setButtonOn(pass);
                             } else if (!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
@@ -181,21 +205,15 @@ public class GameVsHumanActivity extends Activity implements Constants {
                                 setButtonOff(playAgain);
                             }
 
-                            if (!player1_turn && !player1TwiceNotUsed && player1TwiceSpecialPlayActive) {
-                                setPlayerColor(player1Layout, player2Layout);
-                                player1TwiceSpecialPlayActive = false;
-                                setButtonOff(playAgain);
-                                player1_turn = !player1_turn;
+                            if(player2PlayTwiceInUse) {
+                                setButtonOff(pass);
+                                player2PlayTwiceInUse = !player2PlayTwiceInUse;
                             }
 
-                            if (player1_turn && !player2TwiceNotUsed && player2TwiceSpecialPlayActive) {
-                                setPlayerColor(player2Layout, player1Layout);
-                                player2TwiceSpecialPlayActive = false;
-                                setButtonOff(playAgain);
-                                player1_turn = !player1_turn;
-
+                            if(player1PlayTwiceInUse) {
+                                setButtonOff(pass);
+                                player1PlayTwiceInUse = !player1PlayTwiceInUse;
                             }
-
 
                         }
 
@@ -213,15 +231,23 @@ public class GameVsHumanActivity extends Activity implements Constants {
             public void onClick(View v) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 byte playColor = (byte) preferences.getInt("playerColor", BLACK);
+                String Player1Name = preferences.getString("player1Name", player1Name.getText().toString());
+                String Player2Name = preferences.getString("player2Name", player2Name.getText().toString());
                 Intent intent = new Intent(GameVsHumanActivity.this, GameVsHumanActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putByte("playerColor", playColor);
                 intent.putExtras(bundle);
+                intent.putExtra("isNamePlayer1Defined", isNameP1Defined);
+                intent.putExtra("isNamePlayer1Defined", isNameP1Defined);
+                intent.putExtra("player1Name",player1Name.getText().toString());
+                intent.putExtra("player2Name", player2Name.getText().toString());
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
 
             }
         });
+
         pass.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,10 +282,12 @@ public class GameVsHumanActivity extends Activity implements Constants {
                     player1TwiceNotUsed = false;
                     player1TwiceSpecialPlayActive = true;
                     setButtonOff(playAgain);
+                    setButtonOff(pass);
                 } else {
                     player2TwiceNotUsed = false;
                     player2TwiceSpecialPlayActive = true;
                     setButtonOff(playAgain);
+                    setButtonOff(pass);
                 }
             }
         });

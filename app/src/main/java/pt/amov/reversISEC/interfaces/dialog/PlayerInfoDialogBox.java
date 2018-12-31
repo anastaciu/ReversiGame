@@ -22,7 +22,7 @@ public class PlayerInfoDialogBox extends Dialog {
         super(context);
         final ViewGroup nullParent = null;
         this.tvName = tName;
-        this.setCancelable(false);
+        this.setCanceledOnTouchOutside(false);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.player_data_dialog, nullParent);

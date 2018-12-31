@@ -27,7 +27,6 @@
         <activity android:name=".interfaces.activity.RulesActivity"/>
         <activity android:name=".interfaces.activity.GameVsHumanActivity" />
         <activity android:name=".interfaces.activity.CameraActivity"/>
-        <activity android:name=".interfaces.activity.GameOnline"/>
     </application>
 
 </manifest>

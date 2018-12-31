@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,7 +41,6 @@ public class GameVsAiActivity extends Activity implements Constants{
     private LinearLayout player2Layout;
     private TextView player1Tokens;
     private TextView player2Tokens;
-    private TextView tvPlayerName;
     private ImageView player1Image;
     private ImageView player2Image;
     private TextView nameOfAI;
@@ -61,7 +59,6 @@ public class GameVsAiActivity extends Activity implements Constants{
     private int gameState;
 
     private NewGameChooser dialog;
-    private PlayerInfoDialogBox playerInfoDialogBox;
 
 
     @Override
@@ -71,7 +68,7 @@ public class GameVsAiActivity extends Activity implements Constants{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
         gameView = findViewById(R.id.gameView);
-        tvPlayerName = findViewById(R.id.player1_name);
+        TextView tvPlayerName = findViewById(R.id.player1_name);
         player1Layout = findViewById(R.id.player1);
         player2Layout = findViewById(R.id.player2);
         player1Tokens = findViewById(R.id.player1_tokens);
@@ -92,9 +89,8 @@ public class GameVsAiActivity extends Activity implements Constants{
 
         nameOfAI.setText(AI_NAME[difficulty - 1]);
 
-        playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
+        PlayerInfoDialogBox playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
         playerInfoDialogBox.show();
-
         initGameBoard();
 
 
