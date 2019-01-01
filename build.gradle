@@ -23,3 +23,9 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}

@@ -1,10 +1,12 @@
 package pt.amov.reversISEC.interfaces.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +34,8 @@ import pt.amov.reversISEC.logic.Play;
 import pt.amov.reversISEC.logic.GameRules;
 import pt.amov.reversISEC.logic.Scores;
 
+
+
 public class GameVsHumanActivity extends Activity implements Constants {
 
     private GameView gameView = null;
@@ -41,13 +45,9 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private TextView player2Tokens;
     private TextView player1Name;
     private TextView player2Name;
-    TextView tvPlayerName;
-    private TextView nameOfAI;
 
     private boolean isNameP1Defined = false;
     private boolean isNameP2Defined = false;
-    private byte[][] gameBoardObjectIntent;
-
 
     private byte player1Color;
     private byte player2Color;
@@ -62,16 +62,8 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private boolean player2TwiceNotUsed = true;
     private boolean player1PlayTwiceInUse = false;
     private boolean player2PlayTwiceInUse = false;
-    private int difficulty;
 
 
-    String gameMode;
-
-
-    private NewGameChooser newGameChooser;
-    private ChooseGameMode chooseGameMode;
-
-    private static final int depth[] = new int[] { 0, 1, 6, 3, 7, 3, 5, 8, 4 };
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
 
     @Override
@@ -79,14 +71,6 @@ public class GameVsHumanActivity extends Activity implements Constants {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
-
-
-
-        chooseGameMode = new ChooseGameMode(GameVsHumanActivity.this, gameMode);
-        chooseGameMode.show();
-
-        Log.d("CREATE", "gamemode "+ gameMode);
-
 
 
         gameView = findViewById(R.id.gameView);
@@ -104,7 +88,7 @@ public class GameVsHumanActivity extends Activity implements Constants {
         final Button playAgain = findViewById(R.id.play_again);
         final Button quitGame = findViewById(R.id.exit_game);
 
-
+        quitGame.setText(R.string._1_jogador);
 
         setButtonOff(playAgain);
         setButtonOff(pass);
@@ -124,25 +108,17 @@ public class GameVsHumanActivity extends Activity implements Constants {
 
 
 
-/*        if(gameMode == GAME_MODE_2P)
-            quitGame.setText(R.string.game_mode_2p);
-
-
-        if(gameMode == GAME_MODE_2P){
-            twoPlayerInfoDialogBox = new TwoPlayerInfoDialogBox(GameVsHumanActivity.this, player1Name, player2Name);
-            twoPlayerInfoDialogBox.show();*/
-
-        //final PlayerInfoDialogBox playerInfoDialogBox = new PlayerInfoDialogBox(GameVsHumanActivity.this, player1Name);
 
         if(!isNameP1Defined) {
-            //twoPlayerInfoDialogBox.show();
+            twoPlayerInfoDialogBox = new TwoPlayerInfoDialogBox(GameVsHumanActivity.this, player1Name, player2Name);
+            twoPlayerInfoDialogBox.show();
             isNameP1Defined = !isNameP1Defined;
             isNameP2Defined = !isNameP2Defined;
         }
 
         initGameBoard();
 
-        //playerTurn(player1Color, player1Layout, player2Layout);
+        playerTurn(player1Color, player1Layout, player2Layout);
         gameView.setOnTouchListener(new OnTouchListener() {
 
             boolean down = false;
@@ -274,8 +250,6 @@ public class GameVsHumanActivity extends Activity implements Constants {
             public void onClick(View v) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 byte playColor = (byte) preferences.getInt("playerColor", BLACK);
-                String Player1Name = preferences.getString("player1Name", player1Name.getText().toString());
-                String Player2Name = preferences.getString("player2Name", player2Name.getText().toString());
                 Intent intent = new Intent(GameVsHumanActivity.this, GameVsHumanActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putByte("playerColor", playColor);
@@ -342,14 +316,9 @@ public class GameVsHumanActivity extends Activity implements Constants {
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 byte playColor = (byte) preferences.getInt("playerColor", BLACK);
-                Intent intent = new Intent(GameVsHumanActivity.this, GameVsAiActivity.class);
+                Intent intent = new Intent(GameVsHumanActivity.this, MainActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putByte("playerColor", playColor);
-                intent.putExtras(bundle);
-                intent.putExtra("isNamePlayer1Defined", isNameP1Defined);
-                intent.putExtra("isNamePlayer1Defined", isNameP1Defined);
-                intent.putExtra("player1Name",player1Name.getText().toString());
-                intent.putExtra("player2Name", player2Name.getText().toString());
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
@@ -405,13 +374,13 @@ public class GameVsHumanActivity extends Activity implements Constants {
 
     void setButtonOn(Button button) {
         button.setEnabled(true);
-        button.setTextColor(getResources().getColor(R.color.design_default_color_primary_dark));
+        ContextCompat.getColor(getApplicationContext(),R.color.design_default_color_primary_dark);
         button.setBackgroundResource(R.drawable.button_bg);
     }
 
     void setButtonOff(Button button) {
         button.setEnabled(false);
-        button.setTextColor(getResources().getColor(R.color.WHITE));
+        ContextCompat.getColor(getApplicationContext(),R.color.WHITE);
         button.setBackgroundResource(R.drawable.button_disabled);
     }
 

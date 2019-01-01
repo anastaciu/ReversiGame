@@ -105,9 +105,9 @@ public class AiAlgorithm implements Constants{
 					for (int j = 0; j < BOARD_SIZE; j++) {
 						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
 							if (gameBoard[i][j] == WHITE) {
-								whiteEvaluate += 5;
+								whiteEvaluate += 1;
 							} else if (gameBoard[i][j] == BLACK) {
-								blackEvaluate += 5;
+								blackEvaluate += 1;
 							}
 						} else if (i == 0 || i == 7 || j == 0 || j == 7) {
 							if (gameBoard[i][j] == WHITE) {
