@@ -26,7 +26,7 @@ public class TwoPlayerInfoDialogBox extends Dialog {
         this.tvNameP1 = tNameP1;
         this.tvNameP2 = tNameP2;
 
-        this.setCanceledOnTouchOutside(false);
+        this.setCancelable(false);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.two_player_data_dialog, nullParent);

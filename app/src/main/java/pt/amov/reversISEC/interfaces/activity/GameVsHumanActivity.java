@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,11 +14,15 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.util.Log;
+
+
 
 import java.util.List;
 import java.util.Objects;
 
 import pt.amov.reversISEC.R;
+import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.interfaces.dialog.TwoPlayerInfoDialogBox;
 import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
 import pt.amov.reversISEC.interfaces.views.GameView;
@@ -35,9 +40,13 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private TextView player2Tokens;
     private TextView player1Name;
     private TextView player2Name;
+    TextView tvPlayerName;
+    private TextView nameOfAI;
 
-    private boolean isNameP1Defined;
-    private boolean isNameP2Defined;
+    private boolean isNameP1Defined = false;
+    private boolean isNameP2Defined = false;
+    private byte[][] gameBoardObjectIntent;
+
 
     private byte player1Color;
     private byte player2Color;
@@ -52,12 +61,14 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private boolean player2TwiceNotUsed = true;
     private boolean player1PlayTwiceInUse = false;
     private boolean player2PlayTwiceInUse = false;
+    private int difficulty;
+    private byte gameMode;
 
 
+    private NewGameChooser dialog;
 
-
+    private static final int depth[] = new int[] { 0, 1, 6, 3, 7, 3, 5, 8, 4 };
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +83,8 @@ public class GameVsHumanActivity extends Activity implements Constants {
         player1Name = findViewById(R.id.player1_name);
         player2Name = findViewById(R.id.player2_name);
 
+        final TwoPlayerInfoDialogBox twoPlayerInfoDialogBox;
+
         final Button newGame = findViewById(R.id.new_game);
         final Button pass = findViewById(R.id.pass);
         final Button playAgain = findViewById(R.id.play_again);
@@ -84,23 +97,42 @@ public class GameVsHumanActivity extends Activity implements Constants {
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -player1Color;
+        gameMode = Objects .requireNonNull(bundle).getByte("game");
+
         player1Name.setText(Objects.requireNonNull(bundle).getString("player1Name"));
         player2Name.setText(Objects.requireNonNull(bundle).getString("player2Name"));
         isNameP1Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer1Defined");
         isNameP2Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer2Defined");
 
 
+        //gameMode= Objects.requireNonNull(bundle).getInt("gameMode");
 
-        final TwoPlayerInfoDialogBox twoPlayerInfoDialogBox = new TwoPlayerInfoDialogBox(GameVsHumanActivity.this, player1Name, player2Name);
-        if(!isNameP1Defined) {
+        String x = gameMode + " gamelogzi ";
+        String y = player1Color + " corlogzi";
+
+        Log.d("STATE", y);
+        Log.d("STATE", x);
+
+
+
+        if(gameMode == GAME_MODE_2P)
+            quitGame.setText(R.string.game_mode_2p);
+
+        if(gameMode == 2){
+            twoPlayerInfoDialogBox = new TwoPlayerInfoDialogBox(GameVsHumanActivity.this, player1Name, player2Name);
             twoPlayerInfoDialogBox.show();
+        }
+        //final PlayerInfoDialogBox playerInfoDialogBox = new PlayerInfoDialogBox(GameVsHumanActivity.this, player1Name);
+
+        if(!isNameP1Defined) {
+            //twoPlayerInfoDialogBox.show();
             isNameP1Defined = !isNameP1Defined;
             isNameP2Defined = !isNameP2Defined;
         }
+
         initGameBoard();
 
-        playerTurn(player1Color, player1Layout, player2Layout);
-
+        //playerTurn(player1Color, player1Layout, player2Layout);
         gameView.setOnTouchListener(new OnTouchListener() {
 
             boolean down = false;
@@ -160,6 +192,7 @@ public class GameVsHumanActivity extends Activity implements Constants {
                             }
                             int legalMovesPlayer1 = GameRules.getPossiblePlays(gameBoard, player1Color).size();
                             int legalMovesPlayer2 = GameRules.getPossiblePlays(gameBoard, player2Color).size();
+
                             if (legalMovesPlayer2 == 0 && legalMovesPlayer1 == 0)
                                 gameOver(scores.player1 - scores.player2, pass, playAgain);
                             else if (legalMovesPlayer1 > 0 && legalMovesPlayer2 == 0) {
@@ -296,6 +329,21 @@ public class GameVsHumanActivity extends Activity implements Constants {
             @Override
             public void onClick(View v) {
 
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                byte playColor = (byte) preferences.getInt("playerColor", BLACK);
+                Intent intent = new Intent(GameVsHumanActivity.this, GameVsAiActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putByte("playerColor", playColor);
+                intent.putExtras(bundle);
+                intent.putExtra("isNamePlayer1Defined", isNameP1Defined);
+                intent.putExtra("isNamePlayer1Defined", isNameP1Defined);
+                intent.putExtra("player1Name",player1Name.getText().toString());
+                intent.putExtra("player2Name", player2Name.getText().toString());
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+
             }
         });
     }
@@ -355,6 +403,19 @@ public class GameVsHumanActivity extends Activity implements Constants {
         button.setEnabled(false);
         button.setTextColor(getResources().getColor(R.color.WHITE));
         button.setBackgroundResource(R.drawable.button_disabled);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(GameVsHumanActivity.this, MainActivity.class);
+            setResult(RESULT_CANCELED, intent);
+            GameVsHumanActivity.this.finish();
+            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

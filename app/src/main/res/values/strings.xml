@@ -26,5 +26,6 @@
     <string name="quit_game">Quit Game</string>
     <string name="camera_name">Camera</string>
     <string name="take_picture">Take picture</string>
+    <string name="game_mode_2p">2 Players"</string>
 
 </resources>

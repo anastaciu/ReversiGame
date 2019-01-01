@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,13 +44,13 @@ public class GameVsAiActivity extends Activity implements Constants{
     private TextView player2Tokens;
     private ImageView player1Image;
     private ImageView player2Image;
+    private TextView tvPlayerName;
     private TextView nameOfAI;
 
 
     private byte playerColor;
     private byte player2Color;
     private int difficulty;
-    private String playerName;
 
 
 
@@ -61,14 +62,13 @@ public class GameVsAiActivity extends Activity implements Constants{
     private NewGameChooser dialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
         gameView = findViewById(R.id.gameView);
-        TextView tvPlayerName = findViewById(R.id.player1_name);
         player1Layout = findViewById(R.id.player1);
         player2Layout = findViewById(R.id.player2);
         player1Tokens = findViewById(R.id.player1_tokens);
@@ -76,11 +76,12 @@ public class GameVsAiActivity extends Activity implements Constants{
         player1Image = findViewById(R.id.player1_image);
         player2Image = findViewById(R.id.player2_image);
         nameOfAI = findViewById(R.id.player2_name);
+        tvPlayerName = findViewById(R.id.player1_name);
+
         Button newGame = findViewById(R.id.new_game);
         Button pass = findViewById(R.id.pass);
         Button playAgain = findViewById(R.id.play_again);
         Button quitGame = findViewById(R.id.exit_game);
-
 
         Bundle bundle = getIntent().getExtras();
         playerColor = Objects.requireNonNull(bundle).getByte("playerColor");
@@ -91,6 +92,7 @@ public class GameVsAiActivity extends Activity implements Constants{
 
         PlayerInfoDialogBox playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
         playerInfoDialogBox.show();
+
         initGameBoard();
 
 
