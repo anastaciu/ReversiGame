@@ -88,13 +88,8 @@ public class GameVsHumanActivity extends Activity implements Constants {
         final Button playAgain = findViewById(R.id.play_again);
         final Button quitGame = findViewById(R.id.exit_game);
 
-        quitGame.setText(R.string._1_jogador);
-
         setButtonOff(playAgain);
         setButtonOff(pass);
-
-
-
 
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
@@ -104,11 +99,7 @@ public class GameVsHumanActivity extends Activity implements Constants {
         isNameP1Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer1Defined");
         isNameP2Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer2Defined");
 
-
-
-
-
-        if(!isNameP1Defined) {
+      if(!isNameP1Defined) {
             twoPlayerInfoDialogBox = new TwoPlayerInfoDialogBox(GameVsHumanActivity.this, player1Name, player2Name);
             twoPlayerInfoDialogBox.show();
             isNameP1Defined = !isNameP1Defined;
@@ -339,16 +330,7 @@ public class GameVsHumanActivity extends Activity implements Constants {
         quitGame.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(gameMode == GAME_MODE_2P){
-                    quitGame.setText(R.string._1_jogador);
-                    gameMode = GAME_MODE_1P;
-
-                }
-                else if(gameMode == GAME_MODE_1P){
-                    quitGame.setText(R.string._2_jogadores);
-                    gameMode = GAME_MODE_2P;
-
-                }
+                finish();
             }
         });
     }
