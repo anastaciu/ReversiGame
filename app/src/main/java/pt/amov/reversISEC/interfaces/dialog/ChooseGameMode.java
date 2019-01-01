@@ -15,7 +15,6 @@ public class ChooseGameMode extends Dialog implements Constants {
 
     private String gameMode;
 
-
     public ChooseGameMode(Context context, String gamesMode){
         super(context);
         this.gameMode = gamesMode;
@@ -32,7 +31,7 @@ public class ChooseGameMode extends Dialog implements Constants {
         OnePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    gameMode = new String(GMODE_1P_STR);
+
                     dismiss();
                 }
 
@@ -41,7 +40,7 @@ public class ChooseGameMode extends Dialog implements Constants {
         twoPlayers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gameMode = new String( GMODE_2P_STR);
+
                 dismiss();
             }
 
