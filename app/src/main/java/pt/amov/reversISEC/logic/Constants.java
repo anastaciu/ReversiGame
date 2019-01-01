@@ -13,7 +13,9 @@ public interface Constants {
 	int TOKENS = 22;
 	String AI_NAME[] = new String[]{"Rookie", "Pro", "Master"};
 	int SPECIAL_THRESHOLD = 4;
-	byte GAME_MODE_1P = 0;
-	byte GAME_MODE_2P = 1;
+	String GMODE_1P_STR = "1";
+	String GMODE_2P_STR = "2";
+	byte GAME_MODE_1P = 1;
+	byte GAME_MODE_2P = 2;
 
 }

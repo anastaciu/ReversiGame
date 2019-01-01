@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import pt.amov.reversISEC.R;
+import pt.amov.reversISEC.interfaces.dialog.ChooseGameMode;
 import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.interfaces.dialog.TwoPlayerInfoDialogBox;
 import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
@@ -62,10 +63,13 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private boolean player1PlayTwiceInUse = false;
     private boolean player2PlayTwiceInUse = false;
     private int difficulty;
-    private byte gameMode;
 
 
-    private NewGameChooser dialog;
+    String gameMode;
+
+
+    private NewGameChooser newGameChooser;
+    private ChooseGameMode chooseGameMode;
 
     private static final int depth[] = new int[] { 0, 1, 6, 3, 7, 3, 5, 8, 4 };
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
@@ -75,6 +79,16 @@ public class GameVsHumanActivity extends Activity implements Constants {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game);
+
+
+
+        chooseGameMode = new ChooseGameMode(GameVsHumanActivity.this, gameMode);
+        chooseGameMode.show();
+
+        Log.d("CREATE", "gamemode "+ gameMode);
+
+
+
         gameView = findViewById(R.id.gameView);
         player1Layout = findViewById(R.id.player1);
         player2Layout = findViewById(R.id.player2);
@@ -91,13 +105,16 @@ public class GameVsHumanActivity extends Activity implements Constants {
         final Button quitGame = findViewById(R.id.exit_game);
 
 
+
         setButtonOff(playAgain);
         setButtonOff(pass);
+
+
+
 
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -player1Color;
-        gameMode = Objects .requireNonNull(bundle).getByte("game");
 
         player1Name.setText(Objects.requireNonNull(bundle).getString("player1Name"));
         player2Name.setText(Objects.requireNonNull(bundle).getString("player2Name"));
@@ -105,23 +122,16 @@ public class GameVsHumanActivity extends Activity implements Constants {
         isNameP2Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer2Defined");
 
 
-        //gameMode= Objects.requireNonNull(bundle).getInt("gameMode");
-
-        String x = gameMode + " gamelogzi ";
-        String y = player1Color + " corlogzi";
-
-        Log.d("STATE", y);
-        Log.d("STATE", x);
 
 
-
-        if(gameMode == GAME_MODE_2P)
+/*        if(gameMode == GAME_MODE_2P)
             quitGame.setText(R.string.game_mode_2p);
 
-        if(gameMode == 2){
+
+        if(gameMode == GAME_MODE_2P){
             twoPlayerInfoDialogBox = new TwoPlayerInfoDialogBox(GameVsHumanActivity.this, player1Name, player2Name);
-            twoPlayerInfoDialogBox.show();
-        }
+            twoPlayerInfoDialogBox.show();*/
+
         //final PlayerInfoDialogBox playerInfoDialogBox = new PlayerInfoDialogBox(GameVsHumanActivity.this, player1Name);
 
         if(!isNameP1Defined) {

@@ -27,5 +27,7 @@
     <string name="camera_name">Camera</string>
     <string name="take_picture">Take picture</string>
     <string name="game_mode_2p">2 Players"</string>
+    <string name="_1_jogador">1 Jogador</string>
+    <string name="_2_jogadores">2 Jogadores</string>
 
 </resources>
