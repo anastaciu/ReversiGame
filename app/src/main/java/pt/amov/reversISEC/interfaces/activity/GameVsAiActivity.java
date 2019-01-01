@@ -47,11 +47,9 @@ public class GameVsAiActivity extends Activity implements Constants{
     private ImageView player2Image;
     private TextView nameOfAI;
     private boolean player1_turn = true;
-
     private byte playerColor;
     private byte player2Color;
     private int difficulty;
-
     private int player1TurnSpecialMoves = 0;
     private boolean player1PassNotUsed = true;
     private boolean player1TwiceSpecialPlayActive = false;
@@ -81,7 +79,7 @@ public class GameVsAiActivity extends Activity implements Constants{
         player1Image = findViewById(R.id.player1_image);
         player2Image = findViewById(R.id.player2_image);
         nameOfAI = findViewById(R.id.player2_name);
-        TextView tvPlayerName = findViewById(R.id.player1_name);
+        final TextView tvPlayerName = findViewById(R.id.player1_name);
         int newGameAI;
 
         final Button newGame = findViewById(R.id.new_game);
@@ -105,6 +103,7 @@ public class GameVsAiActivity extends Activity implements Constants{
             playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
             playerInfoDialogBox.show();
         }
+        else tvPlayerName.setText(bundle.getString("player1NameAI"));
 
         initGameBoard();
 
@@ -157,13 +156,13 @@ public class GameVsAiActivity extends Activity implements Constants{
                         }
 
 
-                        if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD+1 && player1PassNotUsed) {
+                        if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed) {
                             setButtonOn(pass);
                         } else {
                             setButtonOff(pass);
                         }
 
-                        if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD+1 && player1TwiceNotUsed) {
+                        if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1TwiceNotUsed) {
                             setButtonOn(playAgain);
                         }  else {
                             setButtonOff(playAgain);
@@ -225,6 +224,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                         bundle.putInt("difficulty", difficulty);
                         intent.putExtras(bundle);
                         intent.putExtra("newGameAI", 1);
+                        intent.putExtra("player1NameAI", tvPlayerName.getText());
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         gameView.initGameBoard();
