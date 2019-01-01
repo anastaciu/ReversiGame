@@ -30,5 +30,6 @@
     <string name="game_mode_2p">2 Jogadores"</string>
     <string name="_1_jogador">1 Jogador</string>
     <string name="_2_jogadores">2 Jogadores</string>
+    <string name="ai">IA</string>
 
 </resources>
