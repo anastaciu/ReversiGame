@@ -263,14 +263,6 @@ public class GameVsAiActivity extends Activity implements Constants{
         quitGame.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                byte playColor = (byte)preferences.getInt("playerColor", BLACK);
-                Intent intent = new Intent(GameVsAiActivity.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putByte("playerColor", playColor);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }
         });
