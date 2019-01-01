@@ -15,13 +15,13 @@ public class AiAlgorithm implements Constants{
 
 	private static AiPlay max(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
 		if (depth == 0) {
-			return new AiPlay(evaluate(gameBoard, difficulty), null);
+			return new AiPlay(difficultyCicle(gameBoard, difficulty), null);
 		}
 
 		List<Play> possiblePlays = GameRules.getPossiblePlays(gameBoard, tokenColor);
 		if (possiblePlays.size() == 0) {
 			if (GameRules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
-				return new AiPlay(evaluate(gameBoard, difficulty), null);
+				return new AiPlay(difficultyCicle(gameBoard, difficulty), null);
 			}
 			return min(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
@@ -51,13 +51,13 @@ public class AiAlgorithm implements Constants{
 
 	private static AiPlay min(byte[][] gameBoard, int depth, int alpha, int beta, byte tokenColor, int difficulty) {
 		if (depth == 0) {
-			return new AiPlay(evaluate(gameBoard, difficulty), null);
+			return new AiPlay(difficultyCicle(gameBoard, difficulty), null);
 		}
 
 		List<Play> PossibleMoves = GameRules.getPossiblePlays(gameBoard, tokenColor);
 		if (PossibleMoves.size() == 0) {
 			if (GameRules.getPossiblePlays(gameBoard, (byte)-tokenColor).size() == 0) {
-				return new AiPlay(evaluate(gameBoard, difficulty), null);
+				return new AiPlay(difficultyCicle(gameBoard, difficulty), null);
 			}
 			return max(gameBoard, depth, alpha, beta, (byte)-tokenColor, difficulty);
 		}
@@ -85,7 +85,7 @@ public class AiAlgorithm implements Constants{
 		return new AiPlay(best, play);
 	}
 
-	private static int evaluate(byte[][] gameBoard, int difficulty) {
+	private static int difficultyCicle(byte[][] gameBoard, int difficulty) {
 		int whiteEvaluate = 0;
 		int blackEvaluate = 0;
 		switch (difficulty) {
@@ -105,15 +105,15 @@ public class AiAlgorithm implements Constants{
 					for (int j = 0; j < BOARD_SIZE; j++) {
 						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
 							if (gameBoard[i][j] == WHITE) {
-								whiteEvaluate += 1;
+								whiteEvaluate += 5;
 							} else if (gameBoard[i][j] == BLACK) {
-								blackEvaluate += 1;
+								blackEvaluate += 5;
 							}
 						} else if (i == 0 || i == 7 || j == 0 || j == 7) {
 							if (gameBoard[i][j] == WHITE) {
-								whiteEvaluate += 2;
+								whiteEvaluate += 5;
 							} else if (gameBoard[i][j] == BLACK) {
-								blackEvaluate += 2;
+								blackEvaluate += 5;
 							}
 						} else {
 							if (gameBoard[i][j] == WHITE) {
@@ -130,15 +130,15 @@ public class AiAlgorithm implements Constants{
 					for (int j = 0; j < BOARD_SIZE; j++) {
 						if ((i == 0 || i == 7) && (j == 0 || j == 7)) {
 							if (gameBoard[i][j] == WHITE) {
-								whiteEvaluate += 5;
+								whiteEvaluate += 10;
 							} else if (gameBoard[i][j] == BLACK) {
-								blackEvaluate += 5;
+								blackEvaluate += 10;
 							}
 						} else if (i == 0 || i == 7 || j == 0 || j == 7) {
 							if (gameBoard[i][j] == WHITE) {
-								whiteEvaluate += 2;
+								whiteEvaluate += 10;
 							} else if (gameBoard[i][j] == BLACK) {
-								blackEvaluate += 2;
+								blackEvaluate += 10;
 							}
 						} else {
 							if (gameBoard[i][j] == WHITE) {

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,11 +46,17 @@ public class GameVsAiActivity extends Activity implements Constants{
     private ImageView player1Image;
     private ImageView player2Image;
     private TextView nameOfAI;
-
+    private boolean player1_turn = true;
 
     private byte playerColor;
     private byte player2Color;
     private int difficulty;
+
+    private int player1TurnSpecialMoves = 0;
+    private boolean player1PassNotUsed = true;
+    private boolean player1TwiceSpecialPlayActive = false;
+    private boolean player1TwiceNotUsed = true;
+    private boolean player1PlayTwiceInUse = false;
 
 
 
@@ -59,7 +66,6 @@ public class GameVsAiActivity extends Activity implements Constants{
     private int gameState;
 
     private NewGameChooser dialog;
-
 
 
     @Override
@@ -76,26 +82,29 @@ public class GameVsAiActivity extends Activity implements Constants{
         player2Image = findViewById(R.id.player2_image);
         nameOfAI = findViewById(R.id.player2_name);
         TextView tvPlayerName = findViewById(R.id.player1_name);
+        int newGameAI;
 
-        Button newGame = findViewById(R.id.new_game);
-        Button pass = findViewById(R.id.pass);
-        Button playAgain = findViewById(R.id.play_again);
-        Button quitGame = findViewById(R.id.exit_game);
+        final Button newGame = findViewById(R.id.new_game);
+        final Button pass = findViewById(R.id.pass);
+        final Button playAgain = findViewById(R.id.play_again);
+        final Button quitGame = findViewById(R.id.exit_game);
 
-        pass.setEnabled(false);
-        pass.setVisibility(View.INVISIBLE);
-        playAgain.setEnabled(false);
-        playAgain.setVisibility(View.INVISIBLE);
+        PlayerInfoDialogBox playerInfoDialogBox;
+        setButtonOff(playAgain);
+        setButtonOff(pass);
 
         Bundle bundle = getIntent().getExtras();
         playerColor = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -playerColor;
         difficulty = bundle.getInt("difficulty");
+        newGameAI = bundle.getInt("newGameAI");
 
         nameOfAI.setText(AI_NAME[difficulty - 1]);
 
-        PlayerInfoDialogBox playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
-        playerInfoDialogBox.show();
+        if(newGameAI == 0){
+            playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
+            playerInfoDialogBox.show();
+        }
 
         initGameBoard();
 
@@ -132,12 +141,37 @@ public class GameVsAiActivity extends Activity implements Constants{
                             if (!GameRules.isPossiblePlay(gameBoard, new Play(row, col), playerColor)) {
                                 return true;
                             }
-
                             Play play = new Play(row, col);
                             List<Play> plays = GameRules.plays(gameBoard, play, playerColor);
                             gameView.play(gameBoard, plays, play);
-                            aiTurn();
+                            if(!player1PlayTwiceInUse)
+                                aiTurn();
+                            player1TurnSpecialMoves++;
+                        }
 
+                        if (!player1_turn && !player1TwiceNotUsed && player1TwiceSpecialPlayActive) {
+                            setPlayerColor(player1Layout, player2Layout);
+                            player1TwiceSpecialPlayActive = false;
+                            setButtonOff(playAgain);
+                            setButtonOff(pass);
+                        }
+
+
+                        if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD+1 && player1PassNotUsed) {
+                            setButtonOn(pass);
+                        } else {
+                            setButtonOff(pass);
+                        }
+
+                        if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD+1 && player1TwiceNotUsed) {
+                            setButtonOn(playAgain);
+                        }  else {
+                            setButtonOff(playAgain);
+                        }
+
+                        if(player1PlayTwiceInUse) {
+                            setButtonOff(pass);
+                            player1PlayTwiceInUse = !player1PlayTwiceInUse;
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
@@ -164,12 +198,13 @@ public class GameVsAiActivity extends Activity implements Constants{
                         playerColor = dialog.getPlayerColor();
                         player2Color = (byte) -playerColor;
                         difficulty = dialog.getDifficulty();
-
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         preferences.edit().putInt("playerColor", playerColor).apply();
                         preferences.edit().putInt("difficulty", difficulty).apply();
-
                         nameOfAI.setText(AI_NAME[difficulty - 1]);
+                        GameVsAiActivity.this.finish();
+
+
 
                         initGameBoard();
                         if(playerColor == BLACK){
@@ -181,13 +216,49 @@ public class GameVsAiActivity extends Activity implements Constants{
                             player2Image.setImageResource(R.drawable.black_1);
                             aiTurn();
                         }
+                        SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        byte playColor = (byte) preferences.getInt("playerColor", -1);
+                        int difficulty = preferences.getInt("difficulty", 1);
+                        Intent intent = new Intent(GameVsAiActivity.this, GameVsAiActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putByte("playerColor", playColor);
+                        bundle.putInt("difficulty", difficulty);
+                        intent.putExtras(bundle);
+                        intent.putExtra("newGameAI", 1);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         gameView.initGameBoard();
                         dialog.dismiss();
                     }
                 });
                 dialog.show();
+
             }
         });
+
+        pass.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aiTurn();
+                player1PassNotUsed = false;
+                setButtonOff(pass);
+
+            }
+
+
+        });
+
+        playAgain.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                player1TwiceNotUsed = false;
+                player1PlayTwiceInUse = true;
+                setButtonOff(playAgain);
+                setButtonOff(pass);
+            }
+        });
+
 
         quitGame.setOnClickListener(new OnClickListener() {
             @Override
@@ -200,6 +271,7 @@ public class GameVsAiActivity extends Activity implements Constants{
                 intent.putExtras(bundle);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             }
         });
 
@@ -261,9 +333,9 @@ public class GameVsAiActivity extends Activity implements Constants{
         public void handleMessage(Message msg) {
 
             int legalMoves = msg.what;
-            int thinkingColor = msg.arg1;
+            int Ai_Color = msg.arg1;
             int legalMovesOfAI, legalMovesOfPlayer;
-            if(thinkingColor == player2Color){
+            if(Ai_Color == player2Color){
                 legalMovesOfAI = legalMoves;
                 legalMovesOfPlayer = GameRules.getPossiblePlays(gameBoard, playerColor).size();
 
@@ -314,6 +386,10 @@ public class GameVsAiActivity extends Activity implements Constants{
     }
 
     private void aiTurn(){
+        if(player1PlayTwiceInUse){
+            playerTurn();
+            player1PlayTwiceInUse = false;
+        }
         Scores scores = GameRules.getScores(gameBoard, playerColor);
         String playerStats = X_TOKENS + scores.player1;
         String AIStats = X_TOKENS + scores.player2;
@@ -337,6 +413,24 @@ public class GameVsAiActivity extends Activity implements Constants{
         }
         msgDialog = new ResultMessage(GameVsAiActivity.this, msg);
         msgDialog.show();
+    }
+
+
+    void setPlayerColor(LinearLayout player1Layout, LinearLayout player2Layout) {
+        player1Layout.setBackgroundResource(R.drawable.player_selected);
+        player2Layout.setBackgroundResource(R.drawable.player_unselected);
+    }
+
+    void setButtonOn(Button button) {
+        button.setEnabled(true);
+        button.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.design_default_color_primary_dark));
+        button.setBackgroundResource(R.drawable.button_bg);
+    }
+
+    void setButtonOff(Button button) {
+        button.setEnabled(false);
+        button.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.WHITE));
+        button.setBackgroundResource(R.drawable.button_disabled);
     }
 
     @Override

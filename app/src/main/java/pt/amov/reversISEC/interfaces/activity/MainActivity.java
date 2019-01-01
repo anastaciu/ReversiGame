@@ -37,9 +37,9 @@ public class MainActivity extends Activity implements Constants{
                                         bundle.putInt("difficulty", difficulty);
                                         intent.putExtra("gameMode", 1);
                                         intent.putExtras(bundle);
-
                                         startActivity(intent);
                                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                                     }
                                 }
 
@@ -56,16 +56,15 @@ public class MainActivity extends Activity implements Constants{
                                          byte playColor = (byte)preferences.getInt("playerColor", -1);
                                          byte gameMode = (byte)preferences.getInt("game", 2);
                                          int difficulty = preferences.getInt("difficulty", 1);
-
                                          Intent intent = new Intent(MainActivity.this, GameVsHumanActivity.class);
                                          Bundle bundle = new Bundle();
                                          bundle.putByte("game", gameMode);
                                          bundle.putByte("playerColor", playColor);
                                          bundle.putInt("difficulty", difficulty);
                                          intent.putExtras(bundle);
-
                                          startActivity(intent);
                                          overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                                      }
                                  }
 
@@ -84,6 +83,7 @@ public class MainActivity extends Activity implements Constants{
                                                intent.putExtras(bundle);
                                                startActivity(intent);
                                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                                            }
                                        }
 
@@ -97,6 +97,7 @@ public class MainActivity extends Activity implements Constants{
                 Intent intent = new Intent(MainActivity.this, RulesActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
             }
         });
     }

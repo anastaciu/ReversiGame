@@ -1,7 +1,6 @@
 package pt.amov.reversISEC.interfaces.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,11 +23,10 @@ import java.util.List;
 import java.util.Objects;
 
 import pt.amov.reversISEC.R;
-import pt.amov.reversISEC.interfaces.dialog.ChooseGameMode;
-import pt.amov.reversISEC.interfaces.dialog.NewGameChooser;
 import pt.amov.reversISEC.interfaces.dialog.TwoPlayerInfoDialogBox;
 import pt.amov.reversISEC.interfaces.dialog.ResultMessage;
 import pt.amov.reversISEC.interfaces.views.GameView;
+import pt.amov.reversISEC.logic.AiAlgorithm;
 import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.logic.Play;
 import pt.amov.reversISEC.logic.GameRules;
@@ -62,8 +60,10 @@ public class GameVsHumanActivity extends Activity implements Constants {
     private boolean player2TwiceNotUsed = true;
     private boolean player1PlayTwiceInUse = false;
     private boolean player2PlayTwiceInUse = false;
+    private int gameMode = 2;
 
 
+    private static final int depth[] = new int[] { 0, 2, 3, 4};
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
 
     @Override
@@ -99,7 +99,6 @@ public class GameVsHumanActivity extends Activity implements Constants {
         Bundle bundle = getIntent().getExtras();
         player1Color = Objects.requireNonNull(bundle).getByte("playerColor");
         player2Color = (byte) -player1Color;
-
         player1Name.setText(Objects.requireNonNull(bundle).getString("player1Name"));
         player2Name.setText(Objects.requireNonNull(bundle).getString("player2Name"));
         isNameP1Defined = Objects.requireNonNull(bundle).getBoolean("isNamePlayer1Defined");
@@ -153,10 +152,13 @@ public class GameVsHumanActivity extends Activity implements Constants {
                         if (down && downLine == line && downCol == col) {
                             down = false;
 
+
+
                             if (player1_turn) {
                                 if (!GameRules.isPossiblePlay(gameBoard, new Play(line, col), player1Color)) {
                                     return true;
                                 }
+
 
                                 Play play = new Play(line, col);
                                 List<Play> plays = GameRules.plays(gameBoard, play, player1Color);
@@ -287,6 +289,13 @@ public class GameVsHumanActivity extends Activity implements Constants {
                 } else {
                     setButtonOff(pass);
                 }
+                if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1TwiceNotUsed) {
+                    setButtonOn(playAgain);
+                } else if (!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2TwiceNotUsed) {
+                    setButtonOn(playAgain);
+                } else {
+                    setButtonOff(playAgain);
+                }
             }
         });
 
@@ -294,6 +303,22 @@ public class GameVsHumanActivity extends Activity implements Constants {
 
             @Override
             public void onClick(View v) {
+
+                if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1PassNotUsed) {
+                    setButtonOn(pass);
+                } else if (!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2PassNotUsed) {
+                    setButtonOn(pass);
+                } else {
+                    setButtonOff(pass);
+                }
+
+                if (player1_turn && player1TurnSpecialMoves > SPECIAL_THRESHOLD && player1TwiceNotUsed) {
+                    setButtonOn(playAgain);
+                } else if (!player1_turn && player2TurnSpecialMoves > SPECIAL_THRESHOLD && player2TwiceNotUsed) {
+                    setButtonOn(playAgain);
+                } else {
+                    setButtonOff(playAgain);
+                }
 
                 if (player1_turn) {
                     player1TwiceNotUsed = false;
@@ -306,23 +331,24 @@ public class GameVsHumanActivity extends Activity implements Constants {
                     setButtonOff(playAgain);
                     setButtonOff(pass);
                 }
+
+
             }
         });
 
         quitGame.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(gameMode == GAME_MODE_2P){
+                    quitGame.setText(R.string._1_jogador);
+                    gameMode = GAME_MODE_1P;
 
+                }
+                else if(gameMode == GAME_MODE_1P){
+                    quitGame.setText(R.string._2_jogadores);
+                    gameMode = GAME_MODE_2P;
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                byte playColor = (byte) preferences.getInt("playerColor", BLACK);
-                Intent intent = new Intent(GameVsHumanActivity.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putByte("playerColor", playColor);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-
+                }
             }
         });
     }
@@ -374,13 +400,13 @@ public class GameVsHumanActivity extends Activity implements Constants {
 
     void setButtonOn(Button button) {
         button.setEnabled(true);
-        ContextCompat.getColor(getApplicationContext(),R.color.design_default_color_primary_dark);
+        button.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.design_default_color_primary_dark));
         button.setBackgroundResource(R.drawable.button_bg);
     }
 
     void setButtonOff(Button button) {
         button.setEnabled(false);
-        ContextCompat.getColor(getApplicationContext(),R.color.WHITE);
+        button.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.WHITE));
         button.setBackgroundResource(R.drawable.button_disabled);
     }
 
@@ -396,5 +422,6 @@ public class GameVsHumanActivity extends Activity implements Constants {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 
 }
