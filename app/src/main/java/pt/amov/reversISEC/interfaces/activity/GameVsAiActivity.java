@@ -47,12 +47,9 @@ public class GameVsAiActivity extends Activity implements Constants{
     private ImageView player2Image;
     private TextView nameOfAI;
     private boolean player1_turn = true;
-    private boolean isNameP1Defined = false;
-
     private byte playerColor;
     private byte player2Color;
     private int difficulty;
-
     private int player1TurnSpecialMoves = 0;
     private boolean player1PassNotUsed = true;
     private boolean player1TwiceSpecialPlayActive = false;
