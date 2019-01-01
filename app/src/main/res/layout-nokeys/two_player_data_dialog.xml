@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -8,22 +7,36 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_marginTop="20dp"
-        android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Nome"
+        android:layout_marginVertical="10dp"
+        android:padding="5dp"
+        android:text="Nome Jogador 1"
         android:textColor="#000000"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp"/>
+        android:textSize="14sp" />
 
     <EditText
+        android:id="@+id/edNameOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edName"
-        android:layout_marginHorizontal="15dp"/>
+        android:layout_marginHorizontal="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="5dp"
+        android:padding="5dp"
+        android:text="Nome Jogador 2"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/edNameTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp" />
 
     <!--<ImageButton-->
     <!--android:id="@+id/foto"-->
@@ -34,18 +47,15 @@
 
 
     <Button
-        android:id="@+id/btnOK1P"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnOKTwoPlayers"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/button_bg"
-        android:padding="10dp"
-        android:paddingStart="30dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="30dp"
-        android:paddingBottom="10dp"
+        android:padding="5dp"
         android:text="@string/ok"
         android:textColor="@color/WHITE"
         android:textSize="20sp"

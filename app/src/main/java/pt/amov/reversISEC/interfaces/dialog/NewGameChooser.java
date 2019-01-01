@@ -13,8 +13,7 @@ import pt.amov.reversISEC.logic.Constants;
 import pt.amov.reversISEC.R;
 
 
-
-public class NewGameChooser extends Dialog implements Constants{
+public class NewGameChooser extends Dialog implements Constants {
 
     private RadioButton black;
     private RadioButton white;
@@ -32,23 +31,23 @@ public class NewGameChooser extends Dialog implements Constants{
         black = view.findViewById(R.id.black);
         white = view.findViewById(R.id.white);
 
-        if(playColor == BLACK){
+        if (playColor == BLACK) {
             black.setChecked(true);
-        }else{
+        } else {
             white.setChecked(true);
         }
 
         levelButtons[0] = view.findViewById(R.id.level1);
         levelButtons[1] = view.findViewById(R.id.level2);
         levelButtons[2] = view.findViewById(R.id.level3);
-        for(int i = 0; i < levelButtons.length; i++){
+        for (int i = 0; i < levelButtons.length; i++) {
             final int k = i;
             levelButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
-                        for(int index = 0; index < levelButtons.length; index++){
-                            if(index != k){
+                    if (isChecked) {
+                        for (int index = 0; index < levelButtons.length; index++) {
+                            if (index != k) {
                                 levelButtons[index].setChecked(false);
                             }
                         }
@@ -61,20 +60,20 @@ public class NewGameChooser extends Dialog implements Constants{
         super.setContentView(view);
     }
 
-    public byte getPlayerColor(){
-        return (black.isChecked()? BLACK : WHITE);
+    public byte getPlayerColor() {
+        return (black.isChecked() ? BLACK : WHITE);
     }
 
-    public int getDifficulty(){
-        for(int i = 0; i < levelButtons.length; i++){
-            if(levelButtons[i].isChecked()){
-                return i+1;
+    public int getDifficulty() {
+        for (int i = 0; i < levelButtons.length; i++) {
+            if (levelButtons[i].isChecked()) {
+                return i + 1;
             }
         }
         return 1;
     }
 
-    public void setOnStartNewGameListener(View.OnClickListener onClickListener){
+    public void setOnStartNewGameListener(View.OnClickListener onClickListener) {
         ok.setOnClickListener(onClickListener);
     }
 

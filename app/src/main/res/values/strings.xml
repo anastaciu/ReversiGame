@@ -2,7 +2,7 @@
 <resources>
     <string name="footer">AMov 18/19</string>
     <string name="app_name">ReversISEC</string>
-    <string name="game_rule">1.OBJECTIVOS DO JOGO\nO objectivo deste jogo é ter mais peças no tabuleiro que o adversário. O jogo termina quando todas as casas do tabuleiro estiverem ocupadas com peças ou quando um jogador não puder fazer uma jogada válida.\n2.COMO JOGAR\nO Reversi é jogado com peças brancas de um lado e pretas do outro. Na sua vez, o jogador coloca uma peça no tabuleiro com a sua cor virada para cima. O jogador tem de capturar uma ou mais peças do adversário em cada jogada. As peças capturadas são viradas e tornam-se peças do jogador que fez a jogada.\n3.CAPTURAR PEÇAS\n O jogador deve jogar a sua peça de forma a encurralar horizontal, vertical ou diagonalmente uma linha de peças consecutivas do adversário entre duas das suas peças.\n4. JOGAR OU PASSAR Se o jogador não pode fazer uma jogada válida passa automáticamente a vez ao seu adversário fazendo uma jogada "em branco". A regra anterior não é aplicada se o adversário também não pode fazer nenhuma jogada válida. Nesse caso o jogo é automáticamente terminado</string>
+    <string name="game_rule">1.GAME OBJECTIVES\nThe goal is to have more pieces in the board than your opponent. The game ends when all positions are filled with pieces or when the players can’t make any valid move.\n2.HOW TO PLAY\nReversi is played with white and black pieces. In the player’s turn, he places one piece on the board with the player’s color facing up. The player needs to capture at least one piece from the opponent in each move. The captured pieces are flipped and now belong to the player who made the move.\n3.CAPTURE PIECES\nThe player must place a piece in such a position that there exists at least one straight (horizontal, vertical or diagonal) occupied line between the new piece and another same colored piece, with one or more contiguous opponent pieces between them.\n4. PLAY OR PASS\nIf the player can’t make a valid move, his turn passes automatically to the opponent. This rule is not applicable if the opponent also cannot make a valid move. In this case, the game ends.\n5. SPECIAL ACTIONS\nThere are two special actions in this game mode which become usable on the 5th round. Each special move can be used only once during the game. The "Pass Move" allows a player to pass it’s turn to the opponent without placing any piece. The "Play Twice" allows the player to make two consecutive moves in the same turn.</string>
     <string name="choose_token">Escolha Cor</string>
     <string name="play">Jogar</string>
     <string name="rookie">Rookie</string>
@@ -26,5 +26,9 @@
     <string name="quit_game">Quit Game</string>
     <string name="camera_name">Camera</string>
     <string name="take_picture">Take picture</string>
+    <string name="game_mode_2p">2 Players"</string>
+    <string name="_1_jogador">1 Jogador</string>
+    <string name="_2_jogadores">2 Jogadores</string>
+    <string name="ai">AI</string>
 
 </resources>

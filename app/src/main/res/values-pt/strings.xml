@@ -3,7 +3,7 @@
 
     <string name="footer">AMov 18/19</string>
     <string name="app_name">ReversISEC</string>
-    <string name="game_rule">1.OBJECTIVOS DO JOGO\nO objectivo deste jogo é ter mais peças no tabuleiro que o adversário. O jogo termina quando todas as casas do tabuleiro estiverem ocupadas com peças ou quando um jogador não puder fazer uma jogada válida.\n2.COMO JOGAR\nO Reversi é jogado com peças brancas de um lado e pretas do outro. Na sua vez, o jogador coloca uma peça no tabuleiro com a sua cor virada para cima. O jogador tem de capturar uma ou mais peças do adversário em cada jogada. As peças capturadas são viradas e tornam-se peças do jogador que fez a jogada.\n3.CAPTURAR PEÇAS\n O jogador deve jogar a sua peça de forma a encurralar horizontal, vertical ou diagonalmente uma linha de peças consecutivas do adversário entre duas das suas peças.\n4. JOGAR OU PASSAR Se o jogador não pode fazer uma jogada válida passa automáticamente a vez ao seu adversário fazendo uma jogada "em branco". A regra anterior não é aplicada se o adversário também não pode fazer nenhuma jogada válida. Nesse caso o jogo é automáticamente terminado.</string>
+    <string name="game_rule">1.OBJECTIVOS DO JOGO\nO objectivo deste jogo é ter mais peças no tabuleiro que o adversário. O jogo termina quando todas as casas do tabuleiro estiverem ocupadas com peças ou quando um jogador não puder fazer uma jogada válida.\n2.COMO JOGAR\nO Reversi é jogado com peças brancas de um lado e pretas do outro. Na sua vez, o jogador coloca uma peça no tabuleiro com a sua cor virada para cima. O jogador tem de capturar uma ou mais peças do adversário em cada jogada. As peças capturadas são viradas e tornam-se peças do jogador que fez a jogada.\n3.CAPTURAR PEÇAS\n O jogador deve jogar a sua peça de forma a encurralar horizontal, vertical ou diagonalmente uma linha de peças consecutivas do adversário entre duas das suas peças.\n4. JOGAR OU PASSAR Se o jogador não pode fazer uma jogada válida passa automáticamente a vez ao seu adversário fazendo uma jogada "em branco". A regra anterior não é aplicada se o adversário também não pode fazer nenhuma jogada válida. Nesse caso o jogo é automáticamente terminado.\n5. AÇÕES ESPECIAIS\nExistem duas ações especiais neste modo de jogo que podem ser utilizadas a partir da 5ª ronda. Cada ação especial apenas pode ser usada uma vez durante um jogo. O "Passar Vez" permite que um jogador passa a sua vez sem jogar qualquer peça nesse turno. O "Jogar 2X" permite ao jogador fazer duas jogadas consecutivas no mesmo turno.</string>
     <string name="choose_token">Escolha Cor</string>
     <string name="play">Jogar</string>
     <string name="rookie">Novato</string>
@@ -27,5 +27,9 @@
     <string name="quit_game">Abandonar</string>
     <string name="camera_name">Câmera</string>
     <string name="take_picture">Tirar Foto</string>
+    <string name="game_mode_2p">2 Jogadores"</string>
+    <string name="_1_jogador">1 Jogador</string>
+    <string name="_2_jogadores">2 Jogadores</string>
+    <string name="ai">IA</string>
 
 </resources>

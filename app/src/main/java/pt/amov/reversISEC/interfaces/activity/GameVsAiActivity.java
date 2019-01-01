@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
 
+import pt.amov.reversISEC.interfaces.dialog.PlayerInfoDialogBox;
 import pt.amov.reversISEC.logic.Play;
 import pt.amov.reversISEC.logic.Scores;
 import pt.amov.reversISEC.logic.AiAlgorithm;
@@ -52,7 +53,7 @@ public class GameVsAiActivity extends Activity implements Constants{
 
 
 
-    private static final int depth[] = new int[] { 0, 1, 6, 3, 7, 3, 5, 8, 4 };
+    private static final int depth[] = new int[] { 0, 2, 3, 4};
 
     private final byte[][] gameBoard = new byte[BOARD_SIZE][BOARD_SIZE];
     private int gameState;
@@ -74,11 +75,17 @@ public class GameVsAiActivity extends Activity implements Constants{
         player1Image = findViewById(R.id.player1_image);
         player2Image = findViewById(R.id.player2_image);
         nameOfAI = findViewById(R.id.player2_name);
+        TextView tvPlayerName = findViewById(R.id.player1_name);
+
         Button newGame = findViewById(R.id.new_game);
         Button pass = findViewById(R.id.pass);
         Button playAgain = findViewById(R.id.play_again);
         Button quitGame = findViewById(R.id.exit_game);
 
+        pass.setEnabled(false);
+        pass.setVisibility(View.INVISIBLE);
+        playAgain.setEnabled(false);
+        playAgain.setVisibility(View.INVISIBLE);
 
         Bundle bundle = getIntent().getExtras();
         playerColor = Objects.requireNonNull(bundle).getByte("playerColor");
@@ -86,6 +93,9 @@ public class GameVsAiActivity extends Activity implements Constants{
         difficulty = bundle.getInt("difficulty");
 
         nameOfAI.setText(AI_NAME[difficulty - 1]);
+
+        PlayerInfoDialogBox playerInfoDialogBox = new PlayerInfoDialogBox(GameVsAiActivity.this, tvPlayerName);
+        playerInfoDialogBox.show();
 
         initGameBoard();
 
