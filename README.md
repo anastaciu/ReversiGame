@@ -1,1 +1,4 @@
-Reversi Amov
+
+### Jogo Reversi para Android
+
+
